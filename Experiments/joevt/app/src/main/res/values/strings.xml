@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HellurWorld</string>
+    <string name="hellur">Hellur</string>
+    <string name="wooooo">Wooooo!</string>
+    <string name="switchString">Switch</string>
+    <string name="returnString">Return</string>
+    <string name="name">Name</string>
 </resources>
