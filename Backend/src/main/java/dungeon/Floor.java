@@ -27,9 +27,11 @@ public class Floor {
 
 	private void fillLevel() {
 		// temp
-		for (int i = 0; i < 50; i++)
-			for (int j = 0; j < 100; j++)
+		for (int i = 0; i < 50; i++) {
+			for (int j = 0; j < 100; j++) {
 				level[i][j] = '+';
+			}
+		}
 	}
 
 	public char[][] getLevel() {
