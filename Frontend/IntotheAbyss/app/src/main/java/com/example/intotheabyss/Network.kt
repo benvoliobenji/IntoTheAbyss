@@ -8,7 +8,8 @@ import java.io.IOException
 class Network : Listener() {
     private var client: Client = Client()
     private val ip: String = "localhost"
-    private val  port: Int = 27960
+    private val tcpPort: Int = 27960
+    private val udpPort: Int = 28960
 
     fun connect() {
         client = Client()
@@ -19,7 +20,7 @@ class Network : Listener() {
         client.start()
         try{
             // Attempt to connect within a 5000 ms window before timing out
-            client.connect(5000, ip, port, port)
+            client.connect(5000, ip, tcpPort, udpPort)
         } catch (e: IOException) {
             e.printStackTrace()
         }
