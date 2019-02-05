@@ -3,28 +3,28 @@ package com.example.intotheabyss
 
 import java.util.ArrayList
 import java.util.Random
-import player.Player
+//import player.Player
 
 class Level {
     // private static int mapdepth = 3;
 
     // private Random rand;
     val players: ArrayList<Player>? = null
-    var grid: ArrayList<ArrayList<Tile>>
+    var grid: ArrayList<ArrayList<Tile>>? = null
 
     //Errors on arrayofNulls. Wants type, confused to where though
     constructor() {
-        grid = Array(mapWidth) { arrayOfNulls(mapHeight)}
+//        grid = Array(mapWidth) { arrayOfNulls(mapHeight):}
     }
 
     constructor(random: Random) {
-        grid = Array(mapWidth) { arrayOfNulls(mapHeight) }
+//        grid = Array(mapWidth) { arrayOfNulls(mapHeight) }
         // rand = random;
 
     }
 
     constructor(seed: Int) {
-        grid = Array(mapWidth) { arrayOfNulls(mapHeight) }
+//        grid = Array(mapWidth) { arrayOfNulls(mapHeight) }
     }
 
     companion object {
