@@ -34,3 +34,87 @@ output.json
 #NDK
 obj/
 .externalNativeBuild
+
+# eclipse ignores
+*.pydevproject
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.project
+.externalToolBuilders/
+*.launch
+ .cproject
+.classpath
+.buildpath
+.target
+.texlipse
+.recommenders
+.springBeans
+
+# maven template
+target/
+log/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+#gradle
+   #Redundant
+!gradle/wrapper/gradle-wrapper.jar
+!gradle-wrapper.jar
+   #Redundant
+build/
+/build/
+
+.gradle
+
+#jvm crashes
+hs_err_pid*
+*.class
+
+# package files
+*.jar
+*.war
+*.ear
+
+.gitignore
+
+# STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.settings/*
+.springBeans
+.sts4-cache
+
+#intelliJ idea
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+
+#netBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+#linux specific
+.directory
