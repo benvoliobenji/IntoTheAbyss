@@ -11,13 +11,22 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // TODO: Fix issue with testApplicationID not working
+        // testApplicationID "com.example.intotheabyss"
+        testInstrumentationRunner "com.example.test.intotheabyssInstrumentation"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets{
+        androidTest {
+            assets.srcDirs = ['src/androidTest/assets']
         }
     }
 }
@@ -32,5 +41,9 @@ dependencies {
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support:support-annotations:26.1.0'
+    androidTestImplementation 'info.cukes:cucumber-android:1.2.5@jar'
+    androidTestImplementation 'info.cukes:cucumber-picocontainer:1.2.4'
 }
