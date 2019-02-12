@@ -1,4 +1,5 @@
 package app;
+import packets.ConnectionPacket;
 
 public class Main {
 	public static int portTCP = 44444;
@@ -10,18 +11,14 @@ public class Main {
 	    server.start();
 	    server.bind(portTCP, portUDP);
 	    
-	    /*server.addListener(new Listener() {
+	    server.addListener(new Listener() {
 	        public void received (Connection connection, Object object) {
-	           if (object instanceof SomeRequest) {
-	              SomeRequest request = (SomeRequest)object;
+	           if (object instanceof ConnectionPacket) {
+	              ConnectionPacket request = (ConnectionPacket)object;
 	              System.out.println(request.text);
-	     
-	              SomeResponse response = new SomeResponse();
-	              response.text = "Thanks";
-	              connection.sendTCP(response);
 	           }
 	        }
-	     });*/
+	     });
 	    
 	}
 
