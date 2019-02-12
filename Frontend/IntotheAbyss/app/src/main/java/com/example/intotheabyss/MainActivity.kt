@@ -9,12 +9,11 @@ import com.example.intotheabyss.networking.Network
 
 class MainActivity : AppCompatActivity() {
 
-    private val network: Network = Network(this)
+    private var network: Network = Network(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val ring = MediaPlayer.create(this, R.raw.car_sound)
 
         val play = findViewById<Button>(R.id.playButton)
