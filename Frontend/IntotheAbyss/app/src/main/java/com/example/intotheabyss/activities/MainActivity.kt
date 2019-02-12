@@ -9,7 +9,7 @@ import com.example.intotheabyss.networking.Network
 
 class MainActivity : AppCompatActivity() {
 
-    private var network: Network = Network(this)
+    private var network: Network = Network()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
