@@ -3,6 +3,7 @@ package level;
 import java.util.ArrayList;
 import java.util.Random;
 import player.Player;
+import tiles.*;
 
 public class Level {
 	private static int mapWidth = 100;
@@ -39,7 +40,7 @@ public class Level {
 		for(int i=0; i < mapWidth; i++) {
 			for(int j=0; j < mapHeight; j++) {
 				//Checks if the selected index is an edge of the grid
-				if(i=0 || j=0 || i = mapWidth-1 || j = mapHeight-1) {
+				if(i == 0 || j == 0 || i == mapWidth-1 || j == mapHeight-1) {
 					grid[i][j]  = new Wall();
 				}else {
 					grid[i][j] = new Floor();
