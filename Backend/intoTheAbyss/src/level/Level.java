@@ -13,8 +13,9 @@ public class Level {
 	private Random rand;
 	private ArrayList<Player> players;
 	private Tile[][] grid;
-	public int[][] rooms;
+	private int[][] rooms;
 	private int[] spawn;
+	private int[] stair;
 
 	public Level() {
 		grid = new Tile[mapHeight][mapWidth];
@@ -25,12 +26,13 @@ public class Level {
 	public Level(Random random) {
 	  grid = new Tile[mapHeight][mapWidth];
     rand = random;
-
+    generate();
 	}
 
 	public Level(int seed) {
 	  grid = new Tile[mapHeight][mapWidth];
     rand = new Random(seed);
+    generate();
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -39,6 +41,14 @@ public class Level {
 
 	public Tile[][] getGrid() {
 		return grid;
+	}
+	
+	public int[] getSpawn() {
+	  return spawn;
+	}
+	
+	public int[] getStair() {
+	  return stair;
 	}
 
 	private void generate() {
@@ -137,32 +147,7 @@ public class Level {
 	    if (grid[y1 + i][x2].getType() == 2)
 	      grid[y1 + i][x2] = new Floor();
 	    i += ysign;
-	  }
-	  
-	  /*boolean leftRoom;
-		int i;
-		int xsign = (x1 - x2) / Math.abs(x1 - x2);
-		int ysign = (y1 - y2) / Math.abs(y1 - y2);
-
-		leftRoom = false;
-		for (i = x1; xsign * i >= xsign * x2; i -= xsign) {
-			if (grid[y1][i].getType() == 2)
-				leftRoom = true;
-			if (leftRoom && grid[y1][i].getType() != 2)
-				return;
-			if (grid[y1][i].getType() == 2) {
-				grid[y1][i] = new Floor();
-			}
-			//if (leftRoom && (grid[y1 + 1][i].getType() != 2 || grid[y1 - 1][i].getType() != 2))
-			//	return;
-		}
-
-		for (i = y1; ysign * i >= ysign * y2; i -= ysign) {
-			if (grid[i][x2].getType() == 2) {
-				grid[i][x2] = new Floor();
-			}
-		}*/
-
+	  }	  
 	}
 
 	private int findCenterRoom() {
@@ -170,13 +155,13 @@ public class Level {
     int cY = 21/2;
     int i,x,y;
     int idx = 0;
-    double dist = 100;
+    double dist = 1000;
     double curr_dist;
 
     for (i = 0; i < rooms.length; i++){
         x = rooms[i][1] + rooms[i][3] / 2;
         y = rooms[i][0] + rooms[i][2] / 2;
-        curr_dist = Math.sqrt((cX-x)*(cX-x) + (cY-y)*(cY-y));
+        curr_dist = Math.sqrt((cX-x)*(cX-x) + 2*(cY-y)*(cY-y));
         if (curr_dist < dist){
             dist = curr_dist;
             idx = i;
@@ -187,7 +172,13 @@ public class Level {
 	}
 
 	private void createStair() {
-
+	  int idx = findCenterRoom();
+	  int r = 0;
+	  while (r == idx)
+	    r = rand.nextInt(rooms.length);
+	  stair = new int[2];
+	  stair[1] = rooms[r][1] + rand.nextInt(rooms[r][3]);
+	  stair[0] = rooms[r][0] + rand.nextInt(rooms[r][2]);
 	}
 
 	private void createSpawn() {
