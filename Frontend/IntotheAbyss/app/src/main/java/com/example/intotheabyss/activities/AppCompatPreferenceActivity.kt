@@ -1,4 +1,4 @@
-package com.example.intotheabyss
+package com.example.intotheabyss.activities
 
 import android.content.res.Configuration
 import android.os.Bundle
