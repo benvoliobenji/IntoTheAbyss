@@ -1,4 +1,4 @@
-package com.example.intotheabyss
+package com.example.intotheabyss.activities
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -16,6 +16,7 @@ import android.preference.PreferenceManager
 import android.preference.RingtonePreference
 import android.text.TextUtils
 import android.view.MenuItem
+import com.example.intotheabyss.R
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -225,7 +226,8 @@ class SettingsActivity : AppCompatPreferenceActivity() {
          */
         private fun bindPreferenceSummaryToValue(preference: Preference) {
             // Set the listener to watch for value changes.
-            preference.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
+            preference.onPreferenceChangeListener =
+                sBindPreferenceSummaryToValueListener
 
             // Trigger the listener immediately with the preference's
             // current value.

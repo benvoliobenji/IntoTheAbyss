@@ -1,10 +1,11 @@
-package com.example.intotheabyss
+package com.example.intotheabyss.activities
 
 import android.content.Intent
 import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.intotheabyss.R
 import com.example.intotheabyss.networking.Network
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         val play = findViewById<Button>(R.id.playButton)
         play.setOnClickListener {
-            val intent = Intent(this, dungeonActivity::class.java)
+            val intent = Intent(this, DungeonActivity::class.java)
                 startActivity(intent)
             ring.start()
             this.network.connect()
