@@ -1,11 +1,23 @@
 package com.example.intotheabyss.networking
 
+import android.app.Activity
+import android.content.Context
+import android.widget.TextView
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.Serializer
+import com.esotericsoftware.kryo.io.Input
+import com.esotericsoftware.kryo.io.Output
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
+import com.example.intotheabyss.R
+import com.example.intotheabyss.activitywrapper.displayText
+import com.example.intotheabyss.dungeonActivity
 import java.io.IOException
 
-class Network : Listener() {
+import com.example.intotheabyss.networking.packets.ConnectionPackage
+
+class Network(private var context: Context) : Listener() {
     private var client: Client = Client()
     private val ip: String = "localhost"
     private val tcpPort: Int = 27960
@@ -13,6 +25,21 @@ class Network : Listener() {
 
     fun connect() {
         client = Client()
+
+            // Because the packets on our end are Kotlin and the server is Java, there needs to be some translation
+            client.kryo.apply {
+                register(ConnectionPackage::class.java, object: Serializer<ConnectionPackage>() {
+                    override fun write(kryo: Kryo, output: Output, component: ConnectionPackage) {
+                        kryo.writeObject(output, component.text)
+                    }
+
+                    override fun read(kryo: Kryo, input: Input, type: Class<ConnectionPackage>): ConnectionPackage {
+                        return ConnectionPackage(
+                            kryo.readObject(input, String::class.java)
+                        )
+                    }
+                })
+            }
 
         //Add the class registration when we get to this part
 
@@ -26,11 +53,15 @@ class Network : Listener() {
         }
     }
 
-    // Needs to be explicitly overridden due to Kotlin clashing with JVM
     override fun received(c: Connection?, o: Any?) {
+        if(o is ConnectionPackage) {
+            val connectionText = this.context.findViewById(R.id.connectionText) as TextView
+            connectionText.text = o.text
+            displayText(dungeonActivity, R.id.connectionText, o.text)
+            val connectionResponse = ConnectionPackage("Client says hello!")
+            this.client.sendTCP(connectionResponse)
+        }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
     }
-
-
 }

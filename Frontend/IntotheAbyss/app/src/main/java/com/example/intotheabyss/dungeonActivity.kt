@@ -11,10 +11,11 @@ class dungeonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
 
-        val returnButton = findViewById(R.id.returnButton) as Button
+        val returnButton = findViewById<Button>(R.id.returnButton)
         returnButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
         }
+
     }
 }

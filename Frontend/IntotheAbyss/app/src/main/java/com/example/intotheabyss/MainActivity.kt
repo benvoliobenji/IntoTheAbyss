@@ -5,8 +5,11 @@ import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.intotheabyss.networking.Network
 
 class MainActivity : AppCompatActivity() {
+
+    private val network: Network = Network(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,14 +17,15 @@ class MainActivity : AppCompatActivity() {
 
         val ring = MediaPlayer.create(this, R.raw.car_sound)
 
-        val play = findViewById(R.id.playButton) as Button
+        val play = findViewById<Button>(R.id.playButton)
         play.setOnClickListener {
             val intent = Intent(this, dungeonActivity::class.java)
                 startActivity(intent)
             ring.start()
+            this.network.connect()
         }
 
-        val settings = findViewById(R.id.settingsButton) as Button
+        val settings = findViewById<Button>(R.id.settingsButton)
         settings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
