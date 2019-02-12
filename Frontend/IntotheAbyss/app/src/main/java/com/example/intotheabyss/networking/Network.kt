@@ -2,6 +2,7 @@ package com.example.intotheabyss.networking
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.widget.TextView
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.Serializer
@@ -55,9 +56,7 @@ class Network(private var context: Context) : Listener() {
 
     override fun received(c: Connection?, o: Any?) {
         if(o is ConnectionPackage) {
-            val connectionText = this.context.findViewById(R.id.connectionText) as TextView
-            connectionText.text = o.text
-            displayText(dungeonActivity, R.id.connectionText, o.text)
+            Log.i("Networking", o.text)
             val connectionResponse = ConnectionPackage("Client says hello!")
             this.client.sendTCP(connectionResponse)
         }
