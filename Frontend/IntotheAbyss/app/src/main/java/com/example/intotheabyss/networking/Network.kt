@@ -1,9 +1,6 @@
 package com.example.intotheabyss.networking
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
-import android.widget.TextView
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.Serializer
 import com.esotericsoftware.kryo.io.Input
@@ -11,14 +8,11 @@ import com.esotericsoftware.kryo.io.Output
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
-import com.example.intotheabyss.R
-import com.example.intotheabyss.activitywrapper.displayText
-import com.example.intotheabyss.dungeonActivity
 import java.io.IOException
 
 import com.example.intotheabyss.networking.packets.ConnectionPackage
 
-class Network(private var context: Context) : Listener() {
+class Network() : Listener() {
     private var client: Client = Client()
     private val ip: String = "localhost"
     private val tcpPort: Int = 27960
@@ -54,7 +48,7 @@ class Network(private var context: Context) : Listener() {
         }
     }
 
-    override fun received(c: Connection?, o: Any?) {
+    override fun received(c: Connection, o: Any) {
         if(o is ConnectionPackage) {
             Log.i("Networking", o.text)
             val connectionResponse = ConnectionPackage("Client says hello!")
