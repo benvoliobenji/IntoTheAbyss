@@ -1,5 +1,5 @@
 package network.packets;
 
-public class connectionPackage {
+public class ConnectionPacket {
 	public String text = "New connection";
 }
