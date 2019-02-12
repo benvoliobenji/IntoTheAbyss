@@ -16,6 +16,7 @@ public class Level {
 	private ArrayList<Player> players;
 	private Tile[][] grid;
 	private int[][] rooms;
+	private int[] spawn;
 
 	public Level() {
 		grid = new Tile[mapWidth][mapHeight];
@@ -91,5 +92,20 @@ public class Level {
 
 	private void createCorridors() {
 
+	}
+
+	private int findCenterRoom() {
+
+	}
+
+	private void createStair() {
+
+	}
+	
+	private void createSpawn() {
+		int idx = findCenterRoom();
+		spawn = new int[2];
+		spawn[1] = rooms[idx][1] + rooms[idx][3] / 2;
+		spawn[0] = rooms[idx][0] + rooms[idx][2] / 2;
 	}
 }
