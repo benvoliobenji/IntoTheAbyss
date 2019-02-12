@@ -10,22 +10,22 @@ class Level {
 
     // private Random rand;
     val players: ArrayList<Player>? = null
-    var grid: ArrayList<ArrayList<Tile>>? = null
+    val gridArr = arrayOf<Array<Tile>>()
 
-    //Errors on arrayofNulls. Wants type, confused to where though
+    //Errors onre arrayofNulls. Wants type, confused to where though
     constructor() {
 //        grid = Array(mapWidth) { arrayOfNulls(mapHeight):}
     }
 
-    constructor(random: Random) {
+/*    constructor(random: Random) {
 //        grid = Array(mapWidth) { arrayOfNulls(mapHeight) }
         // rand = random;
 
-    }
+    }*/
 
-    constructor(seed: Int) {
+ /*   constructor(seed: Int) {
 //        grid = Array(mapWidth) { arrayOfNulls(mapHeight) }
-    }
+    }*/
 
     companion object {
         private val mapWidth = 100
@@ -37,18 +37,17 @@ class Level {
     //Everything is a bit different
     fun genDefaultLev() {
         for(i in 1..mapHeight)  {
-            grid.add(ArrayList<Tile>())
             for(j in 1..mapWidth)   {
                 if (i == 1 or mapHeight)    {
                     val newTile = Wall()
-                    grid.get(i).add(newTile)
+                    gridArr[i][j] = newTile
                 }   else if(j == 1 or mapWidth) {
                     val newTile = Wall()
-                    grid.get(i).add(newTile)
+                    gridArr[i][j] = newTile
                 }   else    {
                     //If not top/bottom or side edge, new tile should be floor
                     val newTile = Floor()
-                    grid.get(i).add(newTile)
+                    gridArr[i][j] = newTile
                 }
             }
         }
