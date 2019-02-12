@@ -54,6 +54,8 @@ public class Level {
 		}
 
 		createCorridors();
+		createSpawn();
+		createStair();
 
 	}
 
@@ -91,11 +93,66 @@ public class Level {
 	}
 
 	private void createCorridors() {
+		int idx = findCenterRoom();
+		int x,y;
+		int cx = rooms[idx][1] + rooms[idx][3] / 2;
+		int cy = rooms[idx][0] + rooms[idx][2] / 2;
+
+		for (int i = 0; i < max; i++) {
+			if (i == idx)
+				continue;
+			x = rooms[i][1] + rooms[i][3] / 2;
+			y = rooms[i][0] + rooms[i][2] / 2;
+			drawCorridor(x,y,cx,cy);
+		}
+	}
+
+	private void drawCorridor(int x1, int y1, int x2, int y2){		 
+		int leftRoom;
+		int i;
+		int xsign = (x1 - x2) / Math.abs(x1 - x2);
+		int ysign = (y1 - y2) / Math.abs(y1 - y2);
+
+		leftRoom = 0;
+		for (i = x1; xsign * i >= xsign * x2; i -= xsign) {
+			if (grid[y1][i].getType() == 2)
+				leftRoom = 1;
+			if (leftRoom && grid[y1][i].getType() != 2)
+				return;
+			if (grid[y1][i].getType() == 2) {
+				grid[y1][i] = new Floor();
+			}
+			if (leftRoom && (grid[y1 + 1][i].getType() != 2 || grid[y1 - 1][i].getType() != 2))
+				return;
+		}
+
+		for (i = y1; ysign * i >= ysign * y2; i -= ysign) {
+			if (grid[i][x2].getType() == 2) {
+				grid[i][x2] = new Floor();
+			}
+		}
 
 	}
 
 	private int findCenterRoom() {
+	int cX = 40;
+    int cY = 21/2;
+    int i,x,y;
+    int idx = 0;
+    double dist = 100;
+    double curr_dist;
 
+    for (i = 0; i < MAX_ROOMS; i++){
+        x = rooms[i][1] + rooms[i][3] / 2;
+        y = rooms[i][0] + rooms[i][2] / 2;
+        curr_dist = sqrt((cX-x)*(cX-x) + (cY-y)*(cY-y));
+        if (curr_dist < dist){
+            dist = curr_dist;
+            idx = i;
+        }
+    }
+
+    return idx;
 	}
 
 	private void createStair() {
