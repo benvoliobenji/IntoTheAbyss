@@ -8,9 +8,7 @@ import tiles.*;
 public class Level {
 	private static int mapWidth = 100;
 	private static int mapHeight = 50;
-	// private static int mapdepth = 3;
-
-	// private Random rand;
+	
 	private ArrayList<Player> players;
 	private Object[][] grid;
 
