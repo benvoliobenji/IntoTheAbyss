@@ -1,4 +1,4 @@
-package com.example.intotheabyss.Game
+package com.example.intotheabyss
 
 import android.content.Context
 import android.graphics.Canvas
