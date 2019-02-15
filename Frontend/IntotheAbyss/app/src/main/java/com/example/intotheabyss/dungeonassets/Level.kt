@@ -9,7 +9,6 @@ import kotlin.random.Random
 class Level {
     private val mapWidth: Int = 100
     private val mapHeight: Int = 50
-    private val mapdepth: Int = 3
 
 
 
