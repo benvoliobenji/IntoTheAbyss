@@ -1,9 +1,11 @@
-package com.example.intotheabyss
+package com.example.intotheabyss.activities.game
 
 import android.graphics.Canvas
 import android.view.SurfaceHolder
+import com.example.intotheabyss.activities.activities.game.GameView2
 
-class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView: GameView) : Thread() {
+
+class GameThread2(private val surfaceHolder: SurfaceHolder, private val gameView: GameView2) : Thread() {
 
     private var running: Boolean = false
     private val targetFPS = 25
