@@ -3,9 +3,7 @@ package level;
 import java.util.ArrayList;
 import java.util.Random;
 import player.Player;
-import tiles.Floor;
-import tiles.Tile;
-import tiles.Wall;
+import tiles.*;
 
 public class Level {
 	private static int mapWidth = 100;
@@ -182,7 +180,7 @@ public class Level {
 	  stair[1] = rooms[r][1] + rand.nextInt(rooms[r][3]);
 	  stair[0] = rooms[r][0] + rand.nextInt(rooms[r][2]);
 	}
-	
+
 	private void createSpawn() {
 		int idx = findCenterRoom();
 		spawn = new int[2];
