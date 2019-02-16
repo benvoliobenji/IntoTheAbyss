@@ -1,4 +1,4 @@
-package app.player;
+package player;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -6,15 +6,15 @@ import javax.persistence.Id;
 @Entity
 public class Player {
 	@Id
-	private Integer playerid;
+	private String playerID;
 	private Integer posX, posY, floor, health;
 
-	public Integer getPlayerId() {
-		return playerid;
+	public String getPlayerId() {
+		return playerID;
 	}
 
-	public void setPlayerId(Integer playerid) {
-		this.playerid = playerid;
+	public void setPlayerId(int i) {
+		this.playerID = "" + i;
 	}
 
 	public Integer getPosX() {

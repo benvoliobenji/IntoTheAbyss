@@ -3,7 +3,8 @@ package level;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
-import app.player.Player;
+
+import player.Player;
 import tiles.*;
 
 public class Level {
