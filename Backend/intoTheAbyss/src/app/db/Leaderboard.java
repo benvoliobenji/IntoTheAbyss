@@ -1,4 +1,4 @@
-package app;
+package app.db;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

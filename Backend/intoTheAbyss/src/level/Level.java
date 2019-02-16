@@ -2,7 +2,7 @@ package level;
 
 import java.util.ArrayList;
 import java.util.Random;
-import player.Player;
+import app.player.Player;
 import tiles.*;
 
 public class Level {
