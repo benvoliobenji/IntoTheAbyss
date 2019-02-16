@@ -1,4 +1,4 @@
-package com.example.intotheabyss.Game
+package com.example.intotheabyss.game
 
 import android.graphics.Canvas
 import android.view.SurfaceHolder
