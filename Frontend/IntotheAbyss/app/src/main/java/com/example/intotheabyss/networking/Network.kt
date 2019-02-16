@@ -1,6 +1,5 @@
 package com.example.intotheabyss.networking
 
-import android.net.Network
 import android.util.Log
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.Serializer
@@ -13,16 +12,14 @@ import java.io.IOException
 
 import com.example.intotheabyss.networking.packets.ConnectionPackage
 
-class GameNetwork() : Listener() {
+class Network() : Listener() {
     private var client: Client = Client()
-    private val ip: String = "10.26.177.45"
+    private val ip: String = "localhost"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
     fun connect() {
         client = Client()
-        client.start()
-        Network.register(client)
 
         // Because the packets on our end are Kotlin and the server is Java, there needs to be some translation
         client.kryo.apply {
@@ -40,7 +37,7 @@ class GameNetwork() : Listener() {
         }
 
         //Add the class registration when we get to this part
-
+        client.start()
         client.addListener(this)
         try{
             // Attempt to connect within a 5000 ms window before timing out

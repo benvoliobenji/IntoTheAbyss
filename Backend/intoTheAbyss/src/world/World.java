@@ -1,10 +1,9 @@
 package world;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import level.Level;
-import player.Player;
+import app.player.Player;
 
 public class World {
 	private ArrayList<Level> levels;
@@ -38,7 +37,7 @@ public class World {
 	public void movePlayersToTop() {
 		for (int i = 0; i < levels.size(); i++) {
 			for (Player p : players) {
-				p.setFloorNumber(0);
+				p.setFloor(0);
 			}
 		}
 	}

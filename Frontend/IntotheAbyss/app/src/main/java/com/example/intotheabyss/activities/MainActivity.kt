@@ -7,10 +7,11 @@ import android.os.Bundle
 import android.widget.Button
 import com.example.intotheabyss.R
 import com.example.intotheabyss.networking.Network
+import com.example.intotheabyss.networking.NetworkRunnable
 
 class MainActivity : AppCompatActivity() {
 
-    private var network: Network = Network()
+    private var networkThread = Thread()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +23,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DungeonActivity::class.java)
                 startActivity(intent)
             ring.start()
-            this.network.connect()
+
+            if(!networkThread.isAlive) {
+                networkThread = Thread(NetworkRunnable())
+                networkThread.start()
+            }
         }
 
         val settings = findViewById<Button>(R.id.settingsButton)
