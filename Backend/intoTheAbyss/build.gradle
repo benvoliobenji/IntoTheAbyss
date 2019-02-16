@@ -28,7 +28,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile("org.springframework.boot:spring-boot-devtools")
-	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+	compile("com.esotericsoftware:kryonet:2.22.0-RC1")
 }
 
 sourceSets {
