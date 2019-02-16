@@ -18,6 +18,7 @@ import java.io.IOException
 import com.example.intotheabyss.networking.packets.ConnectionPackage
 import com.example.intotheabyss.networking.packets.MapPacket
 import com.example.intotheabyss.networking.packets.MapRequestPacket
+import com.example.intotheabyss.networking.packets.PlayerLocationPacket
 import com.example.intotheabyss.utils.TileTypes
 
 class Network(private var gameState: GameState): Listener() {
@@ -28,7 +29,7 @@ class Network(private var gameState: GameState): Listener() {
 
     fun connect() {
         // For logging if need be
-        // kryolog.TRACE()
+        kryolog.TRACE()
         client = Client(16384, 65536)
 
 
@@ -71,6 +72,8 @@ class Network(private var gameState: GameState): Listener() {
 //            })
 
             register(ConnectionPackage::class.java)
+
+            // Register packets needed to transfer the map from server to client
             register(MapRequestPacket::class.java)
             register(MapPacket::class.java)
             register(TileTypes::class.java)
@@ -79,6 +82,9 @@ class Network(private var gameState: GameState): Listener() {
             register(Floor::class.java)
             register(Array<Tile>::class.java)
             register(Array<Array<Tile>>::class.java)
+
+            // Player location registration
+            register(PlayerLocationPacket::class.java)
         }
 
 
@@ -90,9 +96,7 @@ class Network(private var gameState: GameState): Listener() {
             client.connect(5000, ip, tcpPort, udpPort)
             Log.d("Networking","Sending Floor Request")
             client.sendTCP(ConnectionPackage("Client says hello!"))
-            val mapRequest = MapRequestPacket(1)
-            client.sendTCP(mapRequest)
-            //.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
+            client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -109,6 +113,12 @@ class Network(private var gameState: GameState): Listener() {
             Log.d("Receiving", o.toString())
             gameState.level = o.levelGrid
             gameState.newLevel()
+
+            // For now, just send the packet of the new location
+            // Eventually we will have a handler that will deal with it outside of Network, but this is only for Demo 2
+            this.client.sendTCP(PlayerLocationPacket(playerID = gameState.myPlayer.playerID,
+                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.x,
+                playerPositionY = gameState.myPlayer.y))
         }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
