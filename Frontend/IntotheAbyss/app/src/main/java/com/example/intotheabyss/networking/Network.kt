@@ -15,31 +15,30 @@ import com.example.intotheabyss.networking.packets.ConnectionPackage
 class Network() : Listener() {
     private var client: Client = Client()
     private val ip: String = "localhost"
-    private val tcpPort: Int = 27960
-    private val udpPort: Int = 28960
+    private val tcpPort: Int = 44444
+    private val udpPort: Int = 44445
 
     fun connect() {
         client = Client()
 
-            // Because the packets on our end are Kotlin and the server is Java, there needs to be some translation
-            client.kryo.apply {
-                register(ConnectionPackage::class.java, object: Serializer<ConnectionPackage>() {
-                    override fun write(kryo: Kryo, output: Output, component: ConnectionPackage) {
-                        kryo.writeObject(output, component.text)
-                    }
+        // Because the packets on our end are Kotlin and the server is Java, there needs to be some translation
+        client.kryo.apply {
+            register(ConnectionPackage::class.java, object: Serializer<ConnectionPackage>() {
+                override fun write(kryo: Kryo, output: Output, component: ConnectionPackage) {
+                    kryo.writeObject(output, component.text)
+                }
 
-                    override fun read(kryo: Kryo, input: Input, type: Class<ConnectionPackage>): ConnectionPackage {
-                        return ConnectionPackage(
-                            kryo.readObject(input, String::class.java)
-                        )
-                    }
-                })
-            }
+                override fun read(kryo: Kryo, input: Input, type: Class<ConnectionPackage>): ConnectionPackage {
+                    return ConnectionPackage(
+                        kryo.readObject(input, String::class.java)
+                    )
+                }
+            })
+        }
 
         //Add the class registration when we get to this part
-
-        client.addListener(this)
         client.start()
+        client.addListener(this)
         try{
             // Attempt to connect within a 5000 ms window before timing out
             client.connect(5000, ip, tcpPort, udpPort)
