@@ -3,10 +3,11 @@ package com.example.intotheabyss.game
 import android.graphics.Canvas
 import android.view.SurfaceHolder
 
+
 class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView: GameView) : Thread() {
 
     private var running: Boolean = false
-    private val targetFPS = 50
+    private val targetFPS = 25
 
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning

@@ -18,14 +18,14 @@ class MainActivity : AppCompatActivity() {
         val play = findViewById<Button>(R.id.playButton)
         play.setOnClickListener {
             val intent = Intent(this, DungeonActivity::class.java)
-                startActivity(intent)
+            startActivity(intent)
             ring.start()
         }
 
         val settings = findViewById<Button>(R.id.settingsButton)
         settings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+            startActivity(intent)
         }
 
 

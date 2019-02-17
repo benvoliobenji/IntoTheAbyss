@@ -3,6 +3,7 @@ package com.example.intotheabyss.activities
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Button
 import com.example.intotheabyss.game.GameProcessingRunnable
 import com.example.intotheabyss.game.GameState
@@ -18,6 +19,7 @@ class DungeonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
 
+
         if(!networkThread.isAlive) {
             networkThread = Thread(NetworkRunnable(gameState))
             networkThread.start()
@@ -28,11 +30,15 @@ class DungeonActivity : AppCompatActivity() {
             gameProcessingThread.start()
         }
 
-        val returnButton = findViewById<Button>(R.id.returnButton)
+        //val returnButton = findViewById<Button>(R.id.returnButton)
+
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        /*val returnButton = findViewById<Button>(R.id.returnButton)
+>>>>>>> JoeDev
         returnButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-        }
-
+        }*/
     }
 }

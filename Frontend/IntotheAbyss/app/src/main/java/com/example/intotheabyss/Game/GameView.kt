@@ -1,14 +1,22 @@
 package com.example.intotheabyss.game
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.example.intotheabyss.R
+import com.example.intotheabyss.player.Player
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     private val thread: GameThread
+
+    //declare game objects as null
+    private var player: Player? = null
 
     init {
 
@@ -35,6 +43,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
+        //Declare game objects
+        player = Player(BitmapFactory.decodeResource(resources, R.drawable.panda))
+
         //Start the game thread
         thread.setRunning(true)
         thread.start()
@@ -48,7 +59,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables
      */
     fun update() {
-
+        player!!.setX(player!!.getX()+1)
+        player!!.setY(player!!.getY()+1)
     }
 
     /**
@@ -56,6 +68,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+        drawPlayer(canvas, player!!)
+    }
+
+    fun drawPlayer(canvas: Canvas, player: Player)  {
+        var x = player.getX()
+        var y = player.getY()
+
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
+        paint.textSize = 24.toFloat()
+
+        player!!.draw(canvas, x, y)
+        canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
     }
 
 }
