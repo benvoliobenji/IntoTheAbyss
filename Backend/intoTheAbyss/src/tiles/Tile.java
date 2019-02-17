@@ -1,7 +1,9 @@
 package tiles;
+import utils.TileTypes;
 
 public abstract class Tile {
-	boolean canHold, isPassable;
+	protected boolean canHold, isPassable;
+	protected TileTypes typel;
 
 	public abstract int getType();
 

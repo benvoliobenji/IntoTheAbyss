@@ -17,6 +17,10 @@ public class Player {
 		username = "";
 	}
 	
+	public Player(int floorNum) {
+		floor = floorNum;
+	}
+	
 	public Player(PlayerPacket playerPacket) {
 		floor = playerPacket.getFloorNumber();
 		username = playerPacket.getUsername();
@@ -45,6 +49,7 @@ public class Player {
 
 	public void setPlayerID(Integer playerid) {
 		this.playerID = playerid;
+
 	}
 
 	public Integer getPosX() {
