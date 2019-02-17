@@ -1,4 +1,4 @@
-package com.example.intotheabyss.game
+package com.example.intotheabyss
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -8,15 +8,14 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.example.intotheabyss.R
 import com.example.intotheabyss.player.Player
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     private val thread: GameThread
 
-    //declare game objects as null
-    private var player: Player? = null
+    //declare game objects
+    private var player: Player = Player()
 
     init {
 
@@ -43,9 +42,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
-        //Declare game objects
-        player = Player(BitmapFactory.decodeResource(resources, R.drawable.panda))
-
+        //Set image assets for game objects
+        player!!.setImage(BitmapFactory.decodeResource(resources, R.drawable.panda))
         //Start the game thread
         thread.setRunning(true)
         thread.start()
@@ -59,6 +57,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables
      */
     fun update() {
+        //Comment out if you don't want arbitrary player movement
         player!!.setX(player!!.getX()+1)
         player!!.setY(player!!.getY()+1)
     }

@@ -1,5 +1,7 @@
 package com.example.intotheabyss.game
 
+import android.graphics.BitmapFactory
+import com.example.intotheabyss.R
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.player.Player
 import kotlin.random.Random
@@ -14,8 +16,8 @@ class GameState {
 
         while(true) {
             if (level[yLocation][xLocation].isPassable) {
-                myPlayer.x = xLocation
-                myPlayer.y = yLocation
+                myPlayer.setX(yLocation)
+                myPlayer.setY(xLocation)
                 break
             } else {
                 xLocation = Random.nextInt(0, 100)

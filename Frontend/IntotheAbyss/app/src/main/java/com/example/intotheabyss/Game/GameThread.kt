@@ -1,7 +1,8 @@
-package com.example.intotheabyss.game
+package com.example.intotheabyss
 
-import android.graphics.Canvas
 import android.view.SurfaceHolder
+import android.graphics.Canvas
+
 
 
 class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView: GameView) : Thread() {
