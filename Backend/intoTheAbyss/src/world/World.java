@@ -3,7 +3,7 @@ package world;
 import java.util.ArrayList;
 
 import level.Level;
-import player.Player;
+import app.player.Player;
 
 public class World {
 	private ArrayList<Level> levels;

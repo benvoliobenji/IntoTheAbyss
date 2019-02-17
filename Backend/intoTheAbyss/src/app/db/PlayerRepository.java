@@ -1,8 +1,7 @@
 package app.db;
 import org.springframework.data.repository.CrudRepository;
 
-import player.Player;
-import network.packets.PlayerPacket;
+import app.player.Player;
 
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
 

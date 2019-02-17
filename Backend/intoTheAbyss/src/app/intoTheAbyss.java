@@ -16,7 +16,7 @@ import network.packets.ConnectionPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
-import player.Player;
+import app.player.Player;
 import world.World;
 
 @SpringBootApplication

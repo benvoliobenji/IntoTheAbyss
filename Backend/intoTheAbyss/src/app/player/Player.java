@@ -1,4 +1,4 @@
-package player;
+package app.player;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

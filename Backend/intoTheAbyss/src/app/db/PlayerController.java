@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import player.Player;
+import app.player.Player;
 
 @Controller
 @RequestMapping(path="/players")
