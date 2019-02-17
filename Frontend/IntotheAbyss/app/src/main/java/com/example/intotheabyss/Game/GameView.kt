@@ -1,4 +1,4 @@
-package com.example.intotheabyss
+package com.example.intotheabyss.game
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.example.intotheabyss.R
 import com.example.intotheabyss.player.Player
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
@@ -77,7 +78,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
-        paint.textSize = 24.toFloat()
+        paint.textSize = 30.toFloat()
 
         player!!.draw(canvas, x, y)
         canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
