@@ -1,16 +1,30 @@
+<<<<<<< HEAD:Frontend/IntotheAbyss/app/src/main/java/com/example/intotheabyss/activities/game/GameView2.kt
 package com.example.intotheabyss.activities.activities.game
+=======
+package com.example.intotheabyss
+>>>>>>> 174633a56e0e8f9946f053207d89514bb75ad192:Frontend/IntotheAbyss/app/src/main/java/com/example/intotheabyss/Game/GameView.kt
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+<<<<<<< HEAD:Frontend/IntotheAbyss/app/src/main/java/com/example/intotheabyss/activities/game/GameView2.kt
 import com.example.intotheabyss.activities.game.GameThread2
+=======
+import com.example.intotheabyss.player.Player
+>>>>>>> 174633a56e0e8f9946f053207d89514bb75ad192:Frontend/IntotheAbyss/app/src/main/java/com/example/intotheabyss/Game/GameView.kt
 
 
 class GameView2(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     private val thread: GameThread2
+
+    //declare game objects
+    private var player: Player = Player()
 
     init {
 
@@ -37,6 +51,8 @@ class GameView2(context: Context, attributes: AttributeSet) : SurfaceView(contex
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
+        //Set image assets for game objects
+        player!!.setImage(BitmapFactory.decodeResource(resources, R.drawable.panda))
         //Start the game thread
         thread.setRunning(true)
         thread.start()
@@ -50,7 +66,9 @@ class GameView2(context: Context, attributes: AttributeSet) : SurfaceView(contex
      * This is where we will update game variables
      */
     fun update() {
-
+        //Comment out if you don't want arbitrary player movement
+        player!!.setX(player!!.getX()+1)
+        player!!.setY(player!!.getY()+1)
     }
 
     /**
@@ -58,6 +76,20 @@ class GameView2(context: Context, attributes: AttributeSet) : SurfaceView(contex
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+        drawPlayer(canvas, player!!)
+    }
+
+    fun drawPlayer(canvas: Canvas, player: Player)  {
+        var x = player.getX()
+        var y = player.getY()
+
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
+        paint.textSize = 24.toFloat()
+
+        player!!.draw(canvas, x, y)
+        canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
     }
 
 }

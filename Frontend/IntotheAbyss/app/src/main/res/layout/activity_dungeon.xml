@@ -6,7 +6,11 @@
                 android:layout_height="match_parent"
                 tools:context=".activities.DungeonActivity">
 
+<<<<<<< HEAD
 <com.example.intotheabyss.GameView
+=======
+<com.example.intotheabyss.game.GameView
+>>>>>>> 174633a56e0e8f9946f053207d89514bb75ad192
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

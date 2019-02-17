@@ -1,8 +1,12 @@
 package com.example.intotheabyss.networking
 
-class NetworkRunnable: Runnable {
+import com.example.intotheabyss.game.GameState
+import com.example.intotheabyss.networking.packets.UpdateHandler
+
+class NetworkRunnable(private val gameState: GameState): Runnable {
     override fun run() {
-        val network = Network()
+        val network = Network(gameState)
         network.connect()
+        val updateHandler = UpdateHandler(network, gameState)
     }
 }

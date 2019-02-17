@@ -5,17 +5,43 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
+import com.example.intotheabyss.game.GameProcessingRunnable
+import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.R
+import com.example.intotheabyss.networking.NetworkRunnable
 
 class DungeonActivity : AppCompatActivity() {
+    private var networkThread = Thread()
+    private var gameProcessingThread = Thread()
+    var gameState = GameState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
 
+<<<<<<< HEAD
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         /*val returnButton = findViewById<Button>(R.id.returnButton)
+=======
+
+        if(!networkThread.isAlive) {
+            networkThread = Thread(NetworkRunnable(gameState))
+            networkThread.start()
+        }
+
+        if(!gameProcessingThread.isAlive) {
+            gameProcessingThread = Thread(GameProcessingRunnable(gameState))
+            gameProcessingThread.start()
+        }
+
+        //val returnButton = findViewById<Button>(R.id.returnButton)
+
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        /*val returnButton = findViewById<Button>(R.id.returnButton)
+>>>>>>> JoeDev
+>>>>>>> 174633a56e0e8f9946f053207d89514bb75ad192
         returnButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
