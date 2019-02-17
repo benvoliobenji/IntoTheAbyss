@@ -17,7 +17,7 @@ public class PlayerController {
         Player p = new Player();
         p.setFloor(0);
         p.setHealth(10);
-        p.setPlayerId(Integer.parseInt(playerid));
+        p.setPlayerId(playerid);
         p.setPosX(1);
         p.setPosY(1);
         playerRepository.save(p);
