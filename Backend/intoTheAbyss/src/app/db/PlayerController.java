@@ -12,11 +12,12 @@ public class PlayerController {
     private PlayerRepository playerRepository;
 
     @GetMapping(path="/add")
-    public @ResponseBody String addPlayer (@RequestParam String playerid) {
+    public @ResponseBody String addPlayer (@RequestParam Integer playerid) {
         Player p = new Player();
         p.setFloor(0);
+        p.setUsername(playerid + "");
         p.setHealth(10);
-        p.setPlayerId(Integer.parseInt(playerid));
+        p.setPlayerID(playerid);
         p.setPosX(1);
         p.setPosY(1);
         playerRepository.save(p);
