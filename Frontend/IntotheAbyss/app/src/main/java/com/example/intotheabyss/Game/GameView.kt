@@ -11,12 +11,12 @@ import android.view.SurfaceView
 import com.example.intotheabyss.R
 import com.example.intotheabyss.player.Player
 
-class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
+class GameView(context: Context, attributes: AttributeSet, gameState: GameState) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     private val thread: GameThread
 
     //declare game objects
-    private var player: Player = Player()
+    private var player: Player = Player() //Should be coming from gameState.myPlayer??
 
     init {
 
