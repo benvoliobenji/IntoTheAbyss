@@ -1,6 +1,6 @@
 package network.packets;
 
-import tiles.Tile;
+import app.tiles.Tile;
 
 public class MapPacket {
 	private Tile[][] grid;

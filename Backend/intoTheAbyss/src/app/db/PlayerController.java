@@ -27,7 +27,7 @@ public class PlayerController {
 		return "Saved";
 	}
 	
-	@GetMapping(path = "/add")
+	@GetMapping(path = "/addSafe")
 	public @ResponseBody String addPlayer(@RequestParam Integer playerid) {
 		List<Player> list = playerRepository.getPlayerByUsername(playerid + "");
 		if (list.isEmpty()) {

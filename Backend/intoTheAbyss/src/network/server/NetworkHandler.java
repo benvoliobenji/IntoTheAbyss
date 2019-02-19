@@ -7,13 +7,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import app.level.Level;
 import app.player.Player;
-import level.Level;
+import app.world.World;
 import network.packets.ConnectionPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
-import world.World;
 
 public class NetworkHandler {
 	private static int portTCP = 44444;
@@ -32,12 +32,12 @@ public class NetworkHandler {
 		kryo.register(ConnectionPacket.class);
 		kryo.register(MapRequestPacket.class);
 		kryo.register(MapPacket.class);
-		kryo.register(utils.TileTypes.class);
-		kryo.register(tiles.Tile.class);
-		kryo.register(tiles.Wall.class);
-		kryo.register(tiles.Floor.class);
-		kryo.register(tiles.Tile[].class);
-		kryo.register(tiles.Tile[][].class);
+		kryo.register(app.utils.TileTypes.class);
+		kryo.register(app.tiles.Tile.class);
+		kryo.register(app.tiles.Wall.class);
+		kryo.register(app.tiles.Floor.class);
+		kryo.register(app.tiles.Tile[].class);
+		kryo.register(app.tiles.Tile[][].class);
 		kryo.register(PlayerPacket.class);
 	}
 	

@@ -1,11 +1,11 @@
-package level;
+package app.level;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
 import app.player.Player;
-import tiles.*;
+import app.tiles.*;
 
 public class Level {
 	private static int mapWidth = 100;

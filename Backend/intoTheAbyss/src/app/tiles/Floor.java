@@ -1,5 +1,5 @@
-package tiles;
-import utils.TileTypes;
+package app.tiles;
+import app.utils.TileTypes;
 
 public class Floor extends Tile {
 	final int type = 1;

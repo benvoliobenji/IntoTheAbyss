@@ -22,10 +22,11 @@ public class Player {
 	}
 	
 	public Player(PlayerPacket playerPacket) {
-		floor = playerPacket.getFloorNumber();
+		playerID = Integer.valueOf(17);
+		floor = Integer.valueOf(playerPacket.getFloorNumber());
 		username = playerPacket.getUsername();
-		posX = playerPacket.getXPos();
-		posY = playerPacket.getYPos();
+		posX = Integer.valueOf(playerPacket.getXPos());
+		posY = Integer.valueOf(playerPacket.getYPos());
 	}
 
 	public String toString() {

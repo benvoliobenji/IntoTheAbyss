@@ -1,4 +1,4 @@
-package tiles;
+package app.tiles;
 
 public class Wall extends Tile {
 	final int type = 2;

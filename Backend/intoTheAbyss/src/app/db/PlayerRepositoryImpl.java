@@ -1,11 +1,11 @@
-package app.player;
+package app.db;
 
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
-import app.db.PlayerRepository;
+import app.player.Player;
 
 @Repository
 public abstract class PlayerRepositoryImpl implements PlayerRepository {

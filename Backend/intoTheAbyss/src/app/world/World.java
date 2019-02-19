@@ -1,8 +1,8 @@
-package world;
+package app.world;
 
 import java.util.ArrayList;
 
-import level.Level;
+import app.level.Level;
 import app.player.Player;
 
 public class World {

@@ -1,9 +1,9 @@
-package level;
+package app.level;
 
 import java.awt.Point;
 import java.util.Random;
 
-import tiles.Floor;
+import app.tiles.Floor;
 
 public class Room {
 	private static int mapWidth = 100;
