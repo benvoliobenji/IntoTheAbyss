@@ -11,12 +11,16 @@ import android.view.SurfaceView
 import com.example.intotheabyss.R
 import com.example.intotheabyss.player.Player
 
-class GameView(context: Context, attributes: AttributeSet, gameState: GameState) : SurfaceView(context, attributes), SurfaceHolder.Callback {
+class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     private val thread: GameThread
+    private var gameState: GameState? = null
 
     //declare game objects
-    private var player: Player = Player() //Should be coming from gameState.myPlayer??
+//    private var player: Player = Player() //Should be coming from gameState.myPlayer??
+//    private var player: Player = gameState.myPlayer
+    private var player: Player? = null
+
 
     init {
 
@@ -25,6 +29,12 @@ class GameView(context: Context, attributes: AttributeSet, gameState: GameState)
 
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
+
+        try {
+            player = gameState!!.myPlayer
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -43,6 +53,13 @@ class GameView(context: Context, attributes: AttributeSet, gameState: GameState)
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
+        if (player == null) {
+            try {
+                player = gameState!!.myPlayer
+            } catch (e: java.lang.Exception)    {
+                e.printStackTrace()
+            }
+        }
         //Set image assets for game objects
         player!!.setImage(BitmapFactory.decodeResource(resources, R.drawable.panda))
         //Start the game thread
@@ -82,6 +99,10 @@ class GameView(context: Context, attributes: AttributeSet, gameState: GameState)
 
         player!!.draw(canvas, x, y)
         canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
+    }
+
+    fun setGameState(gState: GameState)  {
+        gameState = gState
     }
 
 }

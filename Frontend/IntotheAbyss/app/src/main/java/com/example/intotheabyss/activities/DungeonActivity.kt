@@ -8,6 +8,7 @@ import android.widget.Button
 import com.example.intotheabyss.game.GameProcessingRunnable
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.R
+import com.example.intotheabyss.game.GameView
 import com.example.intotheabyss.networking.NetworkRunnable
 
 class DungeonActivity : AppCompatActivity() {
@@ -15,10 +16,13 @@ class DungeonActivity : AppCompatActivity() {
     private var gameProcessingThread = Thread()
     var gameState = GameState()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
+        var gameView = findViewById<GameView>(R.id.gView)
 
+        gameView.setGameState(gameState)
 
         if(!networkThread.isAlive) {
             networkThread = Thread(NetworkRunnable(gameState))
@@ -30,12 +34,13 @@ class DungeonActivity : AppCompatActivity() {
             gameProcessingThread.start()
         }
 
+
+
         //val returnButton = findViewById<Button>(R.id.returnButton)
 
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         /*val returnButton = findViewById<Button>(R.id.returnButton)
->>>>>>> JoeDev
         returnButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
