@@ -23,7 +23,7 @@ public class NetworkHandler {
 	private World world;
 	
 	public NetworkHandler(World worldP){
-		Server server = new Server(16384, 65536);
+		server = new Server(16384, 65536);
 		world = worldP;
 	}
 	
