@@ -76,8 +76,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     fun update() {
         //Comment out if you don't want arbitrary player movement
-        player!!.setX(player!!.getX()+1)
-        player!!.setY(player!!.getY()+1)
+        //player!!.setX(player!!.getX()+1)
+        //player!!.setY(player!!.getY()+1)
+        player!!.setX(player!!.getX())
+        player!!.setY(player!!.getY())
     }
 
     /**

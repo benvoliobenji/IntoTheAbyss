@@ -1,7 +1,10 @@
 package com.example.intotheabyss.dungeonassets
 
+import com.example.intotheabyss.utils.TileTypes
+
 class Floor : Tile() {
-    override val type = 1
+    val type = 1
+    override val typel = TileTypes.FLOOR
 
     init {
         canHold = true

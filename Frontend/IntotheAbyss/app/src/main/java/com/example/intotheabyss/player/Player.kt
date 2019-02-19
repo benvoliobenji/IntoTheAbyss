@@ -7,9 +7,9 @@ import java.util.*
 
 import kotlin.random.Random
 
-class Player() {
+class Player {
     var playerID: String = Random.nextInt(0, 1000000).toString()
-    var floorNumber: Int = 0
+    var floorNumber: Int = 1
     private var x: Int = 0
     private var y: Int = 0
     private var image: Bitmap? = null
