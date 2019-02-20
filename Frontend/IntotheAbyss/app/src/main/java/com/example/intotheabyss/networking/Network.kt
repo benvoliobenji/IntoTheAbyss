@@ -95,8 +95,11 @@ class Network(private var gameState: GameState): Listener() {
             // Attempt to connect within a 5000 ms window before timing out
             client.connect(5000, ip, tcpPort, udpPort)
             Log.d("Networking","Sending Floor Request")
-            client.sendTCP(ConnectionPackage("Client says hello!"))
-            client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
+            // client.sendTCP(ConnectionPackage("Client says hello!"))
+            // client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
+            this.client.sendTCP(PlayerLocationPacket(playerID = gameState.myPlayer.playerID,
+                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.getX(),
+                playerPositionY = gameState.myPlayer.getY()))
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -117,8 +120,8 @@ class Network(private var gameState: GameState): Listener() {
             // For now, just send the packet of the new location
             // Eventually we will have a handler that will deal with it outside of Network, but this is only for Demo 2
             this.client.sendTCP(PlayerLocationPacket(playerID = gameState.myPlayer.playerID,
-                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.x,
-                playerPositionY = gameState.myPlayer.y))
+                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.getX(),
+                playerPositionY = gameState.myPlayer.getY()))
         }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
