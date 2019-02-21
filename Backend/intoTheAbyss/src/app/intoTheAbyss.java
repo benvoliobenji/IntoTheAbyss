@@ -1,28 +1,25 @@
 package app;
 
-import java.io.IOException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-
-import network.packets.ConnectionPacket;
-import network.packets.MapPacket;
-import network.packets.MapRequestPacket;
-import network.packets.PlayerPacket;
 import network.server.NetworkHandler;
-import app.level.Level;
-import app.player.Player;
+import app.db.PlayerRepository;
 import app.world.World;
 
 @SpringBootApplication
 public class intoTheAbyss {
+	@Autowired
+	private PlayerRepository playerRepository;
+	@PersistenceContext
+    EntityManager entityManager;
+	
 	public static int portTCP = 44444;
 	public static int portUDP = 44445;
 
@@ -36,7 +33,8 @@ public class intoTheAbyss {
 		world.addLevel();
 		world.addLevel();
 		
-		NetworkHandler network = new NetworkHandler(world);
+		NetworkHandler network = new NetworkHandler(world, playerRepository);
+		network.registerPackets();
 		network.setupListener();
 		network.startNetwork();
 	}

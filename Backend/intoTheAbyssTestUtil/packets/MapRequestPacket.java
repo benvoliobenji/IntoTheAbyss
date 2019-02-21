@@ -14,8 +14,4 @@ public class MapRequestPacket {
 	public int getFloorNum() {
 		return floorNum;
 	}
-	
-	public void setFloorNum(int floor) {
-		floorNum = floor;
-	}
 }
