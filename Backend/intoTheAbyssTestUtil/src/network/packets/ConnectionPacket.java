@@ -1,7 +1,7 @@
 package network.packets;
 
 public class ConnectionPacket {
-	public String text = "New connection";
+	public Integer userID;
 	
 	public ConnectionPacket() {
 		

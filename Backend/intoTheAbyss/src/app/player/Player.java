@@ -1,13 +1,18 @@
 package app.player;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 import network.packets.PlayerPacket;
 
 @Entity
 public class Player {
 	@Id
+	@GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
 	private Integer playerID;
 	private String username;
 	private Integer posX, posY, floor, health;
@@ -16,15 +21,14 @@ public class Player {
 		floor = 0;
 		username = "";
 	}
-	
+
 	public Player(int floorNum) {
 		floor = floorNum;
 	}
-	
+
 	public Player(PlayerPacket playerPacket) {
-		playerID = Integer.valueOf(13);
-		floor = Integer.valueOf(playerPacket.getFloorNumber());
 		username = playerPacket.getUsername();
+		floor = Integer.valueOf(playerPacket.getFloorNumber());
 		posX = Integer.valueOf(playerPacket.getXPos());
 		posY = Integer.valueOf(playerPacket.getYPos());
 	}
