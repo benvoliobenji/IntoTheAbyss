@@ -4,9 +4,7 @@ import java.awt.Point;
 import java.util.Random;
 
 public class Room {
-	private int mapWidth;
-	private int mapHeight;
-	
+
 	private Point corner;
 	private int xLength, yLength;
 	Random rand;
@@ -14,16 +12,14 @@ public class Room {
 	public Room(Random rand) {
 		corner = new Point();
 		this.rand = rand;
-		mapWidth = Level.mapWidth;
-		mapHeight = Level.mapHeight;
+
 		/* create entry in room array */
 		// y length and x length
-		yLength = rand.nextInt(5) + 6;
+		yLength = rand.nextInt(4) + 4;
 		xLength = rand.nextInt(15) + 10;
 		// y corner x corner
-		corner.y = rand.nextInt(mapHeight - yLength - 1) + 1;
-		corner.x = rand.nextInt(mapWidth - xLength - 1)  + 1;
-
+		corner.y = rand.nextInt(Level.mapHeight - yLength - 1) + 1;
+		corner.x = rand.nextInt(Level.mapWidth - xLength - 1)  + 1;
 	}
 
 	public Point getCorner() {

@@ -7,4 +7,8 @@ public abstract class Tile {
 
 	public abstract TileTypes getType();
 
+	@Override
+	public String toString(){
+		return type.ordinal() + "";
+	}
 }

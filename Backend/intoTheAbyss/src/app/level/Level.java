@@ -10,13 +10,12 @@ import app.utils.TileTypes;
 
 public class Level {
 	public static final int mapWidth = 100;
-	public static final int mapHeight = 30;
+	public static final int mapHeight = 25;
 
 	private Random rand;
 	private ArrayList<Player> players;
 	private Tile[][] grid;
 	private Room[] rooms;
-	private Point spawnPoint;
 	private Point spawn;
 	private Point stair;
 
@@ -162,7 +161,7 @@ public class Level {
 
 		for (i = 0; i < rooms.length; i++) {
 			p = rooms[i].getCenter();
-			curr_dist = Math.sqrt((cX - p.x) * (cX - p.x) + 2 * (cY - p.y) * (cY - p.y));
+			curr_dist = Math.sqrt((cX - p.x) * (cX - p.x) + 4 * (cY - p.y) * (cY - p.y));
 			if (curr_dist < dist) {
 				dist = curr_dist;
 				idx = i;
