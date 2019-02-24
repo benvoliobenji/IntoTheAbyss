@@ -3,8 +3,8 @@ import app.utils.TileTypes;
 
 public abstract class Tile {
 	protected boolean canHold, isPassable;
-	protected TileTypes typel;
+	protected TileTypes type;
 
-	public abstract int getType();
+	public abstract TileTypes getType();
 
 }
