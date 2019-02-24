@@ -18,17 +18,24 @@ public class Player {
 	}
 	
 	public Player(int floorNum) {
-		floor = floorNum;
+		floor = Integer.valueOf(floorNum);
+		playerID = Integer.valueOf(17);
+		username = "" + 17;
+		posX = Integer.valueOf(1);
+		posY = Integer.valueOf(1);
+		health = Integer.valueOf(10);
 	}
 	
 	public Player(PlayerPacket playerPacket) {
-		playerID = Integer.valueOf(13);
+		playerID = Integer.valueOf(19);
 		floor = Integer.valueOf(playerPacket.getFloorNumber());
-		username = playerPacket.getUsername();
+		username = playerPacket.getUsername() + "";
 		posX = Integer.valueOf(playerPacket.getXPos());
 		posY = Integer.valueOf(playerPacket.getYPos());
+		health = Integer.valueOf(10);
 	}
-
+	
+	@Override
 	public String toString() {
 		String s = "";
 		s += "Username: " + username + "\t";
