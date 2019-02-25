@@ -48,7 +48,8 @@ class DungeonActivity : AppCompatActivity() {
                 startActivity(intent)
         
 
-=======
->>>>>>> 434576efc1b9dff05e1a03691317af2b8699969d
+
+
+        }*/
     }
 }

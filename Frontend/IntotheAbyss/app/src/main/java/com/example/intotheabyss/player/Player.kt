@@ -2,6 +2,7 @@ package com.example.intotheabyss.player
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+
 import java.lang.Exception
 import java.util.*
 
@@ -13,6 +14,14 @@ class Player {
     private var x: Int = 0
     private var y: Int = 0
     private var image: Bitmap? = null
+=======
+
+class Player(var image: Bitmap) {
+    //So in kotlin, we don't need getters and setters?
+    var floorNumber: Int = 0
+    private var x: Int = 0
+    private var y: Int = 0
+>>>>>>> bea872b5d6e0668930268bc416a9f0040c6047a5
 
     //Getters and setters are automatically generated if non-private variables.
     //This is just testing to confirm.
@@ -46,5 +55,12 @@ class Player {
             print(e.printStackTrace())
         }
 
+
+    /*
+    Method to draw player to the canvas
+     */
+    fun draw(canvas: Canvas, x: Int, y: Int)    {
+        canvas.drawBitmap(image, x.toFloat(), y.toFloat(), null)
+>>>>>>> bea872b5d6e0668930268bc416a9f0040c6047a5
     }
 }

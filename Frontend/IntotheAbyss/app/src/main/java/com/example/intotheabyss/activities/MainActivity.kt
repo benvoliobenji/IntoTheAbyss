@@ -4,7 +4,6 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.StrictMode
 import android.widget.Button
 import com.example.intotheabyss.R
 import com.example.intotheabyss.networking.NetworkRunnable
@@ -14,20 +13,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val ring = MediaPlayer.create(this, R.raw.car_sound)
 
         val play = findViewById<Button>(R.id.playButton)
         play.setOnClickListener {
             val intent = Intent(this, DungeonActivity::class.java)
             startActivity(intent)
 
-            
-            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-            StrictMode.setThreadPolicy(policy)
 
-//            this.network.connect()
-=======
+            
+
+            this.network.connect()
             ring.start()
->>>>>>> 434576efc1b9dff05e1a03691317af2b8699969d
+
+
+            ring.start()
+
+            if(!networkThread.isAlive) {
+                networkThread = Thread(NetworkRunnable())
+                networkThread.start()
+            }
+
         }
 
         val settings = findViewById<Button>(R.id.settingsButton)
