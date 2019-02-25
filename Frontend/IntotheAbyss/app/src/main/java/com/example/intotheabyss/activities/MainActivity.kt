@@ -7,11 +7,9 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.widget.Button
 import com.example.intotheabyss.R
-import com.example.intotheabyss.networking.Network
+import com.example.intotheabyss.networking.NetworkRunnable
 
 class MainActivity : AppCompatActivity() {
-
-    private var network: Network = Network()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,17 +20,20 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DungeonActivity::class.java)
             startActivity(intent)
 
-            //Proposed fix (For network errors maybe?)
+            
             val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
             StrictMode.setThreadPolicy(policy)
 
 //            this.network.connect()
+=======
+            ring.start()
+>>>>>>> 434576efc1b9dff05e1a03691317af2b8699969d
         }
 
         val settings = findViewById<Button>(R.id.settingsButton)
         settings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+            startActivity(intent)
         }
 
 
