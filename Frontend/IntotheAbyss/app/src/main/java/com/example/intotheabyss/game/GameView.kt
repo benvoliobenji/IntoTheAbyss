@@ -1,15 +1,24 @@
 package com.example.intotheabyss.game
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.Display
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.example.intotheabyss.R
+import com.example.intotheabyss.R.drawable
+import com.example.intotheabyss.dungeonassets.Floor
+import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.dungeonassets.Level
+import android.R.attr.y
+import android.R.attr.x
+import android.R
+import android.content.res.Resources
+import android.graphics.*
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import com.example.intotheabyss.utils.TileTypes
+
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -105,6 +114,50 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     fun setGameState(gState: GameState)  {
         gameState = gState
+    }
+
+    fun drawBG(canvas: Canvas, player: Player) {
+        //Wall/floor objects to display - will explore more advanced ways of displaying objects (sprites and whatnot)
+        val wall: Wall = Wall()
+        val floor: Floor = Floor()
+        val tileSize = 32
+
+        //getting lvlArray from gameState for now, but this should be changed to be level object
+        //val level: Level = gameState.level
+        val lvlArray = gameState!!.level
+
+        //Screen dimensions
+        val sWidth = Resources.getSystem().displayMetrics.widthPixels
+        val sHeight = Resources.getSystem().displayMetrics.heightPixels
+
+        //How many tiles will fit on screen
+        val dimWidth: Int = sWidth / tileSize
+        val dimHeight: Int = sHeight / tileSize
+
+        //image variable - will maybe be updated to be more efficient later
+        var image: Bitmap = BitmapFactory.decodeResource(R.drawable.panda)
+
+        //Loop through all tiles to be displayed, and a few others to minimize lag
+        for (i in -2..dimWidth+2) {
+            for (j in -2..dimHeight+2) {
+                //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
+                try{
+                    if (lvlArray.get(i).get(j).typel == TileTypes.FLOOR) {  //Set image to floorImage
+                        image = floorImage
+                    } else if (lvlArray.get(i).get(j).typel == TileTypes.WALL) {
+                        image = wallImage                                   //Set image to wallImage
+                    }
+                    try {   //Try to print the damn thing
+                        canvas.drawBitmap(image, (j*tileSize).toFloat(), (i*tileSize).tofloat(), null)
+                    } catch (e: java.lang.Exception) {
+                        print(e.printStackTrace())
+                    }
+                } catch(e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+
+            }
+        }
     }
 
 }
