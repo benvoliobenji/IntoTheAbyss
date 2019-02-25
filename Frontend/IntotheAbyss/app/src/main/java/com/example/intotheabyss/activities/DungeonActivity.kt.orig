@@ -34,23 +34,25 @@ class DungeonActivity : AppCompatActivity() {
             gameProcessingThread.start()
         }
 
-<<<<<<< HEAD
-=======
+
 
 
         //val returnButton = findViewById<Button>(R.id.returnButton)
 
->>>>>>> 434576efc1b9dff05e1a03691317af2b8699969d
+
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         /*val returnButton = findViewById<Button>(R.id.returnButton)
         returnButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-        }*/
 <<<<<<< HEAD
+        
 
 =======
 >>>>>>> 434576efc1b9dff05e1a03691317af2b8699969d
+=======
+        }*/
+>>>>>>> bea872b5d6e0668930268bc416a9f0040c6047a5
     }
 }
