@@ -32,10 +32,10 @@ public class PlayerController {
 		List<Player> list = playerRepository.getPlayerByUsername(playerid + "");
 		if (list.isEmpty()) {
 			Player p = new Player();
+			p.setPlayerID(playerid);
 			p.setFloor(0);
 			p.setUsername(playerid + "");
 			p.setHealth(10);
-			p.setPlayerID(playerid);
 			p.setPosX(1);
 			p.setPosY(1);
 			playerRepository.save(p);

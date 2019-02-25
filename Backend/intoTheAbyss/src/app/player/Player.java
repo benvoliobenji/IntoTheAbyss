@@ -1,11 +1,8 @@
 package app.player;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 import network.packets.PlayerPacket;
 
@@ -16,10 +13,12 @@ public class Player {
 	private Integer playerID;
 	private String username;
 	private Integer posX, posY, floor, health;
+	
 
 	public Player() {
 		floor = 0;
 		username = "";
+		health = 10;
 	}
 
 	public Player(int floorNum) {

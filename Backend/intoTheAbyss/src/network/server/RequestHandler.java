@@ -25,7 +25,7 @@ public class RequestHandler {
 
 	public void handleRequests(Connection connection, Object object) {
 		if (object instanceof ConnectionPacket) {
-
+			handleConnectionRequest(connection, object);
 		} else if (object instanceof MapRequestPacket) {
 			handleMapRequest(connection, object);
 
@@ -44,9 +44,6 @@ public class RequestHandler {
 			Player recivedPlayer = new Player((PlayerPacket) object);
 			System.out.println(recivedPlayer.toString());
 			playerRepository.save(recivedPlayer);
-		} else {
-			// Do some processing if the player already exists.
-
 		}
 	}
 
