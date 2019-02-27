@@ -1,0 +1,13 @@
+package com.example.intotheabyss.dungeonassets
+
+<<<<<<< HEAD
+abstract class Tile(internal var canHold: Boolean=false, internal var isPassable: Boolean=false) {
+    abstract val type: Int
+=======
+import com.example.intotheabyss.utils.TileTypes
+
+abstract class Tile(internal var canHold: Boolean=false, internal var isPassable: Boolean=false) {
+    abstract val typel: TileTypes
+>>>>>>> 0fdfd46523401060f73c3e4664c45a857f184cc9
+}
+

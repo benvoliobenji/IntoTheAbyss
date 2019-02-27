@@ -97,6 +97,12 @@ class Network(private var gameState: GameState): Listener() {
             Log.d("Networking","Sending Floor Request")
             client.sendTCP(ConnectionPackage("Client says hello!"))
             client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
+            // client.sendTCP(ConnectionPackage("Client says hello!"))
+            // client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
+            this.client.sendTCP(PlayerLocationPacket(playerID = gameState.myPlayer.playerID,
+                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.getX(),
+                playerPositionY = gameState.myPlayer.getY()))
+>>>>>>> 0fdfd46523401060f73c3e4664c45a857f184cc9
 
         } catch (e: IOException) {
             e.printStackTrace()

@@ -3,18 +3,54 @@ package app.player;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import network.packets.PlayerPacket;
+
 @Entity
 public class Player {
 	@Id
-	private Integer playerid;
+	private Integer playerID;
+	private String username;
 	private Integer posX, posY, floor, health;
 
-	public Integer getPlayerId() {
-		return playerid;
+	public Player() {
+		floor = 0;
+		username = "";
+	}
+	
+	public Player(int floorNum) {
+		floor = floorNum;
+	}
+	
+	public Player(PlayerPacket playerPacket) {
+		playerID = Integer.valueOf(13);
+		floor = Integer.valueOf(playerPacket.getFloorNumber());
+		username = playerPacket.getUsername();
+		posX = Integer.valueOf(playerPacket.getXPos());
+		posY = Integer.valueOf(playerPacket.getYPos());
 	}
 
-	public void setPlayerId(Integer playerid) {
-		this.playerid = playerid;
+	public String toString() {
+		String s = "";
+		s += "Username: " + username + "\t";
+		s += "Position (floor, x, y): " + floor + ", " + posX + ", " + posY;
+		return s;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String uname) {
+		this.username = uname;
+	}
+
+	public Integer getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(Integer playerid) {
+		this.playerID = playerid;
+
 	}
 
 	public Integer getPosX() {

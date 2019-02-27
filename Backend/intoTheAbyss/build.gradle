@@ -31,6 +31,8 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-devtools")
 	compile("com.esotericsoftware:kryonet:2.22.0-RC1")
 	compile("mysql:mysql-connector-java")
+	
+	//compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.1.Final'
 }
 
 sourceSets {
