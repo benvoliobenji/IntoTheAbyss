@@ -7,13 +7,7 @@
                 tools:context=".activities.DungeonActivity">
 
 
-<com.example.intotheabyss.GameView
-=======
 <com.example.intotheabyss.game.GameView
->>>>>>> 174633a56e0e8f9946f053207d89514bb75ad192
-=======
-<com.example.intotheabyss.game.GameView
->>>>>>> 0fdfd46523401060f73c3e4664c45a857f184cc9
         android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:id="@+id/gView"/>

@@ -19,22 +19,7 @@ class MainActivity : AppCompatActivity() {
         play.setOnClickListener {
             val intent = Intent(this, DungeonActivity::class.java)
             startActivity(intent)
-
-
-            
-
-            this.network.connect()
             ring.start()
-
-
-            ring.start()
-
-            if(!networkThread.isAlive) {
-                networkThread = Thread(NetworkRunnable())
-                networkThread.start()
-            }
-
->>>>>>> 0fdfd46523401060f73c3e4664c45a857f184cc9
         }
 
         val settings = findViewById<Button>(R.id.settingsButton)

@@ -17,10 +17,6 @@ class DungeonActivity : AppCompatActivity() {
     private var networkThread = Thread()
     private var gameProcessingThread = Thread()
     var gameState = GameState()
-<<<<<<< HEAD
-=======
-
->>>>>>> 0fdfd46523401060f73c3e4664c45a857f184cc9
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,38 +36,8 @@ class DungeonActivity : AppCompatActivity() {
         }
 
 
-
-
-        //val returnButton = findViewById<Button>(R.id.returnButton)
-
-
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        /*val returnButton = findViewById<Button>(R.id.returnButton)
 
-
-        if(!networkThread.isAlive) {
-            networkThread = Thread(NetworkRunnable(gameState))
-            networkThread.start()
-        }
-
-        if(!gameProcessingThread.isAlive) {
-            gameProcessingThread = Thread(GameProcessingRunnable(gameState))
-            gameProcessingThread.start()
-        }
-
-        //val returnButton = findViewById<Button>(R.id.returnButton)
-
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
-        /*val returnButton = findViewById<Button>(R.id.returnButton)
-        returnButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-        
-
-
-
-        }*/
     }
 }

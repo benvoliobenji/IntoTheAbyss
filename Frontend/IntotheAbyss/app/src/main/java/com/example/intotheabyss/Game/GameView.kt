@@ -5,20 +5,20 @@ import android.util.AttributeSet
 import android.view.Display
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.example.intotheabyss.R.drawable
+import com.example.intotheabyss.R.*
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.player.Player
 import com.example.intotheabyss.dungeonassets.Level
 import android.R.attr.y
 import android.R.attr.x
-import android.R
 import android.content.res.Resources
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import com.example.intotheabyss.utils.TileTypes
-
+import com.example.intotheabyss.R
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -29,6 +29,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 //    private var player: Player = Player() //Should be coming from gameState.myPlayer??
 //    private var player: Player = gameState.myPlayer
     private var player: Player? = null
+    private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
+    private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
 
 
     init {
@@ -70,7 +72,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
         }
         //Set image assets for game objects
-        player!!.setImage(BitmapFactory.decodeResource(resources, R.drawable.panda))
+        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda))
         //Start the game thread
         thread.setRunning(true)
         thread.start()
@@ -97,6 +99,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         drawPlayer(canvas, player!!)
+        drawBG(canvas, player!!)
     }
 
     fun drawPlayer(canvas: Canvas, player: Player)  {
@@ -135,20 +138,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val dimHeight: Int = sHeight / tileSize
 
         //image variable - will maybe be updated to be more efficient later
-        var image: Bitmap = BitmapFactory.decodeResource(R.drawable.panda)
+        var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
 
         //Loop through all tiles to be displayed, and a few others to minimize lag
-        for (i in -2..dimWidth+2) {
-            for (j in -2..dimHeight+2) {
+        for (i in 0..dimWidth) {
+            for (j in 0..dimHeight) {
                 //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
                 try{
-                    if (lvlArray.get(i).get(j).typel == TileTypes.FLOOR) {  //Set image to floorImage
+                    if (lvlArray.get(i).get(j).type1 == TileTypes.FLOOR) {  //Set image to floorImage
                         image = floorImage
-                    } else if (lvlArray.get(i).get(j).typel == TileTypes.WALL) {
+                    } else if (lvlArray.get(i).get(j).type1 == TileTypes.WALL) {
                         image = wallImage                                   //Set image to wallImage
                     }
                     try {   //Try to print the damn thing
-                        canvas.drawBitmap(image, (j*tileSize).toFloat(), (i*tileSize).tofloat(), null)
+                        canvas.drawBitmap(image, (j*tileSize).toFloat(), (i*tileSize).toFloat(), null)
                     } catch (e: java.lang.Exception) {
                         print(e.printStackTrace())
                     }
