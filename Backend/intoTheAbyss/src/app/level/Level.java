@@ -186,16 +186,19 @@ public class Level {
 	}
 
 	public void fillGridForDefaultMap() {
-		for(int i=0; i < mapWidth; i++) {
-			for(int j=0; j < mapHeight; j++) {
+		for(int i=0; i < mapHeight; i++) {
+			for(int j=0; j < mapWidth; j++) {
 				//Checks if the selected index is an edge of the grid
-				if(i == 0 || j == 0 || i == mapWidth-1 || j == mapHeight-1) {
+				if(i == 0 || j == 0 || i == mapHeight-1 || j == mapWidth-1) {
 					grid[i][j]  = new Wall();
 				}else {
 					grid[i][j] = new Floor();
 				}
 			}
 		}
+		grid[mapHeight / 2][mapWidth / 2] = new Stair();
+		stair.y = mapHeight / 2;
+		stair.x = mapWidth / 2;
 	}
 
 }

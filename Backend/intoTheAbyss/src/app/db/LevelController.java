@@ -2,6 +2,7 @@ package app.db;
 
 
 import app.level.Level;
+import app.world.World;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +15,15 @@ public class LevelController {
 
     @GetMapping(path = "/get")
     public @ResponseBody Level getLevel(@RequestParam Integer id){
+        World w = new World();
 
-        return null;
+        w.addLevel();
+        w.addLevel();
+        w.addLevel();
+
+
+        return w.getLevel(id);
+
     }
 
 }
