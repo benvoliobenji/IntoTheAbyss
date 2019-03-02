@@ -22,11 +22,11 @@ public class Player {
 	}
 	
 	public Player(PlayerPacket playerPacket) {
-		playerID = Integer.valueOf(13);
-		floor = Integer.valueOf(playerPacket.getFloorNumber());
+		playerID = 13;
+		floor = playerPacket.getFloorNumber();
 		username = playerPacket.getUsername();
-		posX = Integer.valueOf(playerPacket.getXPos());
-		posY = Integer.valueOf(playerPacket.getYPos());
+		posX = playerPacket.getXPos();
+		posY = playerPacket.getYPos();
 	}
 
 	public String toString() {
@@ -50,7 +50,6 @@ public class Player {
 
 	public void setPlayerID(Integer playerid) {
 		this.playerID = playerid;
-
 	}
 
 	public Integer getPosX() {

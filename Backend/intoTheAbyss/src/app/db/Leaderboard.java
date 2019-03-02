@@ -1,14 +1,37 @@
 package app.db;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@RestController
-class Leaderboard {
+@Entity
+public class Leaderboard {
 
-    @GetMapping("/leaderboard")
-    public String leaderboard() {
-        return "lb";
+    @Id
+    private String playerID;
+    private Integer floorsCleared, monstersKilled;
+
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
+    }
+
+    public Integer getFloorsCleared() {
+        return floorsCleared;
+    }
+
+    public void setFloorsCleared(Integer floorsCleared) {
+        this.floorsCleared = floorsCleared;
+    }
+
+    public Integer getMonstersKilled() {
+        return monstersKilled;
+    }
+
+    public void setMonstersKilled(Integer monstersKilled) {
+        this.monstersKilled = monstersKilled;
     }
 }
 

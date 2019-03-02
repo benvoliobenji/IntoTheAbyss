@@ -1,5 +1,5 @@
 package app.utils;
 
 public enum TileTypes {
-	FLOOR, WALL;
+	FLOOR, WALL, STAIR
 }
