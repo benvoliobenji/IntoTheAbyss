@@ -19,6 +19,7 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.R
+import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -98,8 +99,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        drawPlayer(canvas, player!!)
         drawBG(canvas, player!!)
+        drawPlayer(canvas, player!!)
+
     }
 
     fun drawPlayer(canvas: Canvas, player: Player)  {
@@ -123,11 +125,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //Wall/floor objects to display - will explore more advanced ways of displaying objects (sprites and whatnot)
         val wall: Wall = Wall()
         val floor: Floor = Floor()
-        val tileSize = 32
+        val tileSize = 64
 
+        //TODO: Replace lvlArray with level, when possible
         //getting lvlArray from gameState for now, but this should be changed to be level object
         //val level: Level = gameState.level
-        val lvlArray = gameState!!.level
+        val lvlArray = Array(100) { Array(50) { tile } }
 
         //Screen dimensions
         val sWidth = Resources.getSystem().displayMetrics.widthPixels
@@ -140,27 +143,38 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //image variable - will maybe be updated to be more efficient later
         var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
 
-        //Loop through all tiles to be displayed, and a few others to minimize lag
-        for (i in 0..dimWidth) {
-            for (j in 0..dimHeight) {
-                //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
-                try{
-                    if (lvlArray.get(i).get(j).type1 == TileTypes.FLOOR) {  //Set image to floorImage
-                        image = floorImage
-                    } else if (lvlArray.get(i).get(j).type1 == TileTypes.WALL) {
-                        image = wallImage                                   //Set image to wallImage
-                    }
-                    try {   //Try to print the damn thing
-                        canvas.drawBitmap(image, (j*tileSize).toFloat(), (i*tileSize).toFloat(), null)
-                    } catch (e: java.lang.Exception) {
-                        print(e.printStackTrace())
-                    }
-                } catch(e: java.lang.Exception) {
-                    e.printStackTrace()
+        //TODO: Remove later (when replacaed by gamestate)
+        //Debugging
+        for (i in 0..(lvlArray.size-1)) {
+            for (j in 0..(lvlArray[0].size-1)) {
+                if ((i == 0) or (i == 100) or (j == 0) or (j == 50)) {
+                    lvlArray[i][j] = wall
+                } else {
+                    lvlArray[i][j] = floor
                 }
-
             }
         }
+
+        //Loop through all tiles to be displayed, and a few others to minimize lag
+        for (i in 0..dimWidth) {
+            if ((i > -1) and (i < 100))
+            for (j in 0..dimHeight) {
+                if ((j > -1) and (j < 50)) {
+                    //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
+                    if (lvlArray[i][j]!!.type1 == TileTypes.FLOOR) {  //Set image to floorImage
+                        image = floorImage
+                    } else if (lvlArray[i][j]!!.type1 == TileTypes.WALL) {
+                        image = wallImage                                   //Set image to wallImage
+                    }
+                    //Try to print the damn thing
+                    canvas.drawBitmap(image, ((i * tileSize)+1).toFloat(), ((j * tileSize)+1).toFloat(), null)
+                }
+            }
+        }
+    }
+
+    companion object {
+        private var tile: Tile? = null
     }
 
 }

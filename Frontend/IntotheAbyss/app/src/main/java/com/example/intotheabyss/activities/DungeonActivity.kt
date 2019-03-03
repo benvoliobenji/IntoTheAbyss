@@ -1,8 +1,10 @@
 package com.example.intotheabyss.activities
 
 import android.content.Intent
+import android.graphics.Canvas
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import com.example.intotheabyss.game.GameProcessingRunnable
@@ -25,6 +27,7 @@ class DungeonActivity : AppCompatActivity() {
 
         gameView.setGameState(gameState)
 
+
         if(!networkThread.isAlive) {
             networkThread = Thread(NetworkRunnable(gameState))
             networkThread.start()
@@ -34,10 +37,6 @@ class DungeonActivity : AppCompatActivity() {
             gameProcessingThread = Thread(GameProcessingRunnable(gameState))
             gameProcessingThread.start()
         }
-
-
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
 
     }
 }
