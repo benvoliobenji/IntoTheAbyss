@@ -3,33 +3,42 @@ package app.level;
 import java.awt.Point;
 import java.util.Random;
 
-import app.tiles.Floor;
-
 public class Room {
-	private static int mapWidth = 100;
-	private static int mapHeight = 50;
-	
+
 	private Point corner;
 	private int xLength, yLength;
+	Random rand;
 
 	public Room(Random rand) {
 		corner = new Point();
+		this.rand = rand;
+
 		/* create entry in room array */
 		// y length and x length
-		yLength = (rand.nextInt(Integer.MAX_VALUE) % 5) + 6;
-		xLength = (rand.nextInt(Integer.MAX_VALUE) % 15) + 10;
+		yLength = rand.nextInt(4) + 4;
+		xLength = rand.nextInt(15) + 10;
 		// y corner x corner
-		corner.x = (rand.nextInt(Integer.MAX_VALUE) % (mapHeight - yLength - 1)) + 1;
-		corner.y = (rand.nextInt(Integer.MAX_VALUE) % (mapWidth - xLength - 1)) + 1;
-
+		corner.y = rand.nextInt(Level.mapHeight - yLength - 1) + 1;
+		corner.x = rand.nextInt(Level.mapWidth - xLength - 1)  + 1;
 	}
 
-	public Point getCorners() {
+	public Point getCorner() {
 		return corner;
 	}
 
 	public Point getCenter() {
-		return null;
+		Point p = new Point();
+		p.x = corner.x + xLength / 2;
+		p.y = corner.y + yLength / 2;
+		return p;
+	}
+
+	public int getxLength() {
+		return xLength;
+	}
+
+	public int getyLength() {
+		return yLength;
 	}
 
 	public boolean overlapsRoom(Room differentRoom) {
@@ -37,7 +46,11 @@ public class Room {
 	}
 
 	public Point getRandomPointInRoom() {
-		return null;
+		Point p = new Point();
+		p.x = corner.x + 1 + rand.nextInt(xLength - 2);
+		p.y = corner.y + 1 + rand.nextInt(yLength - 2);
+		return p;
 	}
+
 
 }
