@@ -8,13 +8,22 @@ import app.player.Player;
 import app.tiles.*;
 import app.utils.TileTypes;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
 public class Level {
 	public static final int mapWidth = 100;
 	public static final int mapHeight = 25;
 
+	@Id
+	private Integer level;
 	private Random rand;
 	private ArrayList<Player> players;
+	@Transient
 	private Tile[][] grid;
+	@Transient
 	private Room[] rooms;
 	private Point spawn;
 	private Point stair;
@@ -31,9 +40,10 @@ public class Level {
 		generate();
 	}
 
-	public Level(int seed) {
+	public Level(Integer level) {
+		this.level = level;
 		grid = new Tile[mapHeight][mapWidth];
-		rand = new Random(seed);
+		rand = new Random();
 		generate();
 	}
 
