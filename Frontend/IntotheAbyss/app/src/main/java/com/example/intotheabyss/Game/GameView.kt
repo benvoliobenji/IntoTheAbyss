@@ -23,17 +23,24 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var gameState: GameState? = null
 
     //Screen dimensions
-    val sWidth = Resources.getSystem().displayMetrics.widthPixels
-    val sHeight = Resources.getSystem().displayMetrics.heightPixels
+    private val sWidth = Resources.getSystem().displayMetrics.widthPixels
+    private val sHeight = Resources.getSystem().displayMetrics.heightPixels
+
 
     private val tileSize = 64
+    //How many tiles will fit on screen
+    private val dimWidth: Int = sWidth / tileSize
+    private val dimHeight: Int = sHeight / tileSize
 
     //declare game objects
-//    private var player: Player = Player() //Should be coming from gameState.myPlayer??
 //    private var player: Player = gameState.myPlayer
     private var player: Player? = null
+    private var lvlArray = Array(100) { Array(50) { tile } }
+
+    //Assets
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
+
     //Variables for reading player input
     var input: MotionEvent? = null
     var downTime: Long = 0
@@ -42,6 +49,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var iX: Float = 0.toFloat()
     var iY: Float = 0.toFloat()
     var metaState: Int = 0
+
+    //Variables for following player
+    private val xBuffer: Int = 5
+    private val yBuffer: Int = 5
+    private var minX: Int = 0
+    private var minY: Int = 0
 
 
     init {
@@ -52,6 +65,19 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
 
+        //TODO: Testing only, remove later
+        val wall = Wall()
+        val floor = Floor()
+
+        for (i in 0..(lvlArray.size-1)) {
+            for (j in 0..(lvlArray[0].size-1)) {
+                if ((i == 0) or (i == 100) or (j == 0) or (j == 49)) {
+                    lvlArray[i][j] = wall
+                } else {
+                    lvlArray[i][j] = floor
+                }
+            }
+        }
 
         try {
             player = gameState!!.myPlayer
@@ -99,20 +125,39 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables
      */
     fun update() {
-        //Comment out if you don't want arbitrary player movement
-        //player!!.setX(player!!.getX()+1)
-        //player!!.setY(player!!.getY()+1)
         player!!.setX(player!!.getX())
         player!!.setY(player!!.getY())
+        var newX: Int
+        var newY: Int
 
-        if (iX > sWidth / 2) {
-            player!!.setX(player!!.getX()+1)
-            iX = 0f
-        } else if ((iX < sWidth / 2) and (iX != 0f)) {
-            player!!.setX(player!!.getX()-1)
-            iX = 0f
+        if (iX > sWidth * 3/4) {
+            newX = player!!.getX() + 1
+            if (lvlArray[player!!.getY()][newX]!!.isPassable) {
+                player!!.setX(newX)
+            }
+        } else if ((iX < sWidth / 4) and (iX != 0f)) {
+            newX = player!!.getX() - 1
+            if (lvlArray[player!!.getY()][newX]!!.isPassable) {
+                player!!.setX(newX)
+            }
         }
 
+        if (iY > sHeight * 3/4) {
+            newY = player!!.getY() + 1
+            if (lvlArray[newY][player!!.getX()]!!.isPassable) {
+                player!!.setY(newY)
+            }
+        } else if ((iY < sWidth / 4) and (iY != 0f)) {
+                newY = player!!.getY() - 1
+                if (lvlArray[newY][player!!.getY()]!!.isPassable) {
+                    player!!.setY(newY)
+                }
+            }
+
+        iX = 0f
+        iY = 0f
+
+        updateBoundaries(player!!)
     }
 
     /**
@@ -122,7 +167,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         super.draw(canvas)
         drawBG(canvas, player!!)
         drawPlayer(canvas, player!!)
-        println("X: $iX, Y: $iY")
+//        println("X: $iX, Y: $iY")
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -134,16 +179,33 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 //        return super.dispatchTouchEvent(event)
     }
 
-    fun drawPlayer(canvas: Canvas, player: Player)  {
-        var x = player.getX()
-        var y = player.getY()
+    private fun updateBoundaries(player: Player) {
+        val x = player.getX()
+        val y = player.getY()
+
+        if ((x - xBuffer < minX)/* and ((x - xBuffer) > 0)*/) {
+            minX--
+        } else if (((x + xBuffer) > (minX + dimWidth))/* and ((x+xBuffer) < (lvlArray[1].size))*/) {
+            minX++
+        }
+
+//        if ((x+xBuffer) > lvlArray[1].size) {
+//            minX = (lvlArray[1].size + 1) - x
+//        }
+        println("minX: $minX")
+    }
+
+    private fun drawPlayer(canvas: Canvas, player: Player)  {
+        val x = player.getX()
+        val y = player.getY()
+
 
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        player!!.draw(canvas, x*tileSize, y*tileSize)
+        player!!.draw(canvas, (x-minX)*tileSize, y*tileSize)
         canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
     }
 
@@ -153,48 +215,34 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     fun drawBG(canvas: Canvas, player: Player) {
         //Wall/floor objects to display - will explore more advanced ways of displaying objects (sprites and whatnot)
-        val wall: Wall = Wall()
-        val floor: Floor = Floor()
+
 
         //TODO: Replace lvlArray with level, when possible
         //getting lvlArray from gameState for now, but this should be changed to be level object
         //val level: Level = gameState.level
-        val lvlArray = Array(100) { Array(50) { tile } }
 
 
 
-        //How many tiles will fit on screen
-        val dimWidth: Int = sWidth / tileSize
-        val dimHeight: Int = sHeight / tileSize
+
+
 
         //image variable - will maybe be updated to be more efficient later
         var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
 
-        //TODO: Remove later (when replacaed by gamestate)
-        //Debugging
-        for (i in 0..(lvlArray.size-1)) {
-            for (j in 0..(lvlArray[0].size-1)) {
-                if ((i == 0) or (i == 100) or (j == 0) or (j == 50)) {
-                    lvlArray[i][j] = wall
-                } else {
-                    lvlArray[i][j] = floor
-                }
-            }
-        }
 
         //Loop through all tiles to be displayed, and a few others to minimize lag
-        for (i in 0..dimWidth) {
-            if ((i > -1) and (i < 100))
-            for (j in 0..dimHeight) {
-                if ((j > -1) and (j < 50)) {
+        for (i in minX..minX+dimWidth) {
+            if ((i > -1) and (i < 50))
+            for (j in minY-1..minY+dimHeight) {
+                if ((j > -1) and (j < 100)) {
                     //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
-                    if (lvlArray[i][j]!!.type1 == TileTypes.FLOOR) {  //Set image to floorImage
+                    if (lvlArray[j][i]!!.type1 == TileTypes.FLOOR) {  //Set image to floorImage
                         image = floorImage
-                    } else if (lvlArray[i][j]!!.type1 == TileTypes.WALL) {
+                    } else if (lvlArray[j][i]!!.type1 == TileTypes.WALL) {
                         image = wallImage                                   //Set image to wallImage
                     }
                     //Try to print the damn thing
-                    canvas.drawBitmap(image, ((i * tileSize)+1).toFloat(), ((j * tileSize)+1).toFloat(), null)
+                    canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), ((j * tileSize)+1).toFloat(), null)
                 }
             }
         }
