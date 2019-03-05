@@ -14,6 +14,7 @@ public class Level {
 
 	private Random rand;
 	private ArrayList<Player> players;
+	private ArrayList<Room> roomsA;
 	private Tile[][] grid;
 	private Room[] rooms;
 	private Point spawn;
@@ -63,9 +64,9 @@ public class Level {
 		int num_rooms = 0;
 		rooms = new Room[8];
 
-		while (num_rooms < 8) {
-			createRoom(num_rooms);
-			num_rooms++;
+		while (numRooms < 8) {
+			createRoom(numRooms);
+			numRooms++;
 		}
 
 		createCorridors();
