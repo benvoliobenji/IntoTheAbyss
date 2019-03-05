@@ -8,12 +8,18 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar"
+    >
+            <!--android:theme="@style/AppTheme"-->
+    >
         <activity
                 android:name=".activities.SettingsActivity"
                 android:label="@string/title_activity_settings">
         </activity>
-        <activity android:name=".activities.DungeonActivity">
+        <activity
+                android:name=".activities.DungeonActivity"
+                android:screenOrientation="landscape"
+        >
 
         </activity>
 

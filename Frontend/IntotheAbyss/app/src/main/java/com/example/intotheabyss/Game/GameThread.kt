@@ -5,10 +5,11 @@ import android.graphics.Canvas
 
 
 
+
 class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView: GameView) : Thread() {
 
     private var running: Boolean = false
-    private val targetFPS = 25
+    private val targetFPS = 24
 
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning

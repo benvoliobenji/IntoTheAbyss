@@ -13,13 +13,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val ring = MediaPlayer.create(this, R.raw.car_sound)
+//        val ring = MediaPlayer.create(this, R.raw.car_sound)
 
         val play = findViewById<Button>(R.id.playButton)
         play.setOnClickListener {
             val intent = Intent(this, DungeonActivity::class.java)
             startActivity(intent)
-            ring.start()
+//            ring.start()
         }
 
         val settings = findViewById<Button>(R.id.settingsButton)
