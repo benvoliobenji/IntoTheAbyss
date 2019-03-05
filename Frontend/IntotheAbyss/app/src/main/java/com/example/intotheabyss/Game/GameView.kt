@@ -2,7 +2,6 @@ package com.example.intotheabyss.game
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.Display
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.intotheabyss.R.*
@@ -46,9 +45,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var downTime: Long = 0
     var eventTime: Long = 0
     var action: Int = 0
-    var iX: Float = 0.toFloat()
-    var iY: Float = 0.toFloat()
+    var iX: Float = 0.toFloat()     //x coord of finger press
+    var iY: Float = 0.toFloat()     //y coord of finger press
     var metaState: Int = 0
+
+    //Tracking time for player speed
+    private var lastTime: Long = 0
+    private var currentTime: Long = 10000   //Just some number significantly longer than last time to start
 
     //Variables for following player
     private val xBuffer: Int = 5
@@ -71,7 +74,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         for (i in 0..(lvlArray.size-1)) {
             for (j in 0..(lvlArray[0].size-1)) {
-                if ((i == 0) or (i == 100) or (j == 0) or (j == 49)) {
+                if ((i == 0) or (i == 99) or (j == 0) or (j == 49)) {
                     lvlArray[i][j] = wall
                 } else {
                     lvlArray[i][j] = floor
@@ -129,33 +132,62 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         player!!.setY(player!!.getY())
         var newX: Int
         var newY: Int
+        var moved = false
+        val waitTime: Long = 100
+
+        if (action == MotionEvent.ACTION_UP) {
+            iX = 0f
+            iY = 0f
+        }
 
         if (iX > sWidth * 3/4) {
             newX = player!!.getX() + 1
             if (lvlArray[player!!.getY()][newX]!!.isPassable) {
-                player!!.setX(newX)
+                currentTime = System.currentTimeMillis()
+                if ((currentTime - lastTime > waitTime) or (moved)) {
+                    player!!.setX(newX)
+                    moved = true
+                    lastTime = System.currentTimeMillis()
+                }
             }
         } else if ((iX < sWidth / 4) and (iX != 0f)) {
             newX = player!!.getX() - 1
             if (lvlArray[player!!.getY()][newX]!!.isPassable) {
-                player!!.setX(newX)
+                currentTime = System.currentTimeMillis()
+                if ((currentTime - lastTime > waitTime) or (moved)) {
+                    player!!.setX(newX)
+                    moved = true
+                    lastTime = System.currentTimeMillis()
+                }
             }
         }
 
         if (iY > sHeight * 3/4) {
             newY = player!!.getY() + 1
             if (lvlArray[newY][player!!.getX()]!!.isPassable) {
-                player!!.setY(newY)
-            }
-        } else if ((iY < sWidth / 4) and (iY != 0f)) {
-                newY = player!!.getY() - 1
-                if (lvlArray[newY][player!!.getY()]!!.isPassable) {
+                currentTime = System.currentTimeMillis()
+                if ((currentTime - lastTime > waitTime) or (moved)) {
                     player!!.setY(newY)
+                    moved = true
+                    lastTime = System.currentTimeMillis()
                 }
             }
+        } else if ((iY < sWidth / 4) and (iY != 0f)) {
+            newY = player!!.getY() - 1
+            if (newY < lvlArray.size) {
+                if (lvlArray[newY][player!!.getX()]!!.isPassable) {
+                    currentTime = System.currentTimeMillis()
+                    if ((currentTime - lastTime > waitTime) or (moved)) {
+                        player!!.setY(newY)
+                        moved = true
+                        lastTime = System.currentTimeMillis()
+                    }
+                }
+            }
+        }
 
-        iX = 0f
-        iY = 0f
+//        iX = 0f
+//        iY = 0f
 
         updateBoundaries(player!!)
     }
@@ -173,6 +205,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         iX = event!!.x
         iY = event!!.y
+        action = event.action
         return true
 
 //        Removing the super call seems dangerous, but it fixed my problems so idk
@@ -183,16 +216,17 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val x = player.getX()
         val y = player.getY()
 
-        if ((x - xBuffer < minX)/* and ((x - xBuffer) > 0)*/) {
+        if (x - xBuffer < minX) {
             minX--
-        } else if (((x + xBuffer) > (minX + dimWidth))/* and ((x+xBuffer) < (lvlArray[1].size))*/) {
+        } else if ((x + xBuffer) > (minX + dimWidth)) {
             minX++
         }
 
-//        if ((x+xBuffer) > lvlArray[1].size) {
-//            minX = (lvlArray[1].size + 1) - x
-//        }
-        println("minX: $minX")
+        if (y - yBuffer < minY) {
+            minY--
+        } else if ((y + yBuffer) > (minY + dimHeight)) {
+            minY++
+        }
     }
 
     private fun drawPlayer(canvas: Canvas, player: Player)  {
@@ -205,7 +239,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        player!!.draw(canvas, (x-minX)*tileSize, y*tileSize)
+        player!!.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
         canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
     }
 
@@ -233,7 +267,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //Loop through all tiles to be displayed, and a few others to minimize lag
         for (i in minX..minX+dimWidth) {
             if ((i > -1) and (i < 50))
-            for (j in minY-1..minY+dimHeight) {
+            for (j in minY..minY+dimHeight) {
                 if ((j > -1) and (j < 100)) {
                     //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
                     if (lvlArray[j][i]!!.type1 == TileTypes.FLOOR) {  //Set image to floorImage
@@ -242,7 +276,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                         image = wallImage                                   //Set image to wallImage
                     }
                     //Try to print the damn thing
-                    canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), ((j * tileSize)+1).toFloat(), null)
+                    canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), (((j-minY) * tileSize)+1).toFloat(), null)
                 }
             }
         }
