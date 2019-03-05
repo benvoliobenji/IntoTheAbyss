@@ -4,7 +4,7 @@ import com.example.intotheabyss.utils.TileTypes
 
 class Floor : Tile() {
     val type = 1
-    override val typel = TileTypes.FLOOR
+    override val type1 = TileTypes.FLOOR
 
     init {
         canHold = true
