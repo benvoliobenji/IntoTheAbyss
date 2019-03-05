@@ -23,6 +23,9 @@ public class LevelController {
             return levelRepository.findById(id).get();
         } else {
             Level l = new Level(id);
+            if (id % 5 == 0) {
+                l.fillGridForDefaultMap();
+            }
             levelRepository.save(l);
             return l;
         }
@@ -31,6 +34,17 @@ public class LevelController {
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<Level> getLevels() {
         return levelRepository.findAll();
+    }
+
+    @GetMapping(path = "/clear")
+    public @ResponseBody String clearLevels() {
+        levelRepository.deleteAll();
+        return "Cleared levels.";
+    }
+
+    @GetMapping(path = "/count")
+    public @ResponseBody Long countLevels() {
+        return levelRepository.count();
     }
 
 }
