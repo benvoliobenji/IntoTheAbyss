@@ -4,13 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import app.items.Item;
 import network.packets.PlayerPacket;
 
 @Entity
 public class Player {
 	@Id
-	@GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-	private Integer playerID;
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator( name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	public String playerID;
 	private String username;
 	private Integer posX, posY, floor, health;
 	
@@ -47,11 +51,11 @@ public class Player {
 		this.username = uname;
 	}
 
-	public Integer getPlayerID() {
+	public String getPlayerID() {
 		return playerID;
 	}
 
-	public void setPlayerID(Integer playerid) {
+	public void setPlayerID(String playerid) {
 		this.playerID = playerid;
 
 	}

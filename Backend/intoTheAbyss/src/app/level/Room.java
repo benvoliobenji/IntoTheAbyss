@@ -8,6 +8,8 @@ import app.tiles.Floor;
 public class Room {
 	private static int mapWidth = 100;
 	private static int mapHeight = 50;
+	private static int minWidth = 10;
+	private static int minHeight = 6;
 	
 	private Point corner;
 	private int xLength, yLength;
@@ -16,8 +18,8 @@ public class Room {
 		corner = new Point();
 		/* create entry in room array */
 		// y length and x length
-		yLength = (rand.nextInt(Integer.MAX_VALUE) % 5) + 6;
-		xLength = (rand.nextInt(Integer.MAX_VALUE) % 15) + 10;
+		yLength = (rand.nextInt(Integer.MAX_VALUE) % 5) + minHeight;
+		xLength = (rand.nextInt(Integer.MAX_VALUE) % 15) + minWidth;
 		// y corner x corner
 		corner.x = (rand.nextInt(Integer.MAX_VALUE) % (mapHeight - yLength - 1)) + 1;
 		corner.y = (rand.nextInt(Integer.MAX_VALUE) % (mapWidth - xLength - 1)) + 1;
@@ -39,5 +41,6 @@ public class Room {
 	public Point getRandomPointInRoom() {
 		return null;
 	}
-
+	
+	
 }

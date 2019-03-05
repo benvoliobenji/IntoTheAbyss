@@ -1,10 +1,10 @@
-package app.player;
+package app.inventory;
 
 import java.util.ArrayList;
 import app.items.Item;
 
 public class Inventory {
-	private Integer ownerID;
+	private String ownerID;
 	private Integer maxSize;
 	private ArrayList<Item> items;
 	
@@ -12,16 +12,16 @@ public class Inventory {
 		items = new ArrayList<Item>();
 	}
 	
-	public Inventory(Integer ID) {
+	public Inventory(String ID) {
 		ownerID = ID;
 		items = new ArrayList<Item>();
 	}
 	
-	public Integer getOwnerID() {
+	public String getOwnerID() {
 		return ownerID;
 	}
 	
-	public void setOwnerID(Integer ID) {
+	public void setOwnerID(String ID) {
 		ownerID = ID;
 	}
 	

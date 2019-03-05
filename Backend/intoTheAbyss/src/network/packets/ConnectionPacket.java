@@ -1,21 +1,21 @@
 package network.packets;
 
 public class ConnectionPacket {
-	private Integer userID;
+	private String userID;
 	
 	public ConnectionPacket() {
 		
 	}
 	
-	public ConnectionPacket(int ID) {
+	public ConnectionPacket(String ID) {
 		userID = ID;
 	}
 	
-	public void setID(Integer ID) {
+	public void setID(String ID) {
 		userID = ID;
 	}
 	
-	public void getID(Integer ID) {
+	public void getID(String ID) {
 		userID = ID;
 	}
 }

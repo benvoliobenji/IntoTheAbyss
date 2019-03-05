@@ -1,6 +1,8 @@
 package app.db;
 
 import java.util.List;
+import java.util.UUID;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -21,9 +23,9 @@ public abstract class PlayerRepositoryImpl implements PlayerRepository {
     }
     
     @Override
-    public Player getPlayerByPlayerID(Integer playerPassedID) {
-        /*javax.persistence.Query query = entityManager.createQuery(("SELECT * FROM player p WHERE p.playerid = " + playerPassedID.intValue()), Player.class);
-        Player returnedPlayer = (Player) query.getSingleResult();*/
-        return entityManager.find(Player.class, playerPassedID);
+    public Player getPlayerByPlayerID(String playerPassedID) {
+    	UUID uuid = UUID.fromString(playerPassedID);
+    	System.out.print(uuid.toString());
+        return entityManager.find(Player.class, uuid.toString());
     }
 }

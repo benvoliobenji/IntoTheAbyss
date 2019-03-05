@@ -6,4 +6,5 @@ public abstract class Item {
 	Integer itemCode;
 	ItemTypes itemType;
 	
+	
 }
