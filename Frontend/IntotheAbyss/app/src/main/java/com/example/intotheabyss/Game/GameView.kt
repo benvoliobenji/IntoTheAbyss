@@ -10,13 +10,9 @@ import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.player.Player
 import com.example.intotheabyss.dungeonassets.Level
-import android.R.attr.y
-import android.R.attr.x
 import android.content.res.Resources
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
-import android.util.DisplayMetrics
-import android.view.WindowManager
+import android.view.MotionEvent
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.R
 import com.example.intotheabyss.dungeonassets.Tile
@@ -26,12 +22,26 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private val thread: GameThread
     private var gameState: GameState? = null
 
+    //Screen dimensions
+    val sWidth = Resources.getSystem().displayMetrics.widthPixels
+    val sHeight = Resources.getSystem().displayMetrics.heightPixels
+
+    private val tileSize = 64
+
     //declare game objects
 //    private var player: Player = Player() //Should be coming from gameState.myPlayer??
 //    private var player: Player = gameState.myPlayer
     private var player: Player? = null
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
+    //Variables for reading player input
+    var input: MotionEvent? = null
+    var downTime: Long = 0
+    var eventTime: Long = 0
+    var action: Int = 0
+    var iX: Float = 0.toFloat()
+    var iY: Float = 0.toFloat()
+    var metaState: Int = 0
 
 
     init {
@@ -41,6 +51,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
+
 
         try {
             player = gameState!!.myPlayer
@@ -72,6 +83,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 e.printStackTrace()
             }
         }
+
         //Set image assets for game objects
         player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda))
         //Start the game thread
@@ -92,6 +104,15 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //player!!.setY(player!!.getY()+1)
         player!!.setX(player!!.getX())
         player!!.setY(player!!.getY())
+
+        if (iX > sWidth / 2) {
+            player!!.setX(player!!.getX()+1)
+            iX = 0f
+        } else if ((iX < sWidth / 2) and (iX != 0f)) {
+            player!!.setX(player!!.getX()-1)
+            iX = 0f
+        }
+
     }
 
     /**
@@ -101,7 +122,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         super.draw(canvas)
         drawBG(canvas, player!!)
         drawPlayer(canvas, player!!)
+        println("X: $iX, Y: $iY")
+    }
 
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        iX = event!!.x
+        iY = event!!.y
+        return true
+
+//        Removing the super call seems dangerous, but it fixed my problems so idk
+//        return super.dispatchTouchEvent(event)
     }
 
     fun drawPlayer(canvas: Canvas, player: Player)  {
@@ -113,7 +143,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        player!!.draw(canvas, x, y)
+        player!!.draw(canvas, x*tileSize, y*tileSize)
         canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
     }
 
@@ -125,16 +155,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //Wall/floor objects to display - will explore more advanced ways of displaying objects (sprites and whatnot)
         val wall: Wall = Wall()
         val floor: Floor = Floor()
-        val tileSize = 64
 
         //TODO: Replace lvlArray with level, when possible
         //getting lvlArray from gameState for now, but this should be changed to be level object
         //val level: Level = gameState.level
         val lvlArray = Array(100) { Array(50) { tile } }
 
-        //Screen dimensions
-        val sWidth = Resources.getSystem().displayMetrics.widthPixels
-        val sHeight = Resources.getSystem().displayMetrics.heightPixels
+
 
         //How many tiles will fit on screen
         val dimWidth: Int = sWidth / tileSize
