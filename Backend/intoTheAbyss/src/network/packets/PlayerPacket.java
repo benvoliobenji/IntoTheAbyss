@@ -1,11 +1,15 @@
 package network.packets;
 
 public class PlayerPacket {
-	private String playerID;
-	private int playerLocationFloor, playerPositionX, playerPositionY;
+	private String username;
+	private int playerLocationFloor, playerPositionX, playerPositionY, ID;
 	
 	public PlayerPacket() {
 		
+	}
+	
+	public int getID() {
+		return ID;
 	}
 
 	public int getXPos() {
@@ -21,6 +25,6 @@ public class PlayerPacket {
 	}
 	
 	public String getUsername() {
-		return playerID;
+		return username;
 	}
 }

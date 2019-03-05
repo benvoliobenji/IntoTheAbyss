@@ -4,7 +4,11 @@ import java.awt.Point;
 import java.util.Random;
 
 public class Room {
-
+	private static int mapWidth = 100;
+	private static int mapHeight = 50;
+	private static int minWidth = 10;
+	private static int minHeight = 6;
+	
 	private Point corner;
 	private int xLength, yLength;
 	Random rand;
