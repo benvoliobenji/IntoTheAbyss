@@ -57,7 +57,6 @@ public class Player {
 
 	public void setPlayerID(String playerid) {
 		this.playerID = playerid;
-
 	}
 
 	public Integer getPosX() {
