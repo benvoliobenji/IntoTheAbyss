@@ -41,25 +41,8 @@ class DungeonActivity : AppCompatActivity() {
             true
         }
 
-        // This is the basic format for creating Volley requests, we just need to figure out what to send back and
-        // forth in order for the server to understand what we're requesting.
-        // This will eventually make it's way into the network thread and be handled there, especially with getting
-        // new levels.
-        val requestQueue = Volley.newRequestQueue(this)
-        val url = "" // This will be the url for our player request
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-            Response.Listener { response ->
-                Log.i("PlayerRegistration", "Response: %s".format(response.toString()))
-            },
-            Response.ErrorListener { error ->
-                Log.i("PlayerRegistration", "Error: %s".format(error.toString()))
-            }
-        )
-
-        requestQueue.add(jsonObjectRequest)
-
         if(!networkThread.isAlive) {
-            networkThread = Thread(NetworkRunnable(gameState))
+            networkThread = Thread(NetworkRunnable(gameState, this))
             networkThread.start()
         }
 
