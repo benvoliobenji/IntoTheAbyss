@@ -15,9 +15,9 @@ class VolleyNetwork(context: Context) {
         this.requestQueue = Volley.newRequestQueue(context)
     }
 
-    fun createNewPlayer() {
+    fun createNewPlayer(playerName: String) {
         // Create new player URL
-        val url = ""
+        val url = "/players/add?username=$playerName"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
@@ -34,7 +34,7 @@ class VolleyNetwork(context: Context) {
 
     fun retrievePlayerData(playerName: String) {
         // Add the playerName to the url
-        val url = "" // This will be the url for our player request
+        val url = "/players/getPlayer?playerUUIDPassed=$playerName" // This will be the url for our player request
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
@@ -49,6 +49,17 @@ class VolleyNetwork(context: Context) {
     }
 
     fun retrieveNewDungeonLevel(level: Int) {
+        val url = "/levels/get?id=#$level"
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            Response.Listener { response ->
+                Log.i("DungeonLevel", "Response: %s".format(response.toString()))
+            },
+            Response.ErrorListener { error ->
+                Log.i("DungeonLevel", "Error: %s".format(error.toString()))
+            }
+        )
 
+        requestQueue?.add(jsonObjectRequest)
     }
 }

@@ -19,8 +19,6 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
 
         val volleyNetwork = VolleyNetwork(context)
 
-        val requestQueue = Volley.newRequestQueue(context)
-
         val playerFile = File(context.filesDir, "PlayerName")
         if (playerFile.exists()) {
             val playerName = playerFile.readText()
@@ -29,11 +27,11 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
             // Temporary name until we get the Google Account API linked
             val playerName = Random.nextInt(0, 1000000).toString()
             playerFile.writeText(playerName)
-            volleyNetwork.createNewPlayer()
+            volleyNetwork.createNewPlayer(playerName)
         }
 
         val network = Network(gameState)
         network.connect()
-        val updateHandler = UpdateHandler(network, gameState)
+        val updateHandler = UpdateHandler(network, volleyNetwork, gameState)
     }
 }
