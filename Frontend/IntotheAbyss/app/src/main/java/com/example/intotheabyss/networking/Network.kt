@@ -19,7 +19,7 @@ import com.example.intotheabyss.utils.TileTypes
 
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
-    private val ip: String = "10.64.19.14"
+    private val ip: String = "cs309-ad-4-misc.iastate.edu:8080"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
@@ -92,13 +92,6 @@ class Network(private var gameState: GameState): Listener() {
             client.connect(5000, ip, tcpPort, udpPort)
             Log.d("Networking","Sending Floor Request")
             client.sendTCP(ConnectionPackage("Client says hello!"))
-            client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
-            // client.sendTCP(ConnectionPackage("Client says hello!"))
-            // client.sendTCP(MapRequestPacket(gameState.myPlayer.floorNumber))
-            this.client.sendTCP(PlayerLocationPacket(playerID = gameState.myPlayer.playerID,
-                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.getX(),
-                playerPositionY = gameState.myPlayer.getY()))
-
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -114,13 +107,6 @@ class Network(private var gameState: GameState): Listener() {
         if (o is MapPacket) {
             Log.d("Receiving", o.toString())
             gameState.level = o.levelGrid
-            gameState.newLevel()
-
-            // For now, just send the packet of the new location
-            // Eventually we will have a handler that will deal with it outside of Network, but this is only for Demo 2
-            this.client.sendTCP(PlayerLocationPacket(playerID = gameState.myPlayer.playerID,
-                playerLocationFloor = gameState.myPlayer.floorNumber, playerPositionX = gameState.myPlayer.getX(),
-                playerPositionY = gameState.myPlayer.getY()))
         }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
