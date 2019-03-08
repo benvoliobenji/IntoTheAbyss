@@ -13,16 +13,15 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
         // This will eventually make it's way into the network thread and be handled there, especially with getting
         // new levels.
 
-        val volleyNetwork = VolleyNetwork(context)
+        val volleyNetwork = VolleyNetwork(context, gameState)
 
-        val playerFile = File(context.filesDir, "PlayerName")
+        val playerFile = File(context.filesDir, "PlayerID")
         if (playerFile.exists()) {
-            val playerName = playerFile.readText()
-            volleyNetwork.retrievePlayerData(playerName)
+            val playerID = playerFile.readText()
+            volleyNetwork.retrievePlayerData(playerID)
         } else {
             // Temporary name until we get the Google Account API linked
             val playerName = Random.nextInt(0, 1000000).toString()
-            playerFile.writeText(playerName)
             volleyNetwork.createNewPlayer(playerName)
         }
 
