@@ -14,6 +14,9 @@ public class World {
 		levels = new ArrayList<Level>();
 		players = new ArrayList<Player>();
 
+		addLevel();
+		levels.get(0).fillGridForDefaultMap();
+
 	}
 
 	public World(int seed) {
@@ -26,6 +29,10 @@ public class World {
 
 	public void addLevel() {
 		levels.add(new Level());
+	}
+
+	public int getDepth(){
+		return levels.size();
 	}
 
 	public void resetWorld() {
