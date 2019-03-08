@@ -1,10 +1,6 @@
 package com.example.intotheabyss.networking
 
 import android.content.Context
-import android.util.Log
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.*
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.packets.UpdateHandler
 import java.io.File
