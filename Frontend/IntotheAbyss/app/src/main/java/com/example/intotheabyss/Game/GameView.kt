@@ -4,16 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.example.intotheabyss.R.*
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.player.Player
-import com.example.intotheabyss.dungeonassets.Level
 import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.intotheabyss.utils.TileTypes
-import com.example.intotheabyss.R
 import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
