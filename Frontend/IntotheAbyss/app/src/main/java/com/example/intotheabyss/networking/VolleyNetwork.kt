@@ -9,7 +9,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.player.Player
-import com.example.intotheabyss.utils.GridParse
+import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
 class VolleyNetwork(context: Context, gameState: GameState) {
@@ -33,7 +33,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val networkPlayerName = response.getString("username")
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
-                val player = Player(networkPlayerName, playerID, 1, posX, posY)
+                val player = Player(networkPlayerName, playerID, 0, posX, posY)
                 gameState?.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
 
@@ -60,7 +60,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val networkPlayerName = response.getString("username")
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
-                val player = Player(networkPlayerName, playerID, 1, posX, posY)
+                val player = Player(networkPlayerName, playerID, 0, posX, posY)
                 gameState?.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
             },
@@ -79,8 +79,9 @@ class VolleyNetwork(context: Context, gameState: GameState) {
             Response.Listener { response ->
                 val grid = response.getJSONArray("grid")
 
-                // Parse the JSONArray of JSONArrays into our 2D array of tiles
-                gameState?.level = GridParse(grid)
+                // Parse the JSONArray of JSONArrays into our 2D array of tiles, apply to gameState
+                gameState?.level = gridParse(grid)
+                gameState?.loading = false
                 Log.i("DungeonLevel", grid.toString())
             },
             Response.ErrorListener { error ->
