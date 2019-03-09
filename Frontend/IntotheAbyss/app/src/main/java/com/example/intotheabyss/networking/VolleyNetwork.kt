@@ -24,7 +24,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
 
     fun createNewPlayer(playerName: String) {
         // Create new player URL
-        val url = "cs309-ad-4.misc.iastate.edu:8080/players/add?username=$playerName"
+        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/add?username=$playerName"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
@@ -51,7 +51,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
 
     fun retrievePlayerData(playerName: String) {
         // Add the playerName to the url
-        val url = "cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerName"
+        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerName"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
@@ -72,11 +72,12 @@ class VolleyNetwork(context: Context, gameState: GameState) {
     }
 
     fun retrieveNewDungeonLevel(level: Int) {
-        val url = "cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
+        val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
-                Log.i("DungeonLevel", "Response: %s".format(response.toString()))
+                val grid = response.getJSONArray("grid")
+                Log.i("DungeonLevel", grid.toString())
             },
             Response.ErrorListener { error ->
                 Log.i("DungeonLevel", "Error: %s".format(error.toString()))

@@ -267,9 +267,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             for (j in minY..minY+dimHeight) {
                 if ((j > -1) and (j < 100)) {
                     //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
-                    if (lvlArray[j][i]!!.type1 == TileTypes.FLOOR) {  //Set image to floorImage
+                    if (lvlArray[j][i]!!.type == TileTypes.FLOOR) {  //Set image to floorImage
                         image = floorImage
-                    } else if (lvlArray[j][i]!!.type1 == TileTypes.WALL) {
+                    } else if (lvlArray[j][i]!!.type == TileTypes.WALL) {
                         image = wallImage                                   //Set image to wallImage
                     }
                     //Try to print the damn thing
