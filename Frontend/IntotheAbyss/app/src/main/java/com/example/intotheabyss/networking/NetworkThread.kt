@@ -27,6 +27,10 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
 
         val network = Network(gameState)
         network.connect()
+
+        volleyNetwork.retrieveNewDungeonLevel(gameState.myPlayer.floorNumber)
+
+        // Create new thread for updateHandler
         val updateHandler = UpdateHandler(network, volleyNetwork, gameState)
     }
 }

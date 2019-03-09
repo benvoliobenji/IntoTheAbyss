@@ -16,10 +16,10 @@ class Player {
     private var y: Int = 1
     private var image: Bitmap? = null
 
-    init {
+    constructor() {
         this.playerName = ""
         this.playerID = ""
-        this.floorNumber = 1
+        this.floorNumber = 0
         this.x = 1
         this.y = 1
         this.image = null
