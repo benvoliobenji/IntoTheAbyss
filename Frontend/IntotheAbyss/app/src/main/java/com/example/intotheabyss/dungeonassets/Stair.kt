@@ -2,11 +2,11 @@ package com.example.intotheabyss.dungeonassets
 
 import com.example.intotheabyss.utils.TileTypes
 
-class Floor : Tile() {
-    override val type = TileTypes.FLOOR
+class Stair: Tile() {
+    override val type: TileTypes = TileTypes.STAIR
 
     init {
-        canHold = true
+        canHold = false
         isPassable = true
     }
 }

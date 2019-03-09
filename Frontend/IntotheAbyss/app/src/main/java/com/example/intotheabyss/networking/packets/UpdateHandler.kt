@@ -7,7 +7,7 @@ import com.example.intotheabyss.networking.VolleyNetwork
 class UpdateHandler(private val network: Network, private val volleyNetwork: VolleyNetwork,
                     private val gameState: GameState) {
 
-    fun updateLocation(xPositon: Int, yPosition: Int) {
+    fun update() {
 
     }
 }

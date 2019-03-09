@@ -1,10 +1,6 @@
 package com.example.intotheabyss.networking
 
 import android.content.Context
-import android.util.Log
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.*
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.packets.UpdateHandler
 import java.io.File
@@ -17,21 +13,24 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
         // This will eventually make it's way into the network thread and be handled there, especially with getting
         // new levels.
 
-        val volleyNetwork = VolleyNetwork(context)
+        val volleyNetwork = VolleyNetwork(context, gameState)
 
-        val playerFile = File(context.filesDir, "PlayerName")
+        val playerFile = File(context.filesDir, "PlayerID")
         if (playerFile.exists()) {
-            val playerName = playerFile.readText()
-            volleyNetwork.retrievePlayerData(playerName)
+            val playerID = playerFile.readText()
+            volleyNetwork.retrievePlayerData(playerID)
         } else {
             // Temporary name until we get the Google Account API linked
             val playerName = Random.nextInt(0, 1000000).toString()
-            playerFile.writeText(playerName)
             volleyNetwork.createNewPlayer(playerName)
         }
 
         val network = Network(gameState)
         network.connect()
+
+        volleyNetwork.retrieveNewDungeonLevel(gameState.myPlayer.floorNumber)
+
+        // Create new thread for updateHandler
         val updateHandler = UpdateHandler(network, volleyNetwork, gameState)
     }
 }
