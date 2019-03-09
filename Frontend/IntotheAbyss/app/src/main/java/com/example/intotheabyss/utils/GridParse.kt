@@ -31,7 +31,6 @@ fun gridParse(grid: JSONArray): Array<Array<Tile>> {
                 }
             }
             rowList.trimToSize()
-            Log.i("gridParse", rowList[j].toString())
 
             // Create a model Array to add to convert rowList to an Array<Tile> and then append to the dungeonGridList
             val rowArray = arrayOfNulls<Tile>(rowList.size)

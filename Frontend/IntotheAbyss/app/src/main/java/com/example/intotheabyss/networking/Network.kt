@@ -19,7 +19,7 @@ import com.example.intotheabyss.utils.TileTypes
 
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
-    private val ip: String = "cs309-ad-4-misc.iastate.edu:8080"
+    private val ip: String = "http://cs309-ad-4.misc.iastate.edu:8080"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
@@ -29,7 +29,6 @@ class Network(private var gameState: GameState): Listener() {
         client = Client(16384, 65536)
 
 
-        // Because the packets on our end are Kotlin and the server is Java, there needs to be some translation
         client.kryo.apply {
 //            register(ConnectionPackage::class.java, object: Serializer<ConnectionPackage>() {
 //                override fun write(kryo: Kryo, output: Output, component: ConnectionPackage) {
@@ -102,13 +101,14 @@ class Network(private var gameState: GameState): Listener() {
         if (o is ConnectionPackage) {
             Log.i("Networking", o.text)
             val connectionResponse = ConnectionPackage("Client says hello!")
-            this.client.sendTCP(connectionResponse)
-        }
-        if (o is MapPacket) {
-            Log.d("Receiving", o.toString())
-            gameState.level = o.levelGrid
+            client.sendTCP(connectionResponse)
         }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
+    }
+
+    fun updatePosition(playerID: String, floor: Int, posX: Int, posY: Int) {
+        val positionPacket = PlayerLocationPacket(playerID, floor, posX, posY)
+        client.sendTCP(positionPacket)
     }
 }
