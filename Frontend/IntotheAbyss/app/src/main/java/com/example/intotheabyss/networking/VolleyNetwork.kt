@@ -9,6 +9,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.utils.GridParse
 import java.io.File
 
 class VolleyNetwork(context: Context, gameState: GameState) {
@@ -77,6 +78,9 @@ class VolleyNetwork(context: Context, gameState: GameState) {
             Request.Method.GET, url, null,
             Response.Listener { response ->
                 val grid = response.getJSONArray("grid")
+
+                // Parse the JSONArray of JSONArrays into our 2D array of tiles
+                gameState?.level = GridParse(grid)
                 Log.i("DungeonLevel", grid.toString())
             },
             Response.ErrorListener { error ->
