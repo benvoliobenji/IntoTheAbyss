@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import app.db.InventoryRepository;
-import app.player.Player;
 
 @Controller
 @RequestMapping(path = "/inventory")
@@ -18,7 +17,7 @@ public class InventoryController {
 	@Autowired
 	private InventoryRepository inventoryRepository;
 	
-	/*@GetMapping(path = "/listByOwner")
+	/*@GetMapping(path = "/getByOwner")
 	public @ResponseBody Interable<Inventory> getByOwner(@RequestParam Integer playerid) {
 		
 		

@@ -1,11 +1,13 @@
 package app.db;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class Inventory {
     @Id
+    @Column(length = 50)
     private String playerid;
     private Integer helmet, chest, boots, weapon, slot1, slot2, slot3, slot4;
 
