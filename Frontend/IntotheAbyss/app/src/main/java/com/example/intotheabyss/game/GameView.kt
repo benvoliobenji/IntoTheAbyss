@@ -133,7 +133,18 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //updatePlayerLocation()    //Player movment - iX,iY is coordinate of touch event
         gameController!!.updatePlayerLocation()
         gameController!!.getAction()
+        checkNewLevel()
+        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
         updateBoundaries(player!!)      //Make sure screen follows player around
+    }
+
+    private fun checkNewLevel() {
+        if (gAction > 0) {
+            if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
+                player!!.floorNumber++
+                gameState!!.loading = true //Not sure if this is the purpose of it or not
+            }
+        }
     }
 
     /**
