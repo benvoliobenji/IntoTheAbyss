@@ -8,13 +8,22 @@ import app.player.Player;
 import app.tiles.*;
 import app.utils.TileTypes;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
 public class Level {
 	public static final int mapWidth = 100;
 	public static final int mapHeight = 25;
 
+	@Id
+	private Integer level;
 	private Random rand;
 	private ArrayList<Player> players;
+	@Transient
 	private Tile[][] grid;
+	@Transient
 	private Room[] rooms;
 	private Point spawn;
 	private Point stair;
@@ -31,9 +40,10 @@ public class Level {
 		generate();
 	}
 
-	public Level(int seed) {
+	public Level(Integer level) {
+		this.level = level;
 		grid = new Tile[mapHeight][mapWidth];
-		rand = new Random(seed);
+		rand = new Random();
 		generate();
 	}
 
@@ -63,9 +73,9 @@ public class Level {
 		int num_rooms = 0;
 		rooms = new Room[8];
 
-		while (num_rooms < 8) {
-			createRoom(num_rooms);
-			num_rooms++;
+		while (numRooms < 8) {
+			createRoom(numRooms);
+			numRooms++;
 		}
 
 		createCorridors();
@@ -186,16 +196,19 @@ public class Level {
 	}
 
 	public void fillGridForDefaultMap() {
-		for(int i=0; i < mapWidth; i++) {
-			for(int j=0; j < mapHeight; j++) {
+		for(int i=0; i < mapHeight; i++) {
+			for(int j=0; j < mapWidth; j++) {
 				//Checks if the selected index is an edge of the grid
-				if(i == 0 || j == 0 || i == mapWidth-1 || j == mapHeight-1) {
+				if(i == 0 || j == 0 || i == mapHeight-1 || j == mapWidth-1) {
 					grid[i][j]  = new Wall();
 				}else {
 					grid[i][j] = new Floor();
 				}
 			}
 		}
+		grid[mapHeight / 2][mapWidth / 2] = new Stair();
+		stair.y = mapHeight / 2;
+		stair.x = mapWidth / 2;
 	}
 
 }

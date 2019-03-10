@@ -1,13 +1,17 @@
 package network.packets;
 
 public class PlayerPacket {
-	private String playerID;
-	private int playerLocationFloor, playerPositionX, playerPositionY;
+	private String username;
+	private int playerLocationFloor, playerPositionX, playerPositionY, ID;
 	
 	public PlayerPacket() {
 		
 	}
 
+	public int getID() {
+		return ID;
+	}
+	
 	public int getXPos() {
 		return playerPositionX;
 	}
@@ -21,7 +25,11 @@ public class PlayerPacket {
 	}
 	
 	public String getUsername() {
-		return playerID;
+		return username;
+	}
+	
+	public void setID(int userID) {
+		ID = userID;
 	}
 	
 	public void setXPos(int x) {
@@ -36,7 +44,7 @@ public class PlayerPacket {
 		playerLocationFloor = floor;
 	}
 	
-	public void setUsername(String username) {
-		playerID = username;
+	public void setUsername(String uname) {
+		username = uname;
 	}
 }
