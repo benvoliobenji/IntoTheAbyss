@@ -1,4 +1,4 @@
-package app.db;
+package app.leaderboard;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
