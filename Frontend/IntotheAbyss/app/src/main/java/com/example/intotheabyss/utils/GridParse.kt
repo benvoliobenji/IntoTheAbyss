@@ -13,6 +13,7 @@ fun gridParse(grid: JSONArray): Array<Array<Tile>> {
     val dungeonGrid: Array<Array<Tile>>
     val dungeonGridList = ArrayList<Array<Tile>>()
 
+
     for(i in 0 until grid.length()) {
         val gridRow = grid.getJSONArray(i)
         val rowList = ArrayList<Tile>()
@@ -30,17 +31,29 @@ fun gridParse(grid: JSONArray): Array<Array<Tile>> {
                     rowList.add(Stair())
                 }
             }
-            rowList.trimToSize()
-
-            // Create a model Array to add to convert rowList to an Array<Tile> and then append to the dungeonGridList
-            val rowArray = arrayOfNulls<Tile>(rowList.size)
-            dungeonGridList.add(rowList.toArray(rowArray))
+            // Log.i("gridParse", rowList[j].toString())
         }
+        rowList.trimToSize()
+        // Create a model Array to add to convert rowList to an Array<Tile> and then append to the dungeonGridList
+        val rowArray = arrayOfNulls<Tile>(rowList.size)
+        dungeonGridList.add(rowList.toArray(rowArray))
+
     }
     // Trim dungeonGridList and convert it to Array<Array<Tile>>
     dungeonGridList.trimToSize()
     val rowArray = arrayOfNulls<Array<Tile>>(dungeonGridList.size)
     dungeonGrid = dungeonGridList.toArray(rowArray)
+
+//    Log.i("RowLength", dungeonGrid.size.toString())
+//    Log.i("ColumnLength", dungeonGrid[0].size.toString())
+//
+//    for (row in dungeonGrid) {
+//        Log.i("Row", row.size.toString())
+//        for (spot in row) {
+//            Log.i("RowInternal", spot.toString())
+//        }
+//        Log.i("Row", "End of Row")
+//    }
 
     return dungeonGrid
 }

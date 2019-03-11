@@ -15,13 +15,14 @@ class DungeonActivity : AppCompatActivity() {
     var gameState = GameState()
 
 
+    @SuppressLint("ClickableViewAccessibility") //This is for blind people accessability- sorry blind people
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
         var gameView = findViewById<GameView>(R.id.gView)
 
         gameView.setGameState(gameState)
-        gameView.setOnTouchListener { gameView, event ->
+        gameView.setOnTouchListener { _, event ->
             gameView.dispatchTouchEvent(event)
 //            gameView.invalidate()
             true
