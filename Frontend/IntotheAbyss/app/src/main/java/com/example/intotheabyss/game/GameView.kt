@@ -81,7 +81,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         for (i in 0 until lvlArray.size) {
             for (j in 0 until lvlArray[i].size) {
-                if ((i == 0) or (i == 99) or (j == 0) or (j == 49)) {
+                if ((i == 0) or (i == lvlArray.size-1) or (j == 0) or (j == lvlArray[0].size-1)) {
                     lvlArray[i][j] = wall
                 } else {
                     lvlArray[i][j] = floor
