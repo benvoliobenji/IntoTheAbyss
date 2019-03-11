@@ -209,8 +209,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     private fun drawBG(canvas: Canvas) {
+        lvlArray = gameState!!.level
         //val level: Level = gameState.level
-        if (!validLevel or (lvlArray.isNullOrEmpty())) {
+
+        //If offline, try adding in the ValidLevel thing to fix it
+        if (/*!validLevel or */(lvlArray.isNullOrEmpty())) {
             if (gameState!!.level.isNotEmpty()) {
                 lvlArray = gameState!!.level
             }
