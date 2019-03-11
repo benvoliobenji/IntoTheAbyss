@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import app.db.LevelRepository;
 import app.db.PlayerRepository;
 import app.level.Level;
 import app.player.Player;
@@ -14,10 +15,13 @@ import app.world.World;
 import network.packets.ConnectionPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
+import network.packets.MoveFloorPacket;
+import network.packets.PlayerLocationPacket;
 import network.packets.PlayerPacket;
 
 public class NetworkHandler {
 	private PlayerRepository playerRepository;
+	private LevelRepository levelRepository;
 
 	private static int portTCP = 44444;
 	private static int portUDP = 44445;
@@ -25,10 +29,11 @@ public class NetworkHandler {
 	private Server server;
 	private RequestHandler requestHandler;
 
-	public NetworkHandler(World worldP, PlayerRepository playerRepo) {
+	public NetworkHandler(World worldP, PlayerRepository playerRepo, LevelRepository levelRepo) {
 		server = new Server(16384, 65536);
 		playerRepository = playerRepo;
-		requestHandler = new RequestHandler(playerRepository, server, worldP);
+		levelRepository = levelRepo;
+		requestHandler = new RequestHandler(playerRepository, levelRepo, server, worldP);
 	}
 
 	public void registerPackets() {
@@ -43,6 +48,8 @@ public class NetworkHandler {
 		kryo.register(app.tiles.Tile[].class);
 		kryo.register(app.tiles.Tile[][].class);
 		kryo.register(PlayerPacket.class);
+		kryo.register(MoveFloorPacket.class);
+		kryo.register(PlayerLocationPacket.class);
 	}
 
 	public void setupListener() {

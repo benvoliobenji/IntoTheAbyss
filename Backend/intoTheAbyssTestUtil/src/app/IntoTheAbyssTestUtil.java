@@ -7,6 +7,8 @@ import com.esotericsoftware.kryonet.Client;
 import app.world.World;
 import network.packets.ConnectionPacket;
 import network.packets.MapRequestPacket;
+import network.packets.MoveFloorPacket;
+import network.packets.PlayerLocationPacket;
 import network.packets.PlayerPacket;
 import network.server.NetworkHandler;
 
@@ -24,22 +26,26 @@ public class IntoTheAbyssTestUtil {
 		network.setupListener();
 		network.startNetwork();
 		
+		String userID = "cfdc4cd4-9324-416f-b4ee-42705bf406f3";
+		
 		Client client = network.getClient();
 		ConnectionPacket packet = new ConnectionPacket();
+		packet.setID(userID);
 		client.sendTCP(packet);
 		
-		PlayerPacket p = new PlayerPacket();
-		p.setFloorNumber(1);
-		p.setXPos(3);
-		p.setYPos(3);
-		p.setUsername("Jet");
-		p.setID(2);
+		PlayerLocationPacket locUpdate = new PlayerLocationPacket();
+		locUpdate.setPlayerID(userID);
+		locUpdate.setPlayerPositionX(15);
+		locUpdate.setPlayerPositionY(15);
+		client.sendTCP(locUpdate);
 		
-		client.sendTCP(p);
+		MoveFloorPacket changeFloor = new MoveFloorPacket();
+		changeFloor.setUserID(userID);
+		changeFloor.setFloor(2);
+		client.sendTCP(changeFloor);
 		
-		MapRequestPacket mapP = new MapRequestPacket();
-		mapP.floorNum = 1;
-		client.sendTCP(mapP);
+		
+		
 		TimeUnit.SECONDS.sleep(10);
 	}
 }

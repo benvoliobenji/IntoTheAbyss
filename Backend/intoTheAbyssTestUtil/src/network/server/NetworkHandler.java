@@ -38,6 +38,8 @@ public class NetworkHandler {
 		kryo.register(app.tiles.Tile[].class);
 		kryo.register(app.tiles.Tile[][].class);
 		kryo.register(PlayerPacket.class);
+		kryo.register(MoveFloorPacket.class);
+		kryo.register(PlayerLocationPacket.class);
 	}
 
 	public void setupListener() {
@@ -62,7 +64,8 @@ public class NetworkHandler {
 				} else if (object instanceof MapRequestPacket) {
 
 				} else if (object instanceof PlayerPacket) {
-
+					Player p = new Player((PlayerPacket) object);
+					System.out.println(p.toString());
 				}
 			}
 		});

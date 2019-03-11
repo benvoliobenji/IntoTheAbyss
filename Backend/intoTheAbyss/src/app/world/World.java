@@ -8,7 +8,6 @@ import app.player.Player;
 public class World {
 	private ArrayList<Level> levels;
 	private ArrayList<Player> players;
-	// private Random rand;
 
 	public World() {
 		levels = new ArrayList<Level>();
@@ -16,7 +15,6 @@ public class World {
 
 		addLevel();
 		levels.get(0).fillGridForDefaultMap();
-
 	}
 
 	public World(int seed) {
@@ -31,10 +29,15 @@ public class World {
 		levels.add(new Level());
 	}
 
-	public int getDepth(){
+	public void addLevel(Level level) {
+		levels.add(level);
+	}
+
+	public int getDepth() {
 		return levels.size();
 	}
 
+	// Starts with a near empty world
 	public void resetWorld() {
 		levels.clear();
 		addLevel();

@@ -5,7 +5,7 @@ import app.utils.TileTypes;
 public class Stair extends Tile {
 
     public Stair(){
-        canHold = true;
+        canHold = false;
         isPassable = true;
         type = TileTypes.STAIR;
     }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import app.player.Player;
 
-public interface PlayerRepository extends CrudRepository<Player, Integer> {
+public interface PlayerRepository extends CrudRepository<Player, String> {
 	List<Player> getPlayerByUsername(String username);
 	Player getPlayerByPlayerID(String playerPassedID);
 }

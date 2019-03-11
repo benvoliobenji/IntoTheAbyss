@@ -20,9 +20,9 @@ public class Player {
 	
 
 	public Player() {
-		floor = 0;
+		floor = Integer.valueOf(0);
 		username = "";
-		health = 10;
+		health = Integer.valueOf(10);
 	}
 
 	public Player(int floorNum) {
@@ -81,7 +81,7 @@ public class Player {
 	}
 
 	public void setFloor(Integer floor) {
-		this.floor = floor;
+		this.floor = Integer.valueOf(floor);
 	}
 
 	public Integer getHealth() {
@@ -89,7 +89,7 @@ public class Player {
 	}
 
 	public void setHealth(Integer health) {
-		this.health = health;
+		this.health = Integer.valueOf(health);
 	}
 }
 

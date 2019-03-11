@@ -2,6 +2,7 @@ package app.level;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import app.player.Player;
@@ -20,6 +21,7 @@ public class Level {
 	@Id
 	private Integer level;
 	private Random rand;
+	private Hashtable<String, Player> playersT;
 	private ArrayList<Player> players;
 
 	@Transient
@@ -30,6 +32,8 @@ public class Level {
 	private Point stair;
 
 	public Level() {
+		playersT = new Hashtable<String, Player>();
+		players = new ArrayList<Player>();
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
 		generate();
@@ -52,6 +56,10 @@ public class Level {
 		return players;
 	}
 
+	public Player getPlayer(String ID) {
+		return playersT.get(ID);
+	}
+
 	public Tile[][] getGrid() {
 		return grid;
 	}
@@ -62,6 +70,16 @@ public class Level {
 
 	public Point getStair() {
 		return stair;
+	}
+
+	public void addPlayer(Player p) {
+		playersT.put(p.getPlayerID(), p);
+		players.add(p);
+	}
+
+	public void removePlayer(Player p) {
+		playersT.remove(p.getPlayerID());
+		players.remove(p);
 	}
 
 	private void generate() {
@@ -93,10 +111,9 @@ public class Level {
 
 		do {
 			/* create entry in room array */
-			//y length and x length
-			//y corner x corner
+			// y length and x length
+			// y corner x corner
 			rooms[idx] = new Room(rand);
-
 
 			/* check that the room's position is valid */
 			loop = false;
@@ -147,8 +164,8 @@ public class Level {
 				return;
 			if (grid[y1][x1 + i].getType() == TileTypes.WALL)
 				grid[y1][x1 + i] = new Floor();
-			if (leftRoom && (grid[y1 + 1][x1 + i].getType() != TileTypes.WALL ||
-					grid[y1 - 1][x1 + i].getType() != TileTypes.WALL))
+			if (leftRoom && (grid[y1 + 1][x1 + i].getType() != TileTypes.WALL
+					|| grid[y1 - 1][x1 + i].getType() != TileTypes.WALL))
 				return;
 			i += xsign;
 		}
@@ -197,12 +214,12 @@ public class Level {
 	}
 
 	public void fillGridForDefaultMap() {
-		for(int i=0; i < mapHeight; i++) {
-			for(int j=0; j < mapWidth; j++) {
-				//Checks if the selected index is an edge of the grid
-				if(i == 0 || j == 0 || i == mapHeight-1 || j == mapWidth-1) {
-					grid[i][j]  = new Wall();
-				}else {
+		for (int i = 0; i < mapHeight; i++) {
+			for (int j = 0; j < mapWidth; j++) {
+				// Checks if the selected index is an edge of the grid
+				if (i == 0 || j == 0 || i == mapHeight - 1 || j == mapWidth - 1) {
+					grid[i][j] = new Wall();
+				} else {
 					grid[i][j] = new Floor();
 				}
 			}

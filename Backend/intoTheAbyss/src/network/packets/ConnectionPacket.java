@@ -15,7 +15,7 @@ public class ConnectionPacket {
 		userID = ID;
 	}
 	
-	public void getID(String ID) {
-		userID = ID;
+	public String getID() {
+		return userID;
 	}
 }
