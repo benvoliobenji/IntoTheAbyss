@@ -86,7 +86,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val stairs = response.getJSONObject("stair")
 
                 // Parse the JSONArray of JSONArrays into our 2D array of tiles, apply to gameState
-                val levelGrid = gridParse(grid)
+                var levelGrid = gridParse(grid)
 
                 // Placing the stairs
                 val stairX = stairs.getInt("x")
@@ -100,7 +100,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val startX = spawn.getInt("x")
                 val startY = spawn.getInt("y")
                 gameState?.myPlayer?.x = startX
-                gameState?.myPlayer?.x = startY
+                gameState?.myPlayer?.y = startY
 
                 gameState?.loading = false
                 Log.i("DungeonLevel", spawn.toString())

@@ -1,8 +1,6 @@
 package com.example.intotheabyss.networking
 
 import com.example.intotheabyss.game.GameState
-import com.example.intotheabyss.networking.Network
-import com.example.intotheabyss.networking.VolleyNetwork
 import java.lang.Thread.sleep
 
 class UpdateRunnable(private val network: Network, private val volleyNetwork: VolleyNetwork,
@@ -16,6 +14,7 @@ class UpdateRunnable(private val network: Network, private val volleyNetwork: Vo
             // We will probably want to change this at some point
             while (true) {
                 sleep(25)
+
                 if ((posX != gameState.myPlayer.x) or (posY != gameState.myPlayer.y)) {
                     posX = gameState.myPlayer.x
                     posY = gameState.myPlayer.y

@@ -12,7 +12,6 @@ import com.example.intotheabyss.networking.NetworkRunnable
 
 class DungeonActivity : AppCompatActivity() {
     private var networkThread = Thread()
-    private var gameProcessingThread = Thread()
     var gameState = GameState()
 
 
