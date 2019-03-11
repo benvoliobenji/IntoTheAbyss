@@ -34,6 +34,11 @@ class GameController(gameView: GameView)  {
     private var lastTime: Long = 0
     private var currentTime: Long = 10000   //Just some number significantly longer than last time to start
 
+    //Action timer
+    var lastTimeAction: Long = 0
+    var thisTimeAction: Long = 1000
+    var actionTimer: Long = 500
+
     //Don't know why I need to do this
     var gameView: GameView = gameView
 
@@ -56,15 +61,19 @@ class GameController(gameView: GameView)  {
         curX = 0f
         curY = 0f
 
-        if (input != null) {
-            for (i in 0..input!!.pointerCount-1) {
-                curX = input!!.getX(i)
-                curY = input!!.getY(i)
-                aAction = input!!.actionMasked
-                if ((actionX.contains(curX)) and (actionY.contains(curY)) and (aAction != MotionEvent.ACTION_UP)) {
-                    gameView.gAction = 1
-                } else {
-                    gameView.gAction = 0
+        thisTimeAction = System.currentTimeMillis()
+        if (thisTimeAction - lastTimeAction > actionTimer) {
+            if (input != null) {
+                for (i in 0..input!!.pointerCount - 1) {
+                    curX = input!!.getX(i)
+                    curY = input!!.getY(i)
+                    aAction = input!!.actionMasked
+                    if ((actionX.contains(curX)) and (actionY.contains(curY)) and (aAction != MotionEvent.ACTION_UP)) {
+                        lastTimeAction = thisTimeAction
+                        gameView.gAction = 1
+                    } else {
+                        gameView.gAction = 0
+                    }
                 }
             }
         }

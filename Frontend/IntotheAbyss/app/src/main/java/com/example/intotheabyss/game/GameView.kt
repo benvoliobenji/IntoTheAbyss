@@ -42,15 +42,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     //Assets
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
-
-    //Variables for reading player input
-    var input: MotionEvent? = null
-    var downTime: Long = 0
-    var eventTime: Long = 0
-    var action: Int = 0
-    var iX: Float = 0.toFloat()     //x coord of finger press
-    var iY: Float = 0.toFloat()     //y coord of finger press
-    var metaState: Int = 0
+    private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
 
     //Variables for following player
     private val xBuffer: Int = 5
@@ -143,6 +135,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
                 player!!.floorNumber++
                 gameState!!.loading = true //Not sure if this is the purpose of it or not
+                println("Attempting to descend level. Currently at ${player!!.floorNumber}")
+                gAction = 0
             }
         }
     }
@@ -238,6 +232,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                         image = floorImage
                     } else if (lvlArray[j][i].type == TileTypes.WALL) {
                         image = wallImage                                   //Set image to wallImage
+                    } else if (lvlArray[j][i].type == TileTypes.STAIR) {
+                        image = stairsImage
                     }
                     //Try to print the damn thing
                     canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), (((j-minY) * tileSize)+1).toFloat(), null)
@@ -246,7 +242,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
-    fun drawAction(canvas: Canvas) {
+    private fun drawAction(canvas: Canvas) {
         if (gAction > 0) {
             val paint = Paint()
             paint.color = Color.RED
