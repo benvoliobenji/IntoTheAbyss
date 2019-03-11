@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.example.intotheabyss.dungeonassets.Stair
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.player.Player
 import com.example.intotheabyss.utils.gridParse
@@ -42,7 +43,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 file.writeText(playerID)
             },
             Response.ErrorListener { error ->
-                Log.i("PlayerRegistration", "Error: %s".format(error.toString()))
+                Log.i("PlayerRegistrationError", "Error: %s".format(error.toString()))
             }
         )
 
@@ -63,9 +64,12 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val player = Player(networkPlayerName, playerID, 0, posX, posY)
                 gameState?.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
+                Log.i("PlayerRegistrationX", posX.toString())
+                Log.i("PlayerRegistrationY", posY.toString())
+                Log.i("PlayerRegistrationID", playerID)
             },
             Response.ErrorListener { error ->
-                Log.i("PlayerRegistration", "Error: %s".format(error.toString()))
+                Log.i("PlayerRegistrationError", "Error: %s".format(error.toString()))
             }
         )
 
@@ -78,14 +82,33 @@ class VolleyNetwork(context: Context, gameState: GameState) {
             Request.Method.GET, url, null,
             Response.Listener { response ->
                 val grid = response.getJSONArray("grid")
+                val spawn = response.getJSONObject("spawn")
+                val stairs = response.getJSONObject("stair")
 
                 // Parse the JSONArray of JSONArrays into our 2D array of tiles, apply to gameState
-                gameState?.level = gridParse(grid)
+                var levelGrid = gridParse(grid)
+
+                // Placing the stairs
+                val stairX = stairs.getInt("x")
+                val stairY = stairs.getInt("y")
+                levelGrid[stairY][stairX] = Stair()
+
+                // Set the new level in gameState
+                gameState?.level = levelGrid
+
+                // Placing the player
+                val startX = spawn.getInt("x")
+                val startY = spawn.getInt("y")
+                gameState?.myPlayer?.x = startX
+                gameState?.myPlayer?.y = startY
+
                 gameState?.loading = false
+                Log.i("DungeonLevel", spawn.toString())
+                Log.i("DungeonLevel", stairs.toString())
                 Log.i("DungeonLevel", grid.toString())
             },
             Response.ErrorListener { error ->
-                Log.i("DungeonLevel", "Error: %s".format(error.toString()))
+                Log.i("DungeonLevelError", "Error: %s".format(error.toString()))
             }
         )
 

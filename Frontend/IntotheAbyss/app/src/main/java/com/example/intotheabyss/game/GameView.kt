@@ -9,18 +9,24 @@ import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.player.Player
 import android.content.res.Resources
 import android.graphics.*
+import android.support.annotation.FloatRange
 import android.view.MotionEvent
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
+    private var debug = false //set to true to get a generic level, false to get a level from DB
+
     private val thread: GameThread
     private var gameState: GameState? = null
 
+    private var gameController: GameController
+    var gAction = 0         //GameController sets to 0 if no action, something else if there is
+
     //Screen dimensions
-    private val sWidth = Resources.getSystem().displayMetrics.widthPixels
-    private val sHeight = Resources.getSystem().displayMetrics.heightPixels
+    val sWidth = Resources.getSystem().displayMetrics.widthPixels
+    val sHeight = Resources.getSystem().displayMetrics.heightPixels
 
 
     private val tileSize = 64
@@ -29,26 +35,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private val dimHeight: Int = sHeight / tileSize
 
     //declare game objects
-//    private var player: Player = gameState.myPlayer
-    private var player: Player? = null
-    private var lvlArray = Array(100) { Array(50) { tile } }
+    var player: Player? = null
+
+    private val lvlSize: Point = Point(100, 25)
+    var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
+    private var validLevel = false
 
     //Assets
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
-
-    //Variables for reading player input
-    var input: MotionEvent? = null
-    var downTime: Long = 0
-    var eventTime: Long = 0
-    var action: Int = 0
-    var iX: Float = 0.toFloat()     //x coord of finger press
-    var iY: Float = 0.toFloat()     //y coord of finger press
-    var metaState: Int = 0
-
-    //Tracking time for player speed
-    private var lastTime: Long = 0
-    private var currentTime: Long = 10000   //Just some number significantly longer than last time to start
+    private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
 
     //Variables for following player
     private val xBuffer: Int = 5
@@ -64,25 +60,27 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
-
-        //TODO: Testing only, remove later
-        val wall = Wall()
-        val floor = Floor()
-
-        for (i in 0..(lvlArray.size-1)) {
-            for (j in 0..(lvlArray[0].size-1)) {
-                if ((i == 0) or (i == 99) or (j == 0) or (j == 49)) {
-                    lvlArray[i][j] = wall
-                } else {
-                    lvlArray[i][j] = floor
-                }
-            }
-        }
+        gameController = GameController(this)
 
         try {
             player = gameState!!.myPlayer
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun genericLevel() {
+        val wall = Wall()
+        val floor = Floor()
+
+        for (i in 0 until lvlArray.size) {
+            for (j in 0 until lvlArray[i].size) {
+                if ((i == 0) or (i == lvlArray.size-1) or (j == 0) or (j == lvlArray[0].size-1)) {
+                    lvlArray[i][j] = wall
+                } else {
+                    lvlArray[i][j] = floor
+                }
+            }
         }
     }
 
@@ -125,68 +123,25 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables
      */
     fun update() {
-        player!!.setX(player!!.getX())
-        player!!.setY(player!!.getY())
-        var newX: Int
-        var newY: Int
-        var moved = false
-        val waitTime: Long = 100
 
-        if (action == MotionEvent.ACTION_UP) {
-            iX = 0f
-            iY = 0f
-        }
+        //updatePlayerLocation()    //Player movment - iX,iY is coordinate of touch event
+        gameController!!.updatePlayerLocation()
+        gameController!!.getAction()
+        checkNewLevel()
+        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
+        updateBoundaries(player!!)      //Make sure screen follows player around
+    }
 
-        if (iX > sWidth * 3/4) {
-            newX = player!!.getX() + 1
-            if (lvlArray[player!!.getY()][newX]!!.isPassable) {
-                currentTime = System.currentTimeMillis()
-                if ((currentTime - lastTime > waitTime) or (moved)) {
-                    player!!.setX(newX)
-                    moved = true
-                    lastTime = System.currentTimeMillis()
-                }
-            }
-        } else if ((iX < sWidth / 4) and (iX != 0f)) {
-            newX = player!!.getX() - 1
-            if (lvlArray[player!!.getY()][newX]!!.isPassable) {
-                currentTime = System.currentTimeMillis()
-                if ((currentTime - lastTime > waitTime) or (moved)) {
-                    player!!.setX(newX)
-                    moved = true
-                    lastTime = System.currentTimeMillis()
-                }
+    private fun checkNewLevel() {
+        if (gAction > 0) {
+            if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
+                player!!.floorNumber++
+                gameState!!.loading = true //Not sure if this is the purpose of it or not
+                println("Attempting to descend level. Currently at ${player!!.floorNumber}")
+                gAction = 0
             }
         }
-
-        if (iY > sHeight * 3/4) {
-            newY = player!!.getY() + 1
-            if (lvlArray[newY][player!!.getX()]!!.isPassable) {
-                currentTime = System.currentTimeMillis()
-                if ((currentTime - lastTime > waitTime) or (moved)) {
-                    player!!.setY(newY)
-                    moved = true
-                    lastTime = System.currentTimeMillis()
-                }
-            }
-        } else if ((iY < sWidth / 4) and (iY != 0f)) {
-            newY = player!!.getY() - 1
-            if (newY < lvlArray.size) {
-                if (lvlArray[newY][player!!.getX()]!!.isPassable) {
-                    currentTime = System.currentTimeMillis()
-                    if ((currentTime - lastTime > waitTime) or (moved)) {
-                        player!!.setY(newY)
-                        moved = true
-                        lastTime = System.currentTimeMillis()
-                    }
-                }
-            }
-        }
-
-//        iX = 0f
-//        iY = 0f
-
-        updateBoundaries(player!!)
     }
 
     /**
@@ -194,15 +149,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        drawBG(canvas, player!!)
+        drawBG(canvas)
         drawPlayer(canvas, player!!)
-//        println("X: $iX, Y: $iY")
+        drawAction(canvas)
     }
 
+    /**
+     * How we get info from screen touch events.
+     */
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        iX = event!!.x
-        iY = event!!.y
-        action = event.action
+        event!!
+
+//        iY = event.y
+//        action = event.action
+        gameController.setEvent(event)
         return true
 
 //        Removing the super call seems dangerous, but it fixed my problems so idk
@@ -210,8 +170,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     private fun updateBoundaries(player: Player) {
-        val x = player.getX()
-        val y = player.getY()
+        val x = player.x
+        val y = player.y
 
         if (x - xBuffer < minX) {
             minX--
@@ -227,33 +187,43 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     private fun drawPlayer(canvas: Canvas, player: Player)  {
-        val x = player.getX()
-        val y = player.getY()
-
+//        val x = player.getX()
+//        val y = player.getY()
+        val x = player.x
+        val y = player.y
 
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        player!!.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
-        canvas.drawText("Player location: (" + player.getX().toString() + "," + player.getY().toString() + ")",25.toFloat(), 50.toFloat(), paint)
+        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
+        canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
     }
 
     fun setGameState(gState: GameState)  {
         gameState = gState
     }
 
-    fun drawBG(canvas: Canvas, player: Player) {
-        //Wall/floor objects to display - will explore more advanced ways of displaying objects (sprites and whatnot)
-
-
-        //TODO: Replace lvlArray with level, when possible
-        //getting lvlArray from gameState for now, but this should be changed to be level object
+    private fun drawBG(canvas: Canvas) {
+        if (debug) {
+            genericLevel()
+//            debug = false
+        } else {
+            lvlArray = gameState!!.level
+        }
         //val level: Level = gameState.level
 
-
-
+        //If offline, try adding in the ValidLevel thing to fix it
+        if (/*!validLevel or */(lvlArray.isNullOrEmpty())) {
+            if (gameState!!.level.isNotEmpty()) {
+                lvlArray = gameState!!.level
+            }
+            else {
+                genericLevel()
+            }
+            validLevel = true
+        }
 
 
 
@@ -263,14 +233,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //Loop through all tiles to be displayed, and a few others to minimize lag
         for (i in minX..minX+dimWidth) {
-            if ((i > -1) and (i < 50))
+            if ((i > -1) and (i < lvlSize.x))
             for (j in minY..minY+dimHeight) {
-                if ((j > -1) and (j < 100)) {
+                if ((j > -1) and (j < lvlSize.y)) {
                     //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
-                    if (lvlArray[j][i]!!.type == TileTypes.FLOOR) {  //Set image to floorImage
+                    if (lvlArray[j][i].type == TileTypes.FLOOR) {  //Set image to floorImage
                         image = floorImage
-                    } else if (lvlArray[j][i]!!.type == TileTypes.WALL) {
+                    } else if (lvlArray[j][i].type == TileTypes.WALL) {
                         image = wallImage                                   //Set image to wallImage
+                    } else if (lvlArray[j][i].type == TileTypes.STAIR) {
+                        image = stairsImage
                     }
                     //Try to print the damn thing
                     canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), (((j-minY) * tileSize)+1).toFloat(), null)
@@ -279,8 +251,18 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
-    companion object {
-        private var tile: Tile? = null
+    private fun drawAction(canvas: Canvas) {
+        if (gAction > 0) {
+            val paint = Paint()
+            paint.color = Color.RED
+            paint.style = Paint.Style.FILL
+            paint.textSize = 80f
+            canvas.drawText("Action", 500f, 500f, paint)
+        }
+        gAction = 0
     }
 
+    companion object {
+        private var tile: Tile = Wall()
+    }
 }
