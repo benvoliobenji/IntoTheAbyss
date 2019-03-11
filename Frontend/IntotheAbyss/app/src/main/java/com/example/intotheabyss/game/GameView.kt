@@ -16,6 +16,8 @@ import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
+    private var debug = false //set to true to get a generic level, false to get a level from DB
+
     private val thread: GameThread
     private var gameState: GameState? = null
 
@@ -127,6 +129,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameController!!.getAction()
         checkNewLevel()
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
         updateBoundaries(player!!)      //Make sure screen follows player around
     }
 
@@ -203,7 +206,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     private fun drawBG(canvas: Canvas) {
-        lvlArray = gameState!!.level
+        if (debug) {
+            genericLevel()
+//            debug = false
+        } else {
+            lvlArray = gameState!!.level
+        }
         //val level: Level = gameState.level
 
         //If offline, try adding in the ValidLevel thing to fix it
@@ -216,6 +224,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
             validLevel = true
         }
+
 
 
         //image variable - will maybe be updated to be more efficient later
