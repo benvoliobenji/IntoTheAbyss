@@ -35,7 +35,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     //declare game objects
     var player: Player? = null
 
-    private val lvlSize: Point = Point(50, 100)
+    private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
     private var validLevel = false
 
@@ -79,8 +79,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val wall = Wall()
         val floor = Floor()
 
-        for (i in 0..(lvlArray.size-1)) {
-            for (j in 0..(lvlArray[0].size-1)) {
+        for (i in 0 until lvlArray.size) {
+            for (j in 0 until lvlArray[i].size) {
                 if ((i == 0) or (i == 99) or (j == 0) or (j == 49)) {
                     lvlArray[i][j] = wall
                 } else {

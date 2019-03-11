@@ -19,7 +19,7 @@ import com.example.intotheabyss.utils.TileTypes
 
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
-    private val ip: String = "cs309-ad-4-misc.iastate.edu:8080"
+    private val ip: String = "cs309-ad-4.misc.iastate.edu:8080"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
