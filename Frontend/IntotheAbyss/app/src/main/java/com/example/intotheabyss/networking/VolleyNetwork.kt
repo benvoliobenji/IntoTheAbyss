@@ -43,7 +43,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 file.writeText(playerID)
             },
             Response.ErrorListener { error ->
-                Log.i("PlayerRegistration", "Error: %s".format(error.toString()))
+                Log.i("PlayerRegistrationError", "Error: %s".format(error.toString()))
             }
         )
 
@@ -64,9 +64,12 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val player = Player(networkPlayerName, playerID, 0, posX, posY)
                 gameState?.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
+                Log.i("PlayerRegistrationX", posX.toString())
+                Log.i("PlayerRegistrationY", posY.toString())
+                Log.i("PlayerRegistrationID", playerID)
             },
             Response.ErrorListener { error ->
-                Log.i("PlayerRegistration", "Error: %s".format(error.toString()))
+                Log.i("PlayerRegistrationError", "Error: %s".format(error.toString()))
             }
         )
 
@@ -90,21 +93,22 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val stairY = stairs.getInt("y")
                 levelGrid[stairY][stairX] = Stair()
 
+                // Set the new level in gameState
+                gameState?.level = levelGrid
+
                 // Placing the player
                 val startX = spawn.getInt("x")
                 val startY = spawn.getInt("y")
                 gameState?.myPlayer?.x = startX
                 gameState?.myPlayer?.x = startY
 
-                // Set the new level in gameState
-                gameState?.level = levelGrid
                 gameState?.loading = false
                 Log.i("DungeonLevel", spawn.toString())
                 Log.i("DungeonLevel", stairs.toString())
                 Log.i("DungeonLevel", grid.toString())
             },
             Response.ErrorListener { error ->
-                Log.i("DungeonLevel", "Error: %s".format(error.toString()))
+                Log.i("DungeonLevelError", "Error: %s".format(error.toString()))
             }
         )
 
