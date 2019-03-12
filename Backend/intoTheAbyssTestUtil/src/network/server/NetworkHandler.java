@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Listener;
 import app.level.Level;
 import app.player.Player;
 import app.tiles.Tile;
+import app.utils.TileTypes;
 import app.world.World;
 import network.packets.*;
 
@@ -37,7 +38,10 @@ public class NetworkHandler {
 		kryo.register(app.tiles.Floor.class);
 		kryo.register(app.tiles.Tile[].class);
 		kryo.register(app.tiles.Tile[][].class);
+		kryo.register(app.tiles.Stair.class);
 		kryo.register(PlayerPacket.class);
+		kryo.register(MoveFloorPacket.class);
+		kryo.register(PlayerLocationPacket.class);
 	}
 
 	public void setupListener() {
@@ -55,14 +59,21 @@ public class NetworkHandler {
 
 					for (int i = 0; i < grid.length; i++) {
 						for (int j = 0; j < grid[0].length; j++) {
-							System.out.print(grid[i][j].getType());
+							if(grid[i][j].getType() == TileTypes.WALL) {
+								System.out.print("8");
+							}else if(grid[i][j].getType() == TileTypes.FLOOR) {
+								System.out.print("-");
+							}else if (grid[i][j].getType() == TileTypes.STAIR) {
+								System.out.print("#");
+							}
 						}
 						System.out.print("\n");
 					}
 				} else if (object instanceof MapRequestPacket) {
 
 				} else if (object instanceof PlayerPacket) {
-
+					Player p = new Player((PlayerPacket) object);
+					System.out.println(p.toString());
 				}
 			}
 		});

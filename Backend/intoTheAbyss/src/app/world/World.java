@@ -8,15 +8,13 @@ import app.player.Player;
 public class World {
 	private ArrayList<Level> levels;
 	private ArrayList<Player> players;
-	// private Random rand;
 
 	public World() {
 		levels = new ArrayList<Level>();
 		players = new ArrayList<Player>();
-
+		
 		addLevel();
 		levels.get(0).fillGridForDefaultMap();
-
 	}
 
 	public World(int seed) {
@@ -31,10 +29,23 @@ public class World {
 		levels.add(new Level());
 	}
 
-	public int getDepth(){
+	public void addLevel(Level level) {
+		levels.add(level);
+	}
+
+	public void switchFloors(Player player, int fOne, int fTwo) {
+		levels.get(fOne).removePlayer(player);
+		levels.get(fTwo).addPlayer(player);
+		player.setFloor(Integer.valueOf(fTwo));
+		player.setPosX(Integer.valueOf(levels.get(fTwo).getSpawn().x));
+		player.setPosY(Integer.valueOf(levels.get(fTwo).getSpawn().y));
+	}
+
+	public int getDepth() {
 		return levels.size();
 	}
 
+	// Starts with a near empty world
 	public void resetWorld() {
 		levels.clear();
 		addLevel();

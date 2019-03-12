@@ -2,6 +2,7 @@ package app.level;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import app.player.Player;
@@ -20,7 +21,9 @@ public class Level {
 	@Id
 	private Integer level;
 	private Random rand;
+	private Hashtable<String, Player> playersT;
 	private ArrayList<Player> players;
+
 	@Transient
 	private Tile[][] grid;
 	@Transient
@@ -29,26 +32,35 @@ public class Level {
 	private Point stair;
 
 	public Level() {
+		playersT = new Hashtable<String, Player>();
+		players = new ArrayList<Player>();
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
 		generate();
 	}
 
-	public Level(Random random) {
-		grid = new Tile[mapHeight][mapWidth];
-		rand = random;
-		generate();
-	}
-
 	public Level(Integer level) {
+		playersT = new Hashtable<String, Player>();
+		players = new ArrayList<Player>();
 		this.level = level;
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
 		generate();
 	}
+	
+	public void buildDefaultLevel() {
+		playersT = new Hashtable<String, Player>();
+		players = new ArrayList<Player>();
+		grid = new Tile[mapHeight][mapWidth];
+		fillGridForDefaultMap();
+	}
 
 	public ArrayList<Player> getPlayers() {
 		return players;
+	}
+
+	public Player getPlayer(String ID) {
+		return playersT.get(ID);
 	}
 
 	public Tile[][] getGrid() {
@@ -63,6 +75,16 @@ public class Level {
 		return stair;
 	}
 
+	public void addPlayer(Player p) {
+		playersT.put(p.getPlayerID(), p);
+		//players.add(p);
+	}
+
+	public void removePlayer(Player p) {
+		playersT.remove(p.getPlayerID());
+		//players.remove(p);
+	}
+
 	private void generate() {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
@@ -73,9 +95,9 @@ public class Level {
 		int num_rooms = 0;
 		rooms = new Room[8];
 
-		while (numRooms < 8) {
-			createRoom(numRooms);
-			numRooms++;
+		while (num_rooms < 8) {
+			createRoom(num_rooms);
+			num_rooms++;
 		}
 
 		createCorridors();
@@ -92,10 +114,9 @@ public class Level {
 
 		do {
 			/* create entry in room array */
-			//y length and x length
-			//y corner x corner
+			// y length and x length
+			// y corner x corner
 			rooms[idx] = new Room(rand);
-
 
 			/* check that the room's position is valid */
 			loop = false;
@@ -146,8 +167,8 @@ public class Level {
 				return;
 			if (grid[y1][x1 + i].getType() == TileTypes.WALL)
 				grid[y1][x1 + i] = new Floor();
-			if (leftRoom && (grid[y1 + 1][x1 + i].getType() != TileTypes.WALL ||
-					grid[y1 - 1][x1 + i].getType() != TileTypes.WALL))
+			if (leftRoom && (grid[y1 + 1][x1 + i].getType() != TileTypes.WALL
+					|| grid[y1 - 1][x1 + i].getType() != TileTypes.WALL))
 				return;
 			i += xsign;
 		}
@@ -196,12 +217,12 @@ public class Level {
 	}
 
 	public void fillGridForDefaultMap() {
-		for(int i=0; i < mapHeight; i++) {
-			for(int j=0; j < mapWidth; j++) {
-				//Checks if the selected index is an edge of the grid
-				if(i == 0 || j == 0 || i == mapHeight-1 || j == mapWidth-1) {
-					grid[i][j]  = new Wall();
-				}else {
+		for (int i = 0; i < mapHeight; i++) {
+			for (int j = 0; j < mapWidth; j++) {
+				// Checks if the selected index is an edge of the grid
+				if (i == 0 || j == 0 || i == mapHeight - 1 || j == mapWidth - 1) {
+					grid[i][j] = new Wall();
+				} else {
 					grid[i][j] = new Floor();
 				}
 			}
@@ -209,6 +230,9 @@ public class Level {
 		grid[mapHeight / 2][mapWidth / 2] = new Stair();
 		stair.y = mapHeight / 2;
 		stair.x = mapWidth / 2;
+		spawn.x =mapWidth / 2;
+		spawn.y = mapHeight / 2;
+		
 	}
 
 }

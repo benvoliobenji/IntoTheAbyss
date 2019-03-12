@@ -1,7 +1,7 @@
-package app.db;
+package app.level;
 
 
-import app.level.Level;
+import app.db.LevelRepository;
 import app.world.World;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,6 @@ public class LevelController {
 
     @GetMapping(path = "/get")
     public @ResponseBody Level getLevel(@RequestParam Integer id){
-
         if (levelRepository.existsById(id)) {
             return levelRepository.findById(id).get();
         } else {

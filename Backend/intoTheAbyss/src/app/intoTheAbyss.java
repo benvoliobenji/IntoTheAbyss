@@ -10,6 +10,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
 import network.server.NetworkHandler;
+import app.db.LevelRepository;
 import app.db.PlayerRepository;
 import app.world.World;
 
@@ -17,9 +18,11 @@ import app.world.World;
 public class intoTheAbyss {
 	@Autowired
 	private PlayerRepository playerRepository;
+	@Autowired
+	private LevelRepository levelRepository;
 	@PersistenceContext
-    EntityManager entityManager;
-	
+	EntityManager entityManager;
+
 	public static int portTCP = 44444;
 	public static int portUDP = 44445;
 
@@ -32,8 +35,8 @@ public class intoTheAbyss {
 		World world = new World();
 		world.addLevel();
 		world.addLevel();
-		
-		NetworkHandler network = new NetworkHandler(world, playerRepository);
+
+		NetworkHandler network = new NetworkHandler(world, playerRepository, levelRepository);
 		network.registerPackets();
 		network.setupListener();
 		network.startNetwork();

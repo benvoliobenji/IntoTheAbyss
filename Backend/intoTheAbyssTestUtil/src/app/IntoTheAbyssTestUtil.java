@@ -7,6 +7,8 @@ import com.esotericsoftware.kryonet.Client;
 import app.world.World;
 import network.packets.ConnectionPacket;
 import network.packets.MapRequestPacket;
+import network.packets.MoveFloorPacket;
+import network.packets.PlayerLocationPacket;
 import network.packets.PlayerPacket;
 import network.server.NetworkHandler;
 
@@ -24,22 +26,56 @@ public class IntoTheAbyssTestUtil {
 		network.setupListener();
 		network.startNetwork();
 		
+		String userID = "734b164a-c4c5-48af-bb98-db9194f0fafa";
+		
 		Client client = network.getClient();
-		ConnectionPacket packet = new ConnectionPacket();
+		MapRequestPacket packet = new MapRequestPacket();
+		packet.floorNum = 0;
 		client.sendTCP(packet);
 		
-		PlayerPacket p = new PlayerPacket();
-		p.setFloorNumber(1);
-		p.setXPos(3);
-		p.setYPos(3);
-		p.setUsername("Jet");
-		p.setID(2);
-		
-		client.sendTCP(p);
-		
-		MapRequestPacket mapP = new MapRequestPacket();
-		mapP.floorNum = 1;
-		client.sendTCP(mapP);
 		TimeUnit.SECONDS.sleep(10);
+		
+		
+		/*Client client = network.getClient();
+		ConnectionPacket packet = new ConnectionPacket();
+		packet.setID(userID);
+		client.sendTCP(packet);
+		
+		PlayerLocationPacket locUpdate = new PlayerLocationPacket();
+		locUpdate.setPlayerID(userID);
+		locUpdate.setPlayerPositionX(15);
+		locUpdate.setPlayerPositionY(15);
+		locUpdate.setPlayerFloor(3);
+		client.sendTCP(locUpdate);
+		
+		MoveFloorPacket changeFloor = new MoveFloorPacket();
+		changeFloor.setUserID(userID);
+		changeFloor.setFloor(4);
+		client.sendTCP(changeFloor);
+		
+		TimeUnit.SECONDS.sleep(3);
+		
+		MoveFloorPacket changeFloor = new MoveFloorPacket();
+		changeFloor.setUserID(userID);
+		changeFloor.setFloor(1);
+		client.sendTCP(changeFloor);
+		
+		TimeUnit.SECONDS.sleep(3);
+		
+		MoveFloorPacket changeFloor2 = new MoveFloorPacket();
+		changeFloor2.setUserID(userID);
+		changeFloor2.setFloor(2);
+		client.sendTCP(changeFloor2);
+		
+		TimeUnit.SECONDS.sleep(3);
+		
+		MoveFloorPacket changeFloor3 = new MoveFloorPacket();
+		changeFloor3.setUserID(userID);
+		changeFloor3.setFloor(3);
+		client.sendTCP(changeFloor3);
+		
+		TimeUnit.SECONDS.sleep(3);*/
+		
+		
 	}
 }
