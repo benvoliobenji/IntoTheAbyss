@@ -18,7 +18,7 @@ public class PlayerController {
 	private PlayerRepository playerRepository;
 
 	@GetMapping(path = "/add")
-	public @ResponseBody String addPlayer(@RequestParam String username) {
+	public @ResponseBody Player addPlayer(@RequestParam String username) {
 		List<Player> players = playerRepository.getPlayerByUsername(username);
 		if (players.isEmpty()) {
 			Player player = new Player();
@@ -28,10 +28,8 @@ public class PlayerController {
 			player.setPosX(1);
 			player.setPosY(1);
 			playerRepository.save(player);
-			Json json = new Json();
-			return json.toJson(player);
-		}
-		return "Unable to save player with username " + username + " as this player already exists";
+			return player;
+		}else return null;
 	}
 
 	@GetMapping(path = "/getPlayer")
