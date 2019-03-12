@@ -1,41 +1,40 @@
 package app.player;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import network.packets.PlayerPacket;
 
 @Entity
 public class Player {
 	@Id
-	private Integer playerID;
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator( name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	public String playerID;
 	private String username;
 	private Integer posX, posY, floor, health;
+	
 
 	public Player() {
-		floor = 0;
+		floor = Integer.valueOf(0);
 		username = "";
-	}
-	
-	public Player(int floorNum) {
-		floor = Integer.valueOf(floorNum);
-		playerID = Integer.valueOf(17);
-		username = "" + 17;
-		posX = Integer.valueOf(1);
-		posY = Integer.valueOf(1);
 		health = Integer.valueOf(10);
 	}
-	
+
+	public Player(int floorNum) {
+		floor = floorNum;
+	}
+
 	public Player(PlayerPacket playerPacket) {
-		playerID = Integer.valueOf(19);
+		username = playerPacket.getUsername();
 		floor = Integer.valueOf(playerPacket.getFloorNumber());
-		username = playerPacket.getUsername() + "";
 		posX = Integer.valueOf(playerPacket.getXPos());
 		posY = Integer.valueOf(playerPacket.getYPos());
-		health = Integer.valueOf(10);
 	}
-	
-	@Override
+
 	public String toString() {
 		String s = "";
 		s += "Username: " + username + "\t";
@@ -51,11 +50,11 @@ public class Player {
 		this.username = uname;
 	}
 
-	public Integer getPlayerID() {
+	public String getPlayerID() {
 		return playerID;
 	}
 
-	public void setPlayerID(Integer playerid) {
+	public void setPlayerID(String playerid) {
 		this.playerID = playerid;
 
 	}
@@ -81,7 +80,7 @@ public class Player {
 	}
 
 	public void setFloor(Integer floor) {
-		this.floor = floor;
+		this.floor = Integer.valueOf(floor);
 	}
 
 	public Integer getHealth() {
@@ -89,6 +88,7 @@ public class Player {
 	}
 
 	public void setHealth(Integer health) {
-		this.health = health;
+		this.health = Integer.valueOf(health);
 	}
 }
+

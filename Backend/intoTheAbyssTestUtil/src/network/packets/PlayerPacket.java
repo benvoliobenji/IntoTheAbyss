@@ -1,17 +1,28 @@
 package network.packets;
 
+import app.player.Player;
+
 public class PlayerPacket {
-	private String username;
-	private int playerLocationFloor, playerPositionX, playerPositionY, ID;
+	private String id, username;
+	private int playerLocationFloor, playerPositionX, playerPositionY, health;
 	
 	public PlayerPacket() {
 		
 	}
-
-	public int getID() {
-		return ID;
+	
+	public PlayerPacket(Player p) {
+		id = p.getPlayerID();
+		username = p.getUsername();
+		playerLocationFloor = p.getFloor().intValue();
+		playerPositionX = p.getPosX().intValue();
+		playerPositionY = p.getPosY().intValue();
+		health = p.getHealth().intValue();
 	}
 	
+	public String getID() {
+		return id;
+	}
+
 	public int getXPos() {
 		return playerPositionX;
 	}
@@ -28,23 +39,7 @@ public class PlayerPacket {
 		return username;
 	}
 	
-	public void setID(int userID) {
-		ID = userID;
-	}
-	
-	public void setXPos(int x) {
-		playerPositionX = x;
-	}
-	
-	public void setYPos(int y) {
-		playerPositionY = y;
-	}
-	
-	public void setFloorNumber(int floor) {
-		playerLocationFloor = floor;
-	}
-	
-	public void setUsername(String uname) {
-		username = uname;
+	public int getHealth() {
+		return health;
 	}
 }
