@@ -15,6 +15,10 @@ public class PlayerLocationPacket {
 	public int getPlayerFloor() {
 		return playerLocationFloor;
 	}
+	
+	public void setPlayerFloor(int floor) {
+		playerLocationFloor = floor;
+	}
 
 	public int getXPos() {
 		return getPlayerPositionX();

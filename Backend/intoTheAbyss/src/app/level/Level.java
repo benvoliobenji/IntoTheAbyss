@@ -39,17 +39,20 @@ public class Level {
 		generate();
 	}
 
-	public Level(Random random) {
-		grid = new Tile[mapHeight][mapWidth];
-		rand = random;
-		generate();
-	}
-
 	public Level(Integer level) {
+		playersT = new Hashtable<String, Player>();
+		players = new ArrayList<Player>();
 		this.level = level;
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
 		generate();
+	}
+	
+	public void buildDefaultLevel() {
+		playersT = new Hashtable<String, Player>();
+		players = new ArrayList<Player>();
+		grid = new Tile[mapHeight][mapWidth];
+		fillGridForDefaultMap();
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -74,12 +77,12 @@ public class Level {
 
 	public void addPlayer(Player p) {
 		playersT.put(p.getPlayerID(), p);
-		players.add(p);
+		//players.add(p);
 	}
 
 	public void removePlayer(Player p) {
 		playersT.remove(p.getPlayerID());
-		players.remove(p);
+		//players.remove(p);
 	}
 
 	private void generate() {
@@ -227,6 +230,9 @@ public class Level {
 		grid[mapHeight / 2][mapWidth / 2] = new Stair();
 		stair.y = mapHeight / 2;
 		stair.x = mapWidth / 2;
+		spawn.x =mapWidth / 2;
+		spawn.y = mapHeight / 2;
+		
 	}
 
 }

@@ -12,7 +12,7 @@ public class World {
 	public World() {
 		levels = new ArrayList<Level>();
 		players = new ArrayList<Player>();
-
+		
 		addLevel();
 		levels.get(0).fillGridForDefaultMap();
 	}
@@ -31,6 +31,14 @@ public class World {
 
 	public void addLevel(Level level) {
 		levels.add(level);
+	}
+
+	public void switchFloors(Player player, int fOne, int fTwo) {
+		levels.get(fOne).removePlayer(player);
+		levels.get(fTwo).addPlayer(player);
+		player.setFloor(Integer.valueOf(fTwo));
+		player.setPosX(Integer.valueOf(levels.get(fTwo).getSpawn().x));
+		player.setPosY(Integer.valueOf(levels.get(fTwo).getSpawn().y));
 	}
 
 	public int getDepth() {

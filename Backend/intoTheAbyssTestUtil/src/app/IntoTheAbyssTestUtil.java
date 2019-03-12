@@ -26,9 +26,17 @@ public class IntoTheAbyssTestUtil {
 		network.setupListener();
 		network.startNetwork();
 		
-		String userID = "cfdc4cd4-9324-416f-b4ee-42705bf406f3";
+		String userID = "734b164a-c4c5-48af-bb98-db9194f0fafa";
 		
 		Client client = network.getClient();
+		MapRequestPacket packet = new MapRequestPacket();
+		packet.floorNum = 0;
+		client.sendTCP(packet);
+		
+		TimeUnit.SECONDS.sleep(10);
+		
+		
+		/*Client client = network.getClient();
 		ConnectionPacket packet = new ConnectionPacket();
 		packet.setID(userID);
 		client.sendTCP(packet);
@@ -37,15 +45,37 @@ public class IntoTheAbyssTestUtil {
 		locUpdate.setPlayerID(userID);
 		locUpdate.setPlayerPositionX(15);
 		locUpdate.setPlayerPositionY(15);
+		locUpdate.setPlayerFloor(3);
 		client.sendTCP(locUpdate);
 		
 		MoveFloorPacket changeFloor = new MoveFloorPacket();
 		changeFloor.setUserID(userID);
-		changeFloor.setFloor(2);
+		changeFloor.setFloor(4);
 		client.sendTCP(changeFloor);
 		
+		TimeUnit.SECONDS.sleep(3);
+		
+		MoveFloorPacket changeFloor = new MoveFloorPacket();
+		changeFloor.setUserID(userID);
+		changeFloor.setFloor(1);
+		client.sendTCP(changeFloor);
+		
+		TimeUnit.SECONDS.sleep(3);
+		
+		MoveFloorPacket changeFloor2 = new MoveFloorPacket();
+		changeFloor2.setUserID(userID);
+		changeFloor2.setFloor(2);
+		client.sendTCP(changeFloor2);
+		
+		TimeUnit.SECONDS.sleep(3);
+		
+		MoveFloorPacket changeFloor3 = new MoveFloorPacket();
+		changeFloor3.setUserID(userID);
+		changeFloor3.setFloor(3);
+		client.sendTCP(changeFloor3);
+		
+		TimeUnit.SECONDS.sleep(3);*/
 		
 		
-		TimeUnit.SECONDS.sleep(10);
 	}
 }

@@ -47,7 +47,9 @@ public class RequestHandler {
 	public void handleConnectionRequest(Connection connection, Object object) {
 		ConnectionPacket request = (ConnectionPacket) object;
 		Player p = playerRepository.getPlayerByPlayerID(request.getID());
-		world.getLevel(p.getFloor()).addPlayer(p);
+		if (p != null)
+			world.getLevel(p.getFloor()).addPlayer(p);
+		System.out.println("User added to world :" + p.toString());
 	}
 
 	public void handlePlayerRequest(Connection connection, Object object) {
@@ -73,24 +75,19 @@ public class RequestHandler {
 		p.setPosY(Integer.valueOf(packet.getYPos()));
 		System.out.println(p.toString());
 	}
-	
+
 	public void handleMoveFloorPacket(Connection connection, Object object) {
 		MoveFloorPacket packet = ((MoveFloorPacket) object);
-		Player p = playerRepository.getPlayerByPlayerID(packet.getUserID());
-		p = world.getLevel(p.getFloor().intValue()).getPlayer(p.playerID);
-		if (packet.getFloorNum() == world.getDepth()) {
+		System.out.println(world.getDepth());
+		if (world.getDepth() == packet.getFloorNum()) {
 			Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(packet.getFloorNum()));
 			world.addLevel(newLevel.get());
 		}
-		Integer x = world.getLevel(packet.getFloorNum()).getSpawn().x;
-		Integer y = world.getLevel(packet.getFloorNum()).getSpawn().y;
-		p.setPosX(x);
-		p.setPosY(y);
-		p.setFloor(Integer.valueOf(packet.getFloorNum() - 1));
-		world.getLevel(p.getFloor()).removePlayer(p);
-		world.getLevel(packet.getFloorNum()).addPlayer(p);
+		Player p = playerRepository.getPlayerByPlayerID(packet.getUserID());
+		world.switchFloors(p, packet.getFloorNum() - 1, packet.getFloorNum());
 		playerRepository.save(p);
 		connection.sendUDP(new PlayerPacket(p));
+		System.out.println(p.toString());
 	}
 
 }

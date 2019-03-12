@@ -47,6 +47,7 @@ public class NetworkHandler {
 		kryo.register(app.tiles.Floor.class);
 		kryo.register(app.tiles.Tile[].class);
 		kryo.register(app.tiles.Tile[][].class);
+		kryo.register(app.tiles.Stair.class);
 		kryo.register(PlayerPacket.class);
 		kryo.register(MoveFloorPacket.class);
 		kryo.register(PlayerLocationPacket.class);
@@ -76,8 +77,8 @@ public class NetworkHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void startHandlers() {
-		
+
 	}
 }
