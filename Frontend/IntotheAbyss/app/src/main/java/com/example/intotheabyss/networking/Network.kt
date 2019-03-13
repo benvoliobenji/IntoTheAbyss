@@ -5,16 +5,15 @@ import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
 import com.example.intotheabyss.dungeonassets.Floor
+import com.example.intotheabyss.dungeonassets.Stair
 import com.esotericsoftware.minlog.Log as kryolog
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.networking.packets.*
+import com.example.intotheabyss.player.Player
 import java.io.IOException
 
-import com.example.intotheabyss.networking.packets.ConnectionPackage
-import com.example.intotheabyss.networking.packets.MapPacket
-import com.example.intotheabyss.networking.packets.MapRequestPacket
-import com.example.intotheabyss.networking.packets.PlayerLocationPacket
 import com.example.intotheabyss.utils.TileTypes
 
 class Network(private var gameState: GameState): Listener() {
@@ -30,42 +29,6 @@ class Network(private var gameState: GameState): Listener() {
 
 
         client.kryo.apply {
-//            register(ConnectionPackage::class.java, object: Serializer<ConnectionPackage>() {
-//                override fun write(kryo: Kryo, output: Output, component: ConnectionPackage) {
-//                    kryo.writeObject(output, component.text)
-//                }
-//
-//                override fun read(kryo: Kryo, input: Input, type: Class<ConnectionPackage>): ConnectionPackage {
-//                    return ConnectionPackage(
-//                        kryo.readObject(input, String::class.java)
-//                    )
-//                }
-//            })
-//
-//            register(MapRequestPacket::class.java, object: Serializer<MapRequestPacket>() {
-//                override fun write(kryo: Kryo, output: Output, component: MapRequestPacket) {
-//                    kryo.writeObject(output, component.floorNum)
-//                }
-//
-//                override fun read(kryo: Kryo, input: Input, type: Class<MapRequestPacket>): MapRequestPacket {
-//                    return MapRequestPacket(
-//                        kryo.readObject(input, Int::class.java)
-//                    )
-//                }
-//            })
-//
-//            register(MapPacket::class.java, object: Serializer<MapPacket>() {
-//                override fun write(kryo: Kryo, output: Output, component: MapPacket) {
-//                    kryo.writeObject(output, component.levelGrid)
-//                }
-//
-//                override fun read(kryo: Kryo, input: Input, type: Class<MapPacket>): MapPacket {
-//                    return MapPacket(
-//                        kryo.readObject(input, Array<Array<Tile>>::class.java)
-//                    )
-//                }
-//            })
-
             register(ConnectionPackage::class.java)
 
             // Register packets needed to transfer the map from server to client
@@ -77,6 +40,10 @@ class Network(private var gameState: GameState): Listener() {
             register(Floor::class.java)
             register(Array<Tile>::class.java)
             register(Array<Array<Tile>>::class.java)
+            register(Stair::class.java)
+
+            register(PlayerPacket::class.java)
+            register(MoveFloorPacket::class.java)
 
             // Player location registration
             register(PlayerLocationPacket::class.java)
@@ -90,7 +57,7 @@ class Network(private var gameState: GameState): Listener() {
             // Attempt to connect within a 5000 ms window before timing out
             client.connect(5000, ip, tcpPort, udpPort)
             Log.d("Networking","Sending Floor Request")
-            client.sendTCP(ConnectionPackage("Client says hello!"))
+            client.sendTCP(ConnectionPackage(gameState.myPlayer.playerID))
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -99,9 +66,13 @@ class Network(private var gameState: GameState): Listener() {
 
     override fun received(c: Connection, o: Any) {
         if (o is ConnectionPackage) {
-            Log.i("Networking", o.text)
+            Log.i("Networking", o.playerID)
             val connectionResponse = ConnectionPackage("Client says hello!")
             client.sendTCP(connectionResponse)
+        }
+        if (o is PlayerPacket) {
+            var thisPlayer = Player(o.playerID, o.playerName, o.health, o.floorNum, o.posX, o.posY)
+            gameState.myPlayer = thisPlayer
         }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
@@ -110,5 +81,10 @@ class Network(private var gameState: GameState): Listener() {
     fun updatePosition(playerID: String, floor: Int, posX: Int, posY: Int) {
         val positionPacket = PlayerLocationPacket(playerID, floor, posX, posY)
         client.sendTCP(positionPacket)
+    }
+
+    fun updateLevel(playerID: String, floor: Int) {
+        val floorPacket = MoveFloorPacket(playerID, floor)
+        client.sendTCP(floorPacket)
     }
 }
