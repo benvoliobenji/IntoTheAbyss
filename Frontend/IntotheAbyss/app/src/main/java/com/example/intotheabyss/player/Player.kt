@@ -11,7 +11,8 @@ import kotlin.random.Random
 class Player {
     var playerName: String = ""
     var playerID: String = Random.nextInt(0, 1000000).toString()
-    var floorNumber: Int = 1
+    var health = 10
+    var floorNumber: Int = 0
     var x: Int = 1
     var y: Int = 1
     private var image: Bitmap? = null
@@ -19,6 +20,7 @@ class Player {
     constructor() {
         this.playerName = ""
         this.playerID = ""
+        this.health = 10
         this.floorNumber = 0
         this.x = 1
         this.y = 1
@@ -28,6 +30,16 @@ class Player {
     constructor(playerName: String, playerID: String, floorNumber: Int, xPos: Int, yPos: Int) {
         this.playerName = playerName
         this.playerID = playerID
+        this.health = 10
+        this.floorNumber = floorNumber
+        this.x = xPos
+        this.y = yPos
+    }
+
+    constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int) {
+        this.playerName = playerName
+        this.playerID = playerID
+        this.health = health
         this.floorNumber = floorNumber
         this.x = xPos
         this.y = yPos
