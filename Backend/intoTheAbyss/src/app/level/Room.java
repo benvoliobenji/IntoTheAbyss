@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.util.Random;
 
 public class Room {
-	private static int mapWidth = 100;
-	private static int mapHeight = 50;
 	private static int minWidth = 10;
 	private static int minHeight = 6;
 
@@ -19,8 +17,8 @@ public class Room {
 
 		/* create entry in room array */
 		// y length and x length
-		yLength = rand.nextInt(4) + 4;
-		xLength = rand.nextInt(15) + 10;
+		yLength = rand.nextInt(4) + minHeight;
+		xLength = rand.nextInt(15) + minWidth;
 		// y corner x corner
 		corner.y = rand.nextInt(Level.mapHeight - yLength - 1) + 1;
 		corner.x = rand.nextInt(Level.mapWidth - xLength - 1)  + 1;
@@ -43,10 +41,6 @@ public class Room {
 
 	public int getyLength() {
 		return yLength;
-	}
-
-	public boolean overlapsRoom(Room differentRoom) {
-		return false;
 	}
 
 	public Point getRandomPointInRoom() {

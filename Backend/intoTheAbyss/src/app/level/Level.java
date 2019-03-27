@@ -41,7 +41,7 @@ public class Level {
 
 	public Level(Integer level) {
 		playersT = new Hashtable<String, Player>();
-		players = new ArrayList<Player>();
+		//players = new ArrayList<Player>();
 		this.level = level;
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
@@ -50,13 +50,14 @@ public class Level {
 	
 	public void buildDefaultLevel() {
 		playersT = new Hashtable<String, Player>();
-		players = new ArrayList<Player>();
+		//players = new ArrayList<Player>();
 		grid = new Tile[mapHeight][mapWidth];
 		fillGridForDefaultMap();
 	}
 
 	public ArrayList<Player> getPlayers() {
-		return players;
+		return new ArrayList<Player>(playersT.values());
+		//return players;
 	}
 
 	public Player getPlayer(String ID) {

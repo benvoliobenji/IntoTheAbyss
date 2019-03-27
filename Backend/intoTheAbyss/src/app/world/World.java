@@ -7,13 +7,10 @@ import app.player.Player;
 
 public class World {
 	private ArrayList<Level> levels;
-	private ArrayList<Player> players;
 
 	public World() {
 		levels = new ArrayList<Level>();
-		players = new ArrayList<Player>();
-		
-		addLevel();
+		addLevel(0);
 		levels.get(0).fillGridForDefaultMap();
 	}
 
@@ -27,6 +24,10 @@ public class World {
 
 	public void addLevel() {
 		levels.add(new Level());
+	}
+	
+	public void addLevel(int levelNum) {
+		levels.add(new Level(levelNum));
 	}
 
 	public void addLevel(Level level) {
@@ -44,20 +45,4 @@ public class World {
 	public int getDepth() {
 		return levels.size();
 	}
-
-	// Starts with a near empty world
-	public void resetWorld() {
-		levels.clear();
-		addLevel();
-		movePlayersToTop();
-	}
-
-	public void movePlayersToTop() {
-		for (int i = 0; i < levels.size(); i++) {
-			for (Player p : players) {
-				p.setFloor(0);
-			}
-		}
-	}
-
 }
