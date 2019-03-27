@@ -93,7 +93,7 @@ public class Level {
 			}
 		}
 
-		int num_rooms = 0;
+		int numRooms = 0;
 		rooms = new Room[8];
 
 		while (num_rooms < 8) {

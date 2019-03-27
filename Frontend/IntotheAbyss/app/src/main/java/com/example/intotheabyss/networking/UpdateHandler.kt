@@ -23,7 +23,7 @@ class UpdateRunnable(private val network: Network, private val volleyNetwork: Vo
 
                 if (floor != gameState.myPlayer.floorNumber) {
                     floor = gameState.myPlayer.floorNumber
-                    volleyNetwork.retrieveNewDungeonLevel(floor)
+                    volleyNetwork.retrieveNewDungeonLevel(floor, network)
                 }
             }
         } catch (e: InterruptedException) {

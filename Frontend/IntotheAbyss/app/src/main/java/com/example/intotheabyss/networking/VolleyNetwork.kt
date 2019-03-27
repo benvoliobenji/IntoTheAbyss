@@ -13,15 +13,11 @@ import com.example.intotheabyss.player.Player
 import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
-class VolleyNetwork(context: Context, gameState: GameState) {
+class VolleyNetwork(private var context: Context, private var gameState: GameState) {
     private var requestQueue: RequestQueue? = null
-    private var gameState: GameState? = null
-    private var context: Context? = null
 
     init {
         this.requestQueue = Volley.newRequestQueue(context)
-        this.gameState = gameState
-        this.context = context
     }
 
     fun createNewPlayer(playerName: String) {
@@ -35,11 +31,11 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
                 val player = Player(networkPlayerName, playerID, 0, posX, posY)
-                gameState?.myPlayer = player
+                gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
 
                 // Save new playerID
-                val file = File(context?.filesDir, "PlayerID")
+                val file = File(context.filesDir, "PlayerID")
                 file.writeText(playerID)
             },
             Response.ErrorListener { error ->
@@ -62,7 +58,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
                 val player = Player(networkPlayerName, playerID, 0, posX, posY)
-                gameState?.myPlayer = player
+                gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
                 Log.i("PlayerRegistrationX", posX.toString())
                 Log.i("PlayerRegistrationY", posY.toString())
@@ -76,7 +72,7 @@ class VolleyNetwork(context: Context, gameState: GameState) {
         requestQueue?.add(jsonObjectRequest)
     }
 
-    fun retrieveNewDungeonLevel(level: Int) {
+    fun retrieveNewDungeonLevel(level: Int, network: Network) {
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -94,15 +90,17 @@ class VolleyNetwork(context: Context, gameState: GameState) {
                 levelGrid[stairY][stairX] = Stair()
 
                 // Set the new level in gameState
-                gameState?.level = levelGrid
+                gameState.level = levelGrid
 
                 // Placing the player
                 val startX = spawn.getInt("x")
                 val startY = spawn.getInt("y")
-                gameState?.myPlayer?.x = startX
-                gameState?.myPlayer?.y = startY
+                gameState.myPlayer.x = startX
+                gameState.myPlayer.y = startY
 
-                gameState?.loading = false
+                network.updateLevel(gameState.myPlayer.playerID, gameState.myPlayer.floorNumber)
+
+                gameState.loading = false
                 Log.i("DungeonLevel", spawn.toString())
                 Log.i("DungeonLevel", stairs.toString())
                 Log.i("DungeonLevel", grid.toString())

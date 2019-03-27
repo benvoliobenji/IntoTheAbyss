@@ -1,5 +1,6 @@
 package app.player;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import network.packets.PlayerPacket;
 @Entity
 public class Player {
 	@Id
+	@Column(length = 50)
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator( name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String playerID;
