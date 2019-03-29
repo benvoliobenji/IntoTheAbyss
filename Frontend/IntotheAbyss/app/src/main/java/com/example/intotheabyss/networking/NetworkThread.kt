@@ -24,7 +24,7 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
         val network = Network(gameState)
         network.connect()
 
-        volleyNetwork.retrieveNewDungeonLevel(gameState.myPlayer.floorNumber)
+//        volleyNetwork.retrieveNewDungeonLevel(gameState.myPlayer.floorNumber)
 
         if(!updateThread.isAlive) {
             updateThread = Thread((UpdateRunnable(network, volleyNetwork, gameState)))

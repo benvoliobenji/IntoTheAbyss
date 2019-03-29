@@ -16,7 +16,7 @@ import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
-    private var debug = false //set to true to get a generic level, false to get a level from DB
+    private var debug = true //set to true to get a generic level, false to get a level from DB
 
     private val thread: GameThread
     private var gameState: GameState? = null
@@ -36,6 +36,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     //declare game objects
     var player: Player? = null
+    var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
+    var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
+    var lastX: Int = 0
+    var lastY: Int = 0
+    private var animState: Int = 0 //Currently there are 3 supported walking animations. This keeps track of which was last displayed
 
     private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
@@ -45,6 +50,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
     private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
+    var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
 
     //Variables for following player
     private val xBuffer: Int = 5
@@ -192,13 +198,21 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val x = player.x
         val y = player.y
 
+        if (lastX != x) {
+            setPlayerImage(animState, dX)
+        }
+
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
+//        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
+        canvas.drawBitmap(playerImage,(x-minX)*tileSize.toFloat(), (y-minY)*tileSize.toFloat(),null)
         canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
+
+        lastX = x
+        lastY = y
     }
 
     fun setGameState(gState: GameState)  {
@@ -246,6 +260,64 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     }
                     //Try to print the damn thing
                     canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), (((j-minY) * tileSize)+1).toFloat(), null)
+                }
+            }
+        }
+    }
+
+    /**
+     * Function to animate the walking of the player. Depending on the direction of walking & the last displayed image,
+     * a different image will be set to be displayed
+     */
+    private fun setPlayerImage(state: Int, dir: Int) {
+//        when (dir == -1) {        //Player walking left
+//
+//        } else if (dir == 1) {  //Player walking right
+//
+//        } else {                //Player walking up/down
+//
+//        }
+        when(dir) {
+            -1 -> when(state) {
+                0 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left0)
+                    animState = 1
+                }
+                1 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left1)
+                    animState = 2
+                }
+                2 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left2)
+                    animState = 0
+                }
+            }
+            0 -> when(state) {
+                0 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left0)
+                    //animState = 1
+                }
+                1 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left1)
+                    //animState = 2
+                }
+                2 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left2)
+                    //animState = 0
+                }
+            }
+            1 -> when(state) {
+                0 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_right0)
+                    animState = 1
+                }
+                1 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_right1)
+                    animState = 2
+                }
+                2 -> {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_right2)
+                    animState = 0
                 }
             }
         }
