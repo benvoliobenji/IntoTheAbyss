@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
-import app.player.Player;
-import app.tiles.*;
-import app.utils.TileTypes;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import app.player.Player;
+import app.tiles.Floor;
+import app.tiles.Stair;
+import app.tiles.Tile;
+import app.tiles.Wall;
+import app.utils.TileTypes;
+
 @Entity
-public class Level {
+public class Level implements LevelInterface {
 	public static final int mapWidth = 100;
 	public static final int mapHeight = 25;
 
@@ -22,7 +25,6 @@ public class Level {
 	private Integer level;
 	private Random rand;
 	private Hashtable<String, Player> playersT;
-	private ArrayList<Player> players;
 
 	@Transient
 	private Tile[][] grid;
@@ -33,31 +35,28 @@ public class Level {
 
 	public Level() {
 		playersT = new Hashtable<String, Player>();
-		players = new ArrayList<Player>();
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
 		generate();
+
 	}
 
 	public Level(Integer level) {
 		playersT = new Hashtable<String, Player>();
-		//players = new ArrayList<Player>();
 		this.level = level;
 		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
 		generate();
 	}
-	
+
 	public void buildDefaultLevel() {
 		playersT = new Hashtable<String, Player>();
-		//players = new ArrayList<Player>();
 		grid = new Tile[mapHeight][mapWidth];
 		fillGridForDefaultMap();
 	}
 
 	public ArrayList<Player> getPlayers() {
 		return new ArrayList<Player>(playersT.values());
-		//return players;
 	}
 
 	public Player getPlayer(String ID) {
@@ -78,12 +77,29 @@ public class Level {
 
 	public void addPlayer(Player p) {
 		playersT.put(p.getPlayerID(), p);
-		//players.add(p);
 	}
 
-	public void removePlayer(Player p) {
-		playersT.remove(p.getPlayerID());
-		//players.remove(p);
+	public void removePlayer(String playerID) {
+		playersT.remove(playerID);
+	}
+
+	public void fillGridForDefaultMap() {
+		for (int i = 0; i < mapHeight; i++) {
+			for (int j = 0; j < mapWidth; j++) {
+				// Checks if the selected index is an edge of the grid
+				if (i == 0 || j == 0 || i == mapHeight - 1 || j == mapWidth - 1) {
+					grid[i][j] = new Wall();
+				} else {
+					grid[i][j] = new Floor();
+				}
+			}
+		}
+		grid[mapHeight / 2][mapWidth / 2] = new Stair();
+		stair.y = mapHeight / 2;
+		stair.x = mapWidth / 2;
+		spawn.x = mapWidth / 2;
+		spawn.y = mapHeight / 2;
+
 	}
 
 	private void generate() {
@@ -96,9 +112,9 @@ public class Level {
 		int numRooms = 0;
 		rooms = new Room[8];
 
-		while (num_rooms < 8) {
-			createRoom(num_rooms);
-			num_rooms++;
+		while (numRooms < 8) {
+			createRoom(numRooms);
+			numRooms++;
 		}
 
 		createCorridors();
@@ -216,24 +232,4 @@ public class Level {
 		int idx = findCenterRoom();
 		spawn = rooms[idx].getCenter();
 	}
-
-	public void fillGridForDefaultMap() {
-		for (int i = 0; i < mapHeight; i++) {
-			for (int j = 0; j < mapWidth; j++) {
-				// Checks if the selected index is an edge of the grid
-				if (i == 0 || j == 0 || i == mapHeight - 1 || j == mapWidth - 1) {
-					grid[i][j] = new Wall();
-				} else {
-					grid[i][j] = new Floor();
-				}
-			}
-		}
-		grid[mapHeight / 2][mapWidth / 2] = new Stair();
-		stair.y = mapHeight / 2;
-		stair.x = mapWidth / 2;
-		spawn.x =mapWidth / 2;
-		spawn.y = mapHeight / 2;
-		
-	}
-
 }

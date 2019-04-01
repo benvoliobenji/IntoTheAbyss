@@ -1,15 +1,18 @@
 package app.world;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import app.level.Level;
 import app.player.Player;
 
 public class World {
 	private ArrayList<Level> levels;
+	private Hashtable<Integer, Level> levelsT;
 
 	public World() {
 		levels = new ArrayList<Level>();
+		levelsT = new Hashtable<Integer, Level>();
 		addLevel(0);
 		levels.get(0).fillGridForDefaultMap();
 	}
@@ -25,7 +28,7 @@ public class World {
 	public void addLevel() {
 		levels.add(new Level());
 	}
-	
+
 	public void addLevel(int levelNum) {
 		levels.add(new Level(levelNum));
 	}
@@ -35,7 +38,7 @@ public class World {
 	}
 
 	public void switchFloors(Player player, int fOne, int fTwo) {
-		levels.get(fOne).removePlayer(player);
+		levels.get(fOne).removePlayer(player.getPlayerID());
 		levels.get(fTwo).addPlayer(player);
 		player.setFloor(Integer.valueOf(fTwo));
 		player.setPosX(Integer.valueOf(levels.get(fTwo).getSpawn().x));

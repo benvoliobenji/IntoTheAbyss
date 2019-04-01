@@ -9,7 +9,7 @@ public class Room {
 
 	private Point corner;
 	private int xLength, yLength;
-	Random rand;
+	private Random rand;
 
 	public Room(Random rand) {
 		corner = new Point();
@@ -21,7 +21,7 @@ public class Room {
 		xLength = rand.nextInt(15) + minWidth;
 		// y corner x corner
 		corner.y = rand.nextInt(Level.mapHeight - yLength - 1) + 1;
-		corner.x = rand.nextInt(Level.mapWidth - xLength - 1)  + 1;
+		corner.x = rand.nextInt(Level.mapWidth - xLength - 1) + 1;
 	}
 
 	public Point getCorner() {
@@ -49,6 +49,5 @@ public class Room {
 		p.y = corner.y + 1 + rand.nextInt(yLength - 2);
 		return p;
 	}
-
 
 }
