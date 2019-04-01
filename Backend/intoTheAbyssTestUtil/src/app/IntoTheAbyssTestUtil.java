@@ -26,17 +26,17 @@ public class IntoTheAbyssTestUtil {
 		network.setupListener();
 		network.startNetwork();
 		
-		String userID = "734b164a-c4c5-48af-bb98-db9194f0fafa";
+		String userID = "2425d48b-4e74-4aaf-bb39-4afe70e42866";
 		
 		Client client = network.getClient();
-		MapRequestPacket packet = new MapRequestPacket();
+		/*MapRequestPacket packet = new MapRequestPacket();
 		packet.floorNum = 0;
 		client.sendTCP(packet);
 		
 		TimeUnit.SECONDS.sleep(10);
 		
 		
-		/*Client client = network.getClient();
+		Client client = network.getClient();
 		ConnectionPacket packet = new ConnectionPacket();
 		packet.setID(userID);
 		client.sendTCP(packet);
@@ -53,7 +53,7 @@ public class IntoTheAbyssTestUtil {
 		changeFloor.setFloor(4);
 		client.sendTCP(changeFloor);
 		
-		TimeUnit.SECONDS.sleep(3);
+		TimeUnit.SECONDS.sleep(3);*/
 		
 		MoveFloorPacket changeFloor = new MoveFloorPacket();
 		changeFloor.setUserID(userID);
@@ -74,7 +74,7 @@ public class IntoTheAbyssTestUtil {
 		changeFloor3.setFloor(3);
 		client.sendTCP(changeFloor3);
 		
-		TimeUnit.SECONDS.sleep(3);*/
+		TimeUnit.SECONDS.sleep(3);
 		
 		
 	}

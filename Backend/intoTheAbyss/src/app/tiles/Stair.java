@@ -14,6 +14,13 @@ public class Stair extends Tile {
     public TileTypes getType() {
         return type;
     }
-
+    
+    public boolean isPassable() {
+		return isPassable;
+	}
+	
+	public boolean canHold() {
+		return canHold;
+	}
 
 }

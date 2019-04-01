@@ -21,7 +21,6 @@ import network.packets.PlayerPacket;
 
 public class NetworkHandler {
 	private PlayerRepository playerRepository;
-	private LevelRepository levelRepository;
 
 	private static int portTCP = 44444;
 	private static int portUDP = 44445;
@@ -32,7 +31,6 @@ public class NetworkHandler {
 	public NetworkHandler(World worldP, PlayerRepository playerRepo, LevelRepository levelRepo) {
 		server = new Server(16384, 65536);
 		playerRepository = playerRepo;
-		levelRepository = levelRepo;
 		requestHandler = new RequestHandler(playerRepository, levelRepo, server, worldP);
 	}
 
@@ -55,7 +53,7 @@ public class NetworkHandler {
 
 	public void setupListener() {
 		server.addListener(new Listener() {
-			public void connect(Connection connetion) {
+			public void connect(Connection connection) {
 				System.out.println("Connected");
 			}
 
@@ -76,9 +74,5 @@ public class NetworkHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void startHandlers() {
-
 	}
 }

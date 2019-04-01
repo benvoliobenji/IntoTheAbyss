@@ -7,7 +7,6 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import app.items.Item;
 import network.packets.PlayerPacket;
 
 @Entity
@@ -15,20 +14,15 @@ public class Player {
 	@Id
 	@Column(length = 50)
 	@GeneratedValue(generator = "UUID")
-	@GenericGenerator( name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String playerID;
 	private String username;
 	private Integer posX, posY, floor, health;
-	
 
 	public Player() {
 		floor = Integer.valueOf(0);
 		username = "";
 		health = Integer.valueOf(10);
-	}
-
-	public Player(int floorNum) {
-		floor = floorNum;
 	}
 
 	public Player(PlayerPacket playerPacket) {
@@ -94,4 +88,3 @@ public class Player {
 		this.health = Integer.valueOf(health);
 	}
 }
-
