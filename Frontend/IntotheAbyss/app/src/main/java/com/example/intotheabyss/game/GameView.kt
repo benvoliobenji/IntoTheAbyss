@@ -41,6 +41,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var lastX: Int = 0
     var lastY: Int = 0
     private var animState: Int = 0 //Currently there are 3 supported walking animations. This keeps track of which was last displayed
+    private var rect: Rect = Rect()
+    var playerIdle = true
 
     private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
@@ -198,9 +200,18 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val x = player.x
         val y = player.y
 
-        if (lastX != x) {
-            setPlayerImage(animState, dX)
+        setPlayerImage()
+        setAnimState()
+        val pWidth = playerImage.width
+        val pHeight = playerImage.height
+
+        animState++
+        if (animState == 6) {
+            animState = 0
         }
+//        if (lastX != x) {
+//            setPlayerImage()
+//        }
 
         val paint = Paint()
         paint.color = Color.WHITE
@@ -208,7 +219,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         paint.textSize = 30.toFloat()
 
 //        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
-        canvas.drawBitmap(playerImage,(x-minX)*tileSize.toFloat(), (y-minY)*tileSize.toFloat(),null)
+        val left = (x-minX)*tileSize
+        val top = (y-minY)*tileSize
+        val pos = Rect(left,top,left+3*tileSize/2,top+3*tileSize/2)
+
+        canvas.drawBitmap(playerImage, rect, pos, null)
+//        canvas.drawBitmap(playerImage,(x-minX)*tileSize.toFloat(), (y-minY)*tileSize.toFloat(),null)
         canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
 
         lastX = x
@@ -269,58 +285,47 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * Function to animate the walking of the player. Depending on the direction of walking & the last displayed image,
      * a different image will be set to be displayed
      */
-    private fun setPlayerImage(state: Int, dir: Int) {
-//        when (dir == -1) {        //Player walking left
-//
-//        } else if (dir == 1) {  //Player walking right
-//
-//        } else {                //Player walking up/down
-//
-//        }
-        when(dir) {
-            -1 -> when(state) {
-                0 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left0)
-                    animState = 1
-                }
-                1 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left1)
-                    animState = 2
-                }
-                2 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left2)
-                    animState = 0
+    private fun setPlayerImage() {
+        when(dX) {
+            -1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
+                } else{
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_left)
                 }
             }
-            0 -> when(state) {
-                0 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left0)
-                    //animState = 1
-                }
-                1 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left1)
-                    //animState = 2
-                }
-                2 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_left2)
-                    //animState = 0
-                }
-            }
-            1 -> when(state) {
-                0 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_right0)
-                    animState = 1
-                }
-                1 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_right1)
-                    animState = 2
-                }
-                2 -> {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.walk_right2)
-                    animState = 0
+            1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_right)
+                } else {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_right)
                 }
             }
         }
+        when(dY) {
+            -1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
+                } else {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_down)
+                }
+            }
+            1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_up)
+                } else {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_up)
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a Rect() object that will be the subset of the sprite sheet to display
+     */
+    private fun setAnimState() {
+        val pWidth = playerImage.width
+        rect = Rect((pWidth/6).toInt()*(animState),0,(pWidth/6).toInt()*(animState+1),192)
     }
 
     private fun drawAction(canvas: Canvas) {
