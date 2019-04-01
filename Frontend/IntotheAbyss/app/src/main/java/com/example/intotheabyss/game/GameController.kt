@@ -108,6 +108,7 @@ class GameController(gameView: GameView)  {
                             moved = true
                             gameView.dX = 1
                             gameView.dY = 0
+                            gameView.playerIdle = false
                             lastTime = System.currentTimeMillis()
                         }
                     }
@@ -120,11 +121,12 @@ class GameController(gameView: GameView)  {
                             moved = true
                             gameView.dX = -1
                             gameView.dY = 0
+                            gameView.playerIdle = false
                             lastTime = System.currentTimeMillis()
                         }
                     }
                 } else {
-                    gameView.dX = 0
+//                    gameView.dX = 0
                 }
 
                 if ((middleXRange.contains(curX)) and (upYRange.contains(curY))) {
@@ -135,6 +137,7 @@ class GameController(gameView: GameView)  {
                             gameView.player!!.y = newY
                             gameView.dX = 0
                             gameView.dY = -1
+                            gameView.playerIdle = false
                             lastTime = System.currentTimeMillis()
                         }
                     }
@@ -147,12 +150,13 @@ class GameController(gameView: GameView)  {
                                 gameView.player!!.y = newY
                                 gameView.dX = 0
                                 gameView.dY = 1
+                                gameView.playerIdle = false
                                 lastTime = System.currentTimeMillis()
                             }
                         }
                     }
                 } else {
-                    gameView.dY = 0
+//                    gameView.dY = 0
                 }
             }
         }
