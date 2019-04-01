@@ -53,7 +53,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
     private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
-    var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
+    private var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
 
     //Variables for following player
     private val xBuffer: Int = 5
@@ -118,7 +118,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
 
         //Set image assets for game objects
-        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda))
+        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.char_idle_down))
         //Start the game thread
         thread.setRunning(true)
         thread.start()
