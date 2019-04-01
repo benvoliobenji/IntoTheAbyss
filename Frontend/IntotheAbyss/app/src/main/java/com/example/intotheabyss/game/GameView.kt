@@ -16,7 +16,7 @@ import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
-    private var debug = false //set to true to get a generic level, false to get a level from DB
+    private var debug = true //set to true to get a generic level, false to get a level from DB
 
     private val thread: GameThread
     private var gameState: GameState? = null
@@ -36,6 +36,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     //declare game objects
     var player: Player? = null
+    var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
+    var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
+    var lastX: Int = 0
+    var lastY: Int = 0
+    private var animState: Int = 0 //Currently there are 6 supported walking animations. This keeps track of which was last displayed
+    private var animCount: Int = 7 //This keeps track of how long an animation has been shown for. Used in conjuction with animState (probs inefficient, idk)
+    private var rect: Rect = Rect()
+    var playerIdle = true
 
     private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
@@ -45,6 +53,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
     private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
+    private var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
 
     //Variables for following player
     private val xBuffer: Int = 5
@@ -109,7 +118,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
 
         //Set image assets for game objects
-        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda))
+        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.char_idle_down))
         //Start the game thread
         thread.setRunning(true)
         thread.start()
@@ -151,7 +160,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         super.draw(canvas)
         drawBG(canvas)
         drawPlayer(canvas, player!!)
-        drawAction(canvas)
     }
 
     /**
@@ -187,18 +195,36 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     private fun drawPlayer(canvas: Canvas, player: Player)  {
-//        val x = player.getX()
-//        val y = player.getY()
         val x = player.x
         val y = player.y
+
+        setPlayerImage()
+        drawAction(canvas)
+        setAnimState()
+        val pWidth = playerImage.width
+        val pHeight = playerImage.height
+
+        animState++
+        if (animState == 6) {
+            animState = 0
+        }
 
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
+//        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
+        val left = (x-minX)*tileSize
+        val top = (y-minY)*tileSize
+        val pos = Rect(left,top,left+3*tileSize/2,top+3*tileSize/2)
+
+        canvas.drawBitmap(playerImage, rect, pos, null)
+//        canvas.drawBitmap(playerImage,(x-minX)*tileSize.toFloat(), (y-minY)*tileSize.toFloat(),null)
         canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
+
+        lastX = x
+        lastY = y
     }
 
     fun setGameState(gState: GameState)  {
@@ -251,6 +277,73 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
+    /**
+     * Function to animate the walking of the player. Depending on the direction of walking & the last displayed image,
+     * a different image will be set to be displayed
+     */
+    private fun setPlayerImage() {
+//        if (gAction > 0) {
+//            animState = 0
+//        }
+
+        when(dX) {
+            -1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
+                } else{
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_left)
+                }
+                if (animCount < 6) {
+                    animCount++
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
+                }
+            }
+            1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_right)
+                } else {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_right)
+                }
+                if (animCount < 6) {
+                    animCount++
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
+                }
+            }
+        }
+        when(dY) {
+            -1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
+                } else {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_down)
+                }
+                if (animCount < 6) {
+                    animCount++
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
+                }
+            }
+            1 -> {
+                if (playerIdle) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_up)
+                }  else {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_up)
+                }
+                if (animCount < 6) {
+                    animCount++
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a Rect() object that will be the subset of the sprite sheet to display
+     */
+    private fun setAnimState() {
+        val pWidth = playerImage.width
+        rect = Rect((pWidth/6).toInt()*(animState),0,(pWidth/6).toInt()*(animState+1),192)
+    }
+
     private fun drawAction(canvas: Canvas) {
         if (gAction > 0) {
             val paint = Paint()
@@ -258,6 +351,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             paint.style = Paint.Style.FILL
             paint.textSize = 80f
             canvas.drawText("Action", 500f, 500f, paint)
+//            if (dX == -1) {
+//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
+//                System.out.print("Action")
+//            } else if (dX == 1) {
+//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
+//                System.out.print("Action")
+//            } else if (dY == -1) {
+//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
+//                System.out.print("Action")
+//            } else if (dY == 1) {
+//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
+//                System.out.print("Action")
+//            }
+            animCount = 0
         }
         gAction = 0
     }
