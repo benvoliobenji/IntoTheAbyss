@@ -11,13 +11,13 @@ import android.content.res.Resources
 import android.graphics.*
 import android.support.annotation.FloatRange
 import android.view.MotionEvent
-import com.example.intotheabyss.Game.DrawPlayer
+import com.example.intotheabyss.game.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
-    private var debug = true //set to true to get a generic level, false to get a level from DB
+    var debug = true //set to true to get a generic level, false to get a level from DB
 
     private val thread: GameThread
     private var gameState: GameState? = null

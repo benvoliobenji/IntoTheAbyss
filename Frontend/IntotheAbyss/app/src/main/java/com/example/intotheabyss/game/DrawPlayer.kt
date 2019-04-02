@@ -1,8 +1,7 @@
-package com.example.intotheabyss.Game
+package com.example.intotheabyss.game
 
 import android.content.Context
 import android.graphics.*
-import com.example.intotheabyss.game.GameView
 import com.example.intotheabyss.player.Player
 
 var gameView: GameView? = null

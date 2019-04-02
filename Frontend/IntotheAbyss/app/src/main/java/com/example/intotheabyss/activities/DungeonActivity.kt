@@ -13,15 +13,19 @@ import com.example.intotheabyss.networking.NetworkRunnable
 class DungeonActivity : AppCompatActivity() {
     private var networkThread = Thread()
     var gameState = GameState()
+    var debug = false
 
 
     @SuppressLint("ClickableViewAccessibility") //This is for blind people accessability- sorry blind people
     override fun onCreate(savedInstanceState: Bundle?) {
+        debug = intent.getBooleanExtra("debug", false)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
         var gameView = findViewById<GameView>(R.id.gView)
 
         gameView.setGameState(gameState)
+        gameView.debug = debug
         gameView.setOnTouchListener { _, event ->
             gameView.dispatchTouchEvent(event)
 //            gameView.invalidate()
