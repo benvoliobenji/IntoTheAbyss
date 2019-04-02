@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-	
+		//gradleDockerVersion = "1.2"
 	}
 	repositories {
 		mavenCentral()
@@ -8,6 +8,7 @@ buildscript {
 	dependencies {
 		//classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+		//classpath("se.transmode.gradle:gradle-docker:${gradleDockerVersion}")
 	}
 }
 
@@ -22,6 +23,13 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+	jcenter()
+}
+
+jar {
+    baseName = "IntoTheAbyss"
+    group    = "com.intotheabyss"
+    version  = "0.0.1-SNAPSHOT"
 }
 
 dependencies {
@@ -32,7 +40,11 @@ dependencies {
 	compile("com.esotericsoftware:kryonet:2.22.0-RC1")
 	compile("mysql:mysql-connector-java")
 	
-	//compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.1.Final'
+	testCompile("org.mockito:mockito-core:2.+")
+	testCompile('org.junit.jupiter:junit-jupiter-api:5.4.0')
+	
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.0')
+	
 }
 
 sourceSets {
