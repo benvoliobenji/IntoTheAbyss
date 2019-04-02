@@ -1,6 +1,6 @@
-package com.example.intotheabyss.networking
+package com.example.intotheabyss.networking.volleynetwork
 
-import com.example.intotheabyss.game.GameState
+import com.example.intotheabyss.networking.Network
 
 interface VolleyNetworkInterface {
     fun createNewPlayer(playerName: String)

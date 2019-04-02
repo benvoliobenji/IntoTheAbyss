@@ -1,7 +1,7 @@
 package com.example.intotheabyss
 
 import android.view.MotionEvent
-import com.example.intotheabyss.game.GameController
+import com.example.intotheabyss.game.gamecontroller.GameController
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Test
 

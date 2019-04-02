@@ -1,6 +1,7 @@
 package com.example.intotheabyss.networking
 
 import com.example.intotheabyss.game.GameState
+import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import java.lang.Thread.sleep
 
 class UpdateRunnable(private val network: Network, private val volleyNetwork: VolleyNetwork,

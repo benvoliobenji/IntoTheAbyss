@@ -11,7 +11,7 @@ import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.networking.packets.*
-import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.game.player.Player
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
