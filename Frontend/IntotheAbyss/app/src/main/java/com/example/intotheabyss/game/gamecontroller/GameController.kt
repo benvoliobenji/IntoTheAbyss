@@ -1,10 +1,9 @@
-package com.example.intotheabyss.game
+package com.example.intotheabyss.game.gamecontroller
 
-import android.service.quicksettings.Tile
 import android.view.MotionEvent
-import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.game.GameView
 
-class GameController(gameView: GameView)  {
+class GameController(gameView: GameView): GameControllerInterface  {
     //Variables for reading player input
     var input: MotionEvent? = null
     var downTime: Long = 0
@@ -45,7 +44,7 @@ class GameController(gameView: GameView)  {
     /**
      * Method to retrieve event(s) from GameView
      */
-    fun setEvent(event: MotionEvent): MotionEvent {
+    override fun setEvent(event: MotionEvent): MotionEvent {
         input = event
         iX = input!!.x
         iY = input!!.y
@@ -56,7 +55,7 @@ class GameController(gameView: GameView)  {
     /**
      * Parse touch events to see if action button occurs
      */
-    fun getAction(x: Float, y: Float, action: Int): Int {
+    override fun getAction(x: Float, y: Float, action: Int): Int {
         var gAction: Int = 0
 
         thisTimeAction = System.currentTimeMillis()
@@ -78,7 +77,7 @@ class GameController(gameView: GameView)  {
         return gAction
     }
 
-    fun updatePlayerLocation() {
+    override fun updatePlayerLocation() {
         var newX: Int
         var newY: Int
         var moved = false

@@ -1,8 +1,9 @@
-package com.example.intotheabyss.game
+package com.example.intotheabyss.game.drawplayer
 
 import android.content.Context
 import android.graphics.*
-import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.game.GameView
+import com.example.intotheabyss.game.player.Player
 
 var gameView: GameView? = null
 private var playerImage: Bitmap? = null
@@ -12,14 +13,14 @@ private var rect: Rect = Rect()
 private var playerIdle = true
 private var animCount = 7
 
-class DrawPlayer(gView: GameView, pImage: Bitmap) {
+class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
 
     init {
         gameView = gView
         playerImage = pImage
     }
 
-    fun drawPlayer(canvas: Canvas, player: Player, gAction: Int)  {
+    override fun drawPlayer(canvas: Canvas, player: Player, gAction: Int)  {
         val x = player.x
         val y = player.y
 
@@ -36,18 +37,20 @@ class DrawPlayer(gView: GameView, pImage: Bitmap) {
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        val left = (x- gameView!!.minX)*tileSize
-        val top = (y- gameView!!.minY)*tileSize
-        val pos = Rect(left,top,left+3*tileSize/2,top+3*tileSize/2)
+        val left = (x- gameView!!.minX)* tileSize
+        val top = (y- gameView!!.minY)* tileSize
+        val pos = Rect(left,top,left+3* tileSize /2,top+3* tileSize /2)
 
-        canvas.drawBitmap(playerImage, rect, pos, null)
+        canvas.drawBitmap(
+            playerImage,
+            rect, pos, null)
         canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
 
         drawHealth(player, canvas)
         drawUserName(player, canvas)
     }
 
-    fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int) {
+    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int) {
         if (gAction > 0) {
             animState = 0
         }
@@ -107,7 +110,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap) {
      */
     private fun setAnimState() {
         val pWidth = playerImage!!.width
-        rect = Rect((pWidth/6)*(animState),0,(pWidth/6)*(animState+1),192)
+        rect = Rect((pWidth/6)*(animState),0,(pWidth/6)*(animState +1),192)
     }
 
     private fun drawAction(canvas: Canvas, gAction: Int) {
