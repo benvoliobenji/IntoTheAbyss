@@ -1,11 +1,13 @@
 package app.player;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.esotericsoftware.jsonbeans.Json;
 
@@ -29,7 +31,8 @@ public class PlayerController {
 			player.setPosY(1);
 			playerRepository.save(player);
 			return player;
-		}else return null;
+		} else
+			return null;
 	}
 
 	@GetMapping(path = "/getPlayer")

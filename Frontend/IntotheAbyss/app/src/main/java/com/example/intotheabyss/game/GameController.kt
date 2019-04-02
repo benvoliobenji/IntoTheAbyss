@@ -45,38 +45,37 @@ class GameController(gameView: GameView)  {
     /**
      * Method to retrieve event(s) from GameView
      */
-    fun setEvent(event: MotionEvent) {
+    fun setEvent(event: MotionEvent): MotionEvent {
         input = event
         iX = input!!.x
         iY = input!!.y
+
+        return event
     }
 
     /**
      * Parse touch events to see if action button occurs
      */
-    fun getAction() {
-        var curX: Float
-        var curY: Float
-
-        curX = 0f
-        curY = 0f
+    fun getAction(x: Float, y: Float, action: Int): Int {
+        var gAction: Int = 0
 
         thisTimeAction = System.currentTimeMillis()
         if (thisTimeAction - lastTimeAction > actionTimer) {
             if (input != null) {
                 for (i in 0..input!!.pointerCount - 1) {
-                    curX = input!!.getX(i)
-                    curY = input!!.getY(i)
+//                    curX = input!!.getX(i)
+//                    curY = input!!.getY(i)
                     aAction = input!!.actionMasked
-                    if ((actionX.contains(curX)) and (actionY.contains(curY)) and (aAction != MotionEvent.ACTION_UP)) {
+                    if ((actionX.contains(x)) and (actionY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
                         lastTimeAction = thisTimeAction
-                        gameView.gAction = 1
+                        gAction = 1
                     } else {
-                        gameView.gAction = 0
+                        gAction = 0
                     }
                 }
             }
         }
+        return gAction
     }
 
     fun updatePlayerLocation() {
@@ -94,6 +93,9 @@ class GameController(gameView: GameView)  {
                 curY = input!!.getY(i)
                 mAction = input!!.actionMasked
                 if (mAction == MotionEvent.ACTION_UP) {
+//                    gameView.dX = 0
+//                    gameView.dY = 0
+                    gameView.playerIdle = true
                     break
                 }
                 if ((rightXRange.contains(curX)) and (middleYRange.contains(curY))) {
@@ -103,6 +105,9 @@ class GameController(gameView: GameView)  {
                         if ((currentTime - lastTime > waitTime) or (moved)) {
                             gameView.player!!.x = (newX)
                             moved = true
+                            gameView.dX = 1
+                            gameView.dY = 0
+                            gameView.playerIdle = false
                             lastTime = System.currentTimeMillis()
                         }
                     }
@@ -113,9 +118,14 @@ class GameController(gameView: GameView)  {
                         if ((currentTime - lastTime > waitTime) or (moved)) {
                             gameView.player!!.x = (newX)
                             moved = true
+                            gameView.dX = -1
+                            gameView.dY = 0
+                            gameView.playerIdle = false
                             lastTime = System.currentTimeMillis()
                         }
                     }
+                } else {
+//                    gameView.dX = 0
                 }
 
                 if ((middleXRange.contains(curX)) and (upYRange.contains(curY))) {
@@ -124,6 +134,9 @@ class GameController(gameView: GameView)  {
                         currentTime = System.currentTimeMillis()
                         if ((currentTime - lastTime > waitTime) or (moved)) {
                             gameView.player!!.y = newY
+                            gameView.dX = 0
+                            gameView.dY = -1
+                            gameView.playerIdle = false
                             lastTime = System.currentTimeMillis()
                         }
                     }
@@ -134,10 +147,15 @@ class GameController(gameView: GameView)  {
                             currentTime = System.currentTimeMillis()
                             if ((currentTime - lastTime > waitTime) or (moved)) {
                                 gameView.player!!.y = newY
+                                gameView.dX = 0
+                                gameView.dY = 1
+                                gameView.playerIdle = false
                                 lastTime = System.currentTimeMillis()
                             }
                         }
                     }
+                } else {
+//                    gameView.dY = 0
                 }
             }
         }

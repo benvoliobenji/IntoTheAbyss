@@ -5,8 +5,10 @@ import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Switch
 import com.example.intotheabyss.R
 import com.example.intotheabyss.networking.NetworkRunnable
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         val play = findViewById<Button>(R.id.playButton)
         play.setOnClickListener {
             val intent = Intent(this, DungeonActivity::class.java)
+            intent.putExtra("debug", debugToggle.isChecked)
             startActivity(intent)
 //            ring.start()
         }
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val debugToggle = findViewById<Switch>(R.id.debugToggle)
 
     }
 }

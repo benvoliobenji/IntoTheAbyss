@@ -10,9 +10,16 @@ public class Wall extends Tile {
 		type = TileTypes.WALL;
 	}
 
-	@Override
 	public TileTypes getType() {
 		return type;
+	}
+	
+	public boolean isPassable() {
+		return isPassable;
+	}
+	
+	public boolean canHold() {
+		return canHold;
 	}
 
 }

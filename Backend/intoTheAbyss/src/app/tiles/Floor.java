@@ -14,5 +14,12 @@ public class Floor extends Tile {
 		return type;
 	}
 	
+	public boolean isPassable() {
+		return isPassable;
+	}
+	
+	public boolean canHold() {
+		return canHold;
+	}
 
 }

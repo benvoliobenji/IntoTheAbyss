@@ -11,18 +11,21 @@ import android.content.res.Resources
 import android.graphics.*
 import android.support.annotation.FloatRange
 import android.view.MotionEvent
+import com.example.intotheabyss.game.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
-    private var debug = false //set to true to get a generic level, false to get a level from DB
+    var debug = true //set to true to get a generic level, false to get a level from DB
 
     private val thread: GameThread
     private var gameState: GameState? = null
 
     private var gameController: GameController
+    private var drawPlayer: DrawPlayer
     var gAction = 0         //GameController sets to 0 if no action, something else if there is
+    var event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0)
 
     //Screen dimensions
     val sWidth = Resources.getSystem().displayMetrics.widthPixels
@@ -36,6 +39,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     //declare game objects
     var player: Player? = null
+    var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
+    var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
+
+    var playerIdle = true
 
     private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
@@ -45,12 +52,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
     private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
+    private var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
 
     //Variables for following player
     private val xBuffer: Int = 5
     private val yBuffer: Int = 5
-    private var minX: Int = 0
-    private var minY: Int = 0
+    var minX: Int = 0
+    var minY: Int = 0
 
 
     init {
@@ -61,6 +69,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
         gameController = GameController(this)
+        drawPlayer = DrawPlayer(this, playerImage)
+
 
         try {
             player = gameState!!.myPlayer
@@ -109,7 +119,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
 
         //Set image assets for game objects
-        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda))
+        player!!.setImage(BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.char_idle_down))
         //Start the game thread
         thread.setRunning(true)
         thread.start()
@@ -126,7 +136,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //updatePlayerLocation()    //Player movment - iX,iY is coordinate of touch event
         gameController!!.updatePlayerLocation()
-        gameController!!.getAction()
+        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
         checkNewLevel()
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
         println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
@@ -150,8 +160,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         drawBG(canvas)
-        drawPlayer(canvas, player!!)
-        drawAction(canvas)
+
+        drawPlayer.setPlayerImage(dX,dY,context,gAction)
+        drawPlayer.drawPlayer(canvas,player!!, gAction)
     }
 
     /**
@@ -160,9 +171,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         event!!
 
-//        iY = event.y
-//        action = event.action
-        gameController.setEvent(event)
+        this.event = gameController.setEvent(event)
         return true
 
 //        Removing the super call seems dangerous, but it fixed my problems so idk
@@ -184,21 +193,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         } else if ((y + yBuffer) > (minY + dimHeight)) {
             minY++
         }
-    }
-
-    private fun drawPlayer(canvas: Canvas, player: Player)  {
-//        val x = player.getX()
-//        val y = player.getY()
-        val x = player.x
-        val y = player.y
-
-        val paint = Paint()
-        paint.color = Color.WHITE
-        paint.style = Paint.Style.FILL
-        paint.textSize = 30.toFloat()
-
-        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
-        canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
     }
 
     fun setGameState(gState: GameState)  {
@@ -249,17 +243,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 }
             }
         }
-    }
-
-    private fun drawAction(canvas: Canvas) {
-        if (gAction > 0) {
-            val paint = Paint()
-            paint.color = Color.RED
-            paint.style = Paint.Style.FILL
-            paint.textSize = 80f
-            canvas.drawText("Action", 500f, 500f, paint)
-        }
-        gAction = 0
     }
 
     companion object {
