@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.graphics.*
 import android.support.annotation.FloatRange
 import android.view.MotionEvent
+import com.example.intotheabyss.Game.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
 
@@ -22,7 +23,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var gameState: GameState? = null
 
     private var gameController: GameController
+    private var drawPlayer: DrawPlayer
     var gAction = 0         //GameController sets to 0 if no action, something else if there is
+    var event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0)
 
     //Screen dimensions
     val sWidth = Resources.getSystem().displayMetrics.widthPixels
@@ -38,11 +41,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var player: Player? = null
     var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
     var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
-    var lastX: Int = 0
-    var lastY: Int = 0
-    private var animState: Int = 0 //Currently there are 6 supported walking animations. This keeps track of which was last displayed
-    private var animCount: Int = 7 //This keeps track of how long an animation has been shown for. Used in conjuction with animState (probs inefficient, idk)
-    private var rect: Rect = Rect()
+
     var playerIdle = true
 
     private val lvlSize: Point = Point(100, 25)
@@ -58,8 +57,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     //Variables for following player
     private val xBuffer: Int = 5
     private val yBuffer: Int = 5
-    private var minX: Int = 0
-    private var minY: Int = 0
+    var minX: Int = 0
+    var minY: Int = 0
 
 
     init {
@@ -70,6 +69,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
         gameController = GameController(this)
+        drawPlayer = DrawPlayer(this, playerImage)
 
         try {
             player = gameState!!.myPlayer
@@ -135,7 +135,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //updatePlayerLocation()    //Player movment - iX,iY is coordinate of touch event
         gameController!!.updatePlayerLocation()
-        gameController!!.getAction()
+        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
         checkNewLevel()
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
         println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
@@ -159,7 +159,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         drawBG(canvas)
-        drawPlayer(canvas, player!!)
+
+        drawPlayer.setPlayerImage(dX,dY,context,gAction)
+        drawPlayer.drawPlayer(canvas,player!!, gAction)
     }
 
     /**
@@ -168,9 +170,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         event!!
 
-//        iY = event.y
-//        action = event.action
-        gameController.setEvent(event)
+        this.event = gameController.setEvent(event)
         return true
 
 //        Removing the super call seems dangerous, but it fixed my problems so idk
@@ -192,39 +192,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         } else if ((y + yBuffer) > (minY + dimHeight)) {
             minY++
         }
-    }
-
-    private fun drawPlayer(canvas: Canvas, player: Player)  {
-        val x = player.x
-        val y = player.y
-
-        setPlayerImage()
-        drawAction(canvas)
-        setAnimState()
-        val pWidth = playerImage.width
-        val pHeight = playerImage.height
-
-        animState++
-        if (animState == 6) {
-            animState = 0
-        }
-
-        val paint = Paint()
-        paint.color = Color.WHITE
-        paint.style = Paint.Style.FILL
-        paint.textSize = 30.toFloat()
-
-//        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
-        val left = (x-minX)*tileSize
-        val top = (y-minY)*tileSize
-        val pos = Rect(left,top,left+3*tileSize/2,top+3*tileSize/2)
-
-        canvas.drawBitmap(playerImage, rect, pos, null)
-//        canvas.drawBitmap(playerImage,(x-minX)*tileSize.toFloat(), (y-minY)*tileSize.toFloat(),null)
-        canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
-
-        lastX = x
-        lastY = y
     }
 
     fun setGameState(gState: GameState)  {
@@ -275,98 +242,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 }
             }
         }
-    }
-
-    /**
-     * Function to animate the walking of the player. Depending on the direction of walking & the last displayed image,
-     * a different image will be set to be displayed
-     */
-    private fun setPlayerImage() {
-//        if (gAction > 0) {
-//            animState = 0
-//        }
-
-        when(dX) {
-            -1 -> {
-                if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
-                } else{
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_left)
-                }
-                if (animCount < 6) {
-                    animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
-                }
-            }
-            1 -> {
-                if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_right)
-                } else {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_right)
-                }
-                if (animCount < 6) {
-                    animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
-                }
-            }
-        }
-        when(dY) {
-            -1 -> {
-                if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
-                } else {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_down)
-                }
-                if (animCount < 6) {
-                    animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
-                }
-            }
-            1 -> {
-                if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_up)
-                }  else {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_up)
-                }
-                if (animCount < 6) {
-                    animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
-                }
-            }
-        }
-    }
-
-    /**
-     * Creates a Rect() object that will be the subset of the sprite sheet to display
-     */
-    private fun setAnimState() {
-        val pWidth = playerImage.width
-        rect = Rect((pWidth/6).toInt()*(animState),0,(pWidth/6).toInt()*(animState+1),192)
-    }
-
-    private fun drawAction(canvas: Canvas) {
-        if (gAction > 0) {
-            val paint = Paint()
-            paint.color = Color.RED
-            paint.style = Paint.Style.FILL
-            paint.textSize = 80f
-            canvas.drawText("Action", 500f, 500f, paint)
-//            if (dX == -1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
-//                System.out.print("Action")
-//            } else if (dX == 1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
-//                System.out.print("Action")
-//            } else if (dY == -1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
-//                System.out.print("Action")
-//            } else if (dY == 1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
-//                System.out.print("Action")
-//            }
-            animCount = 0
-        }
-        gAction = 0
     }
 
     companion object {

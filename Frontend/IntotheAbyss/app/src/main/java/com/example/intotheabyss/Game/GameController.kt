@@ -45,38 +45,37 @@ class GameController(gameView: GameView)  {
     /**
      * Method to retrieve event(s) from GameView
      */
-    fun setEvent(event: MotionEvent) {
+    fun setEvent(event: MotionEvent): MotionEvent {
         input = event
         iX = input!!.x
         iY = input!!.y
+
+        return event
     }
 
     /**
      * Parse touch events to see if action button occurs
      */
-    fun getAction() {
-        var curX: Float
-        var curY: Float
-
-        curX = 0f
-        curY = 0f
+    fun getAction(x: Float, y: Float, action: Int): Int {
+        var gAction: Int = 0
 
         thisTimeAction = System.currentTimeMillis()
         if (thisTimeAction - lastTimeAction > actionTimer) {
             if (input != null) {
                 for (i in 0..input!!.pointerCount - 1) {
-                    curX = input!!.getX(i)
-                    curY = input!!.getY(i)
+//                    curX = input!!.getX(i)
+//                    curY = input!!.getY(i)
                     aAction = input!!.actionMasked
-                    if ((actionX.contains(curX)) and (actionY.contains(curY)) and (aAction != MotionEvent.ACTION_UP)) {
+                    if ((actionX.contains(x)) and (actionY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
                         lastTimeAction = thisTimeAction
-                        gameView.gAction = 1
+                        gAction = 1
                     } else {
-                        gameView.gAction = 0
+                        gAction = 0
                     }
                 }
             }
         }
+        return gAction
     }
 
     fun updatePlayerLocation() {
