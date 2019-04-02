@@ -4,8 +4,6 @@ import android.view.SurfaceHolder
 import android.graphics.Canvas
 
 
-
-
 class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView: GameView) : Thread() {
 
     private var running: Boolean = false

@@ -1,4 +1,4 @@
-package com.example.intotheabyss.networking
+package com.example.intotheabyss.networking.volleynetwork
 
 import android.content.Context
 import android.util.Log
@@ -9,18 +9,20 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.intotheabyss.dungeonassets.Stair
 import com.example.intotheabyss.game.GameState
-import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.networking.Network
+import com.example.intotheabyss.game.player.Player
 import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
-class VolleyNetwork(private var context: Context, private var gameState: GameState) {
+class VolleyNetwork(private var context: Context, private var gameState: GameState):
+    VolleyNetworkInterface {
     private var requestQueue: RequestQueue? = null
 
     init {
         this.requestQueue = Volley.newRequestQueue(context)
     }
 
-    fun createNewPlayer(playerName: String) {
+    override fun createNewPlayer(playerName: String) {
         // Create new player URL
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/add?username=$playerName"
         val jsonObjectRequest = JsonObjectRequest(
@@ -47,7 +49,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
 
     }
 
-    fun retrievePlayerData(playerName: String) {
+    override fun retrievePlayerData(playerName: String) {
         // Add the playerName to the url
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerName"
         val jsonObjectRequest = JsonObjectRequest(
@@ -72,7 +74,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
         requestQueue?.add(jsonObjectRequest)
     }
 
-    fun retrieveNewDungeonLevel(level: Int, network: Network) {
+    override fun retrieveNewDungeonLevel(level: Int, network: Network) {
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,

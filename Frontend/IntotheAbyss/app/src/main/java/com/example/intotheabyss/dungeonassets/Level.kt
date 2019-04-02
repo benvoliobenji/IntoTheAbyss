@@ -1,7 +1,7 @@
 //package level;
 package com.example.intotheabyss.dungeonassets
 
-import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.game.player.Player
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 

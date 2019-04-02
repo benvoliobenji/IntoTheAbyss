@@ -6,14 +6,14 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Wall
-import com.example.intotheabyss.player.Player
+import com.example.intotheabyss.game.player.Player
 import android.content.res.Resources
 import android.graphics.*
-import android.support.annotation.FloatRange
 import android.view.MotionEvent
-import com.example.intotheabyss.game.DrawPlayer
+import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
+import com.example.intotheabyss.game.gamecontroller.GameController
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -195,7 +195,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
-    fun setGameState(gState: GameState)  {
+     fun setGameState(gState: GameState)  {
         gameState = gState
     }
 

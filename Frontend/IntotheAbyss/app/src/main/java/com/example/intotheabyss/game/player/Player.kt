@@ -1,14 +1,13 @@
-package com.example.intotheabyss.player
+package com.example.intotheabyss.game.player
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 
 import java.lang.Exception
-import java.util.*
 
 import kotlin.random.Random
 
-class Player {
+class Player: PlayerInterface {
     var playerName: String = ""
     var playerID: String = Random.nextInt(0, 1000000).toString()
     var health = 10
@@ -45,14 +44,14 @@ class Player {
         this.y = yPos
     }
 
-    fun setImage(im: Bitmap) {
+    override fun setImage(im: Bitmap) {
         image = im
     }
 
     /*
     Method to draw player to the canvas
      */
-    fun draw(canvas: Canvas, x: Int, y: Int) {
+    override fun draw(canvas: Canvas, x: Int, y: Int) {
         try {
             canvas.drawBitmap(image, x.toFloat(), y.toFloat(), null)
         } catch (e: Exception) {
