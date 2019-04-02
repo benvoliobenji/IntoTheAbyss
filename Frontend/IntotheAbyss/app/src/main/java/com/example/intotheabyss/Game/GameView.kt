@@ -71,6 +71,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameController = GameController(this)
         drawPlayer = DrawPlayer(this, playerImage)
 
+
         try {
             player = gameState!!.myPlayer
         } catch (e: java.lang.Exception) {

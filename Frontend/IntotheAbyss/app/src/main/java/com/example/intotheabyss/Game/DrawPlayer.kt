@@ -26,8 +26,6 @@ class DrawPlayer(gView: GameView, pImage: Bitmap) {
 
         drawAction(canvas, gAction)
         setAnimState()
-//        val pWidth = playerImage!!.width
-//        val pHeight = playerImage!!.height
 
         animState++
         if (animState == 6) {
@@ -39,17 +37,15 @@ class DrawPlayer(gView: GameView, pImage: Bitmap) {
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-//        player.draw(canvas, (x-minX)*tileSize, (y-minY)*tileSize)
         val left = (x- gameView!!.minX)*tileSize
         val top = (y- gameView!!.minY)*tileSize
         val pos = Rect(left,top,left+3*tileSize/2,top+3*tileSize/2)
 
         canvas.drawBitmap(playerImage, rect, pos, null)
-//        canvas.drawBitmap(playerImage,(x-minX)*tileSize.toFloat(), (y-minY)*tileSize.toFloat(),null)
         canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
 
-//        lastX = x
-//        lastY = y
+        drawHealth(player, canvas)
+        drawUserName(player, canvas)
     }
 
     fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int) {
@@ -122,21 +118,26 @@ class DrawPlayer(gView: GameView, pImage: Bitmap) {
             paint.style = Paint.Style.FILL
             paint.textSize = 80f
             canvas.drawText("Action", 500f, 500f, paint)
-//            if (dX == -1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
-//                System.out.print("Action")
-//            } else if (dX == 1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
-//                System.out.print("Action")
-//            } else if (dY == -1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
-//                System.out.print("Action")
-//            } else if (dY == 1) {
-//                playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
-//                System.out.print("Action")
-//            }
+
             animCount = 0
         }
-//        gAction = 0
+    }
+
+    private fun drawHealth(player: Player, canvas: Canvas) {
+        val paint = Paint()
+        paint.color = Color.RED
+        paint.style = Paint.Style.FILL_AND_STROKE
+        paint.textSize = 80f
+        canvas.drawText("Health: ${player.health}/10", 1500f, 100f, paint)
+    }
+
+    private fun drawUserName(player: Player, canvas: Canvas) {
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.FILL
+        paint.textSize = 30f
+
+        player.playerName = "joevt"
+        canvas.drawText(player.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
 }
