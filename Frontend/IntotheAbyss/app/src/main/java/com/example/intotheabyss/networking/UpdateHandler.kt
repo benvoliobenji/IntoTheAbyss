@@ -1,15 +1,14 @@
 package com.example.intotheabyss.networking
 
 import com.example.intotheabyss.game.GameState
-import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 import java.lang.Thread.sleep
 
 class UpdateRunnable(private val network: Network, private val volleyNetworkInterface: VolleyNetworkInterface,
                      private val gameState: GameState): Runnable {
-    var posX: Int = gameState.myPlayer.x
-    var posY: Int = gameState.myPlayer.y
-    var floor: Int = gameState.myPlayer.floorNumber
+    private var posX: Int = gameState.myPlayer.x
+    private var posY: Int = gameState.myPlayer.y
+    private var floor: Int = gameState.myPlayer.floorNumber
 
     override fun run() {
         try {
