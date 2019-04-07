@@ -53,6 +53,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
     override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int) {
         if (gAction > 0) {
             animState = 0
+//            gameView!!.gAction = 0
         }
 
         when(dX) {

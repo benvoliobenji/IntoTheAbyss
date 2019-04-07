@@ -57,7 +57,7 @@ class GameController(gameView: GameView): GameControllerInterface  {
      */
     override fun getAction(x: Float, y: Float, action: Int): Int {
         var gAction: Int = 0
-
+//        System.out.print("Get Action\n")
         thisTimeAction = System.currentTimeMillis()
         if (thisTimeAction - lastTimeAction > actionTimer) {
             if (input != null) {
@@ -66,14 +66,17 @@ class GameController(gameView: GameView): GameControllerInterface  {
 //                    curY = input!!.getY(i)
                     aAction = input!!.actionMasked
                     if ((actionX.contains(x)) and (actionY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
+                        System.out.print("Get Action called\n")
                         lastTimeAction = thisTimeAction
+//                        gameView.setGAction(1)
                         gAction = 1
                     } else {
-                        gAction = 0
+//                        gAction = 0
+                    }
                     }
                 }
             }
-        }
+        //}
         return gAction
     }
 

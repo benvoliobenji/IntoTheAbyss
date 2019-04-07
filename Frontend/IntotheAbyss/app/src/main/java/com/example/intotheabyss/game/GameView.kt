@@ -39,18 +39,23 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private val dimWidth: Int = sWidth / tileSize
     private val dimHeight: Int = sHeight / tileSize
 
-    //declare game objects
+    //Variables for displaying player
     var player: Player? = null
     var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
     var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
+    var playerIdle = true   //True if player not moving, false if player is moving
 
-    var playerIdle = true
+    //Action timer variables
+    var lastTimeAction: Long = 0
+    var thisTimeAction: Long = 1000
+    var actionTimer: Long = 500
 
+    //Vars for creating default levels
     private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
     private var validLevel = false
 
-    //Assets
+    //Bitmaps
     private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
     private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
     private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
@@ -121,23 +126,41 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     fun update() {
         gameController!!.updatePlayerLocation()
-        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+//        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+        System.out.println("$gAction")
         checkNewLevel()
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
-        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
+//        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
         updateBoundaries(player!!)      //Make sure screen follows player around
     }
 
-    private fun checkNewLevel() {
+    fun checkNewLevel() {
+        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+
         if (gAction > 0) {
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
                 player!!.floorNumber++
                 gameState!!.loading = true //Not sure if this is the purpose of it or not
                 println("Attempting to descend level. Currently at ${player!!.floorNumber}")
-                gAction = 0
+//                gAction = 0
             }
         }
     }
+
+//    fun setGAction(a: Int): Int {
+//        System.out.print("set Action called\n")
+//        thisTimeAction = System.currentTimeMillis()
+//        if (thisTimeAction - lastTimeAction > actionTimer) {
+//            lastTimeAction = thisTimeAction
+//            if (a == 1)
+//                gAction = a
+//            System.out.print("Action set $a\n")
+//            return 1
+//
+//        }
+//
+//        return 0
+//    }
 
     /**
      * This is where we will draw things onto the game "canvas"
