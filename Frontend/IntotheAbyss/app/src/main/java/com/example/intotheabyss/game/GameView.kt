@@ -14,6 +14,7 @@ import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.game.gamecontroller.GameController
+import com.example.intotheabyss.game.levelhandler.LevelHandler
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -24,12 +25,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     private var gameController: GameController
     private var drawPlayer: DrawPlayer
+    private val levelHandler = LevelHandler()
     var gAction = 0         //GameController sets to 0 if no action, something else if there is
     var event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0)
 
     //Screen dimensions
-    val sWidth = Resources.getSystem().displayMetrics.widthPixels
-    val sHeight = Resources.getSystem().displayMetrics.heightPixels
+    var sWidth = Resources.getSystem().displayMetrics.widthPixels
+    var sHeight = Resources.getSystem().displayMetrics.heightPixels
 
 
     private val tileSize = 64
@@ -79,21 +81,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
-    private fun genericLevel() {
-        val wall = Wall()
-        val floor = Floor()
-
-        for (i in 0 until lvlArray.size) {
-            for (j in 0 until lvlArray[i].size) {
-                if ((i == 0) or (i == lvlArray.size-1) or (j == 0) or (j == lvlArray[0].size-1)) {
-                    lvlArray[i][j] = wall
-                } else {
-                    lvlArray[i][j] = floor
-                }
-            }
-        }
-    }
-
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
         //When surface is "destroyed", stop the thread
         var retry = true
@@ -133,8 +120,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables
      */
     fun update() {
-
-        //updatePlayerLocation()    //Player movment - iX,iY is coordinate of touch event
         gameController!!.updatePlayerLocation()
         gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
         checkNewLevel()
@@ -199,9 +184,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameState = gState
     }
 
+    private fun setLevel() {
+        lvlArray = levelHandler.genericLevel(lvlSize.x, lvlSize.y)
+    }
+
     private fun drawBG(canvas: Canvas) {
         if (debug) {
-            genericLevel()
+            setLevel()
 //            debug = false
         } else {
             lvlArray = gameState!!.level
@@ -214,7 +203,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lvlArray = gameState!!.level
             }
             else {
-                genericLevel()
+                setLevel()
             }
             validLevel = true
         }
