@@ -3,6 +3,7 @@ package com.example.intotheabyss
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Point
+import android.util.AttributeSet
 import android.view.MotionEvent
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Tile
@@ -42,6 +43,7 @@ class GameMockitoTest {
         var gameState = GameState()
         var mGameController = mock<GameController>()
         var mGameView = mock<GameView>()
+        var mContext = mock<Context>()
 
         var mDrawPlayer = mock<DrawPlayer>()
         var mPlayer = mock<PlayerInterface>()
@@ -117,7 +119,12 @@ class GameMockitoTest {
 ////        gameState.loading = true
 //
 ////        GameMockitoTest.mGameController.getAction(1800f, 50f, MotionEvent.ACTION_DOWN)
-//        GameMockitoTest.mGameView.checkNewLevel(GameMockitoTest.gameState, mGameController)
+//        var mockattribute = mock<AttributeSet>()
+//        val gameView = GameView(mContext, mockattribute)
+//        gameView.setGameState(gameState)
+//        gameView.checkNewLevel(gameState, mGameController)
+//
+//        // GameMockitoTest.mGameView.checkNewLevel(GameMockitoTest.gameState, mGameController)
 //
 //        Assert.assertEquals(GameMockitoTest.gameState.loading, true)
 //    }
