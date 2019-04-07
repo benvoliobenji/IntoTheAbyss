@@ -1,5 +1,6 @@
 package com.example.intotheabyss.game.gamecontroller
 
+import android.graphics.Canvas
 import android.view.MotionEvent
 import com.example.intotheabyss.game.GameView
 
@@ -163,13 +164,7 @@ class GameController(gameView: GameView): GameControllerInterface  {
         }
     }
 
-    override fun testPlayerUpdateMoveRight()  {
-        //Player should face right
-        gameView.dX = 1
-        gameView.dY = 0
+    fun drawControlls(canvas: Canvas)   {
 
-        //Update x-coordinates
-        gameView.player!!.x = gameView.player!!.x + 1
-        gameView.playerIdle = false
     }
 }

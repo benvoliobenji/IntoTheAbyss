@@ -21,23 +21,28 @@ import com.example.intotheabyss.game.player.PlayerInterface
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.updateverification.UpdateVerification
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert
 import org.junit.Before
 //import com.nhaarman.mockitokotlin2.*
 import org.junit.Test
 import org.mockito.*
+import java.util.jar.Attributes
 import java.util.regex.Pattern.matches
 
 class GameMockitoTest {
+    var gameView = GameView
+
 
     companion object {
+        var gameController: GameController? = null
+
+
+
         var gameState = GameState()
         var mGameController = mock<GameController>()
         var mGameView = mock<GameView>()
+
         var mDrawPlayer = mock<DrawPlayer>()
         var mPlayer = mock<PlayerInterface>()
         var updateVerification = UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y,
@@ -84,27 +89,38 @@ class GameMockitoTest {
 
     @Before
     fun setupTests() {
-        mGameView.setGameState(gameState)
-        mGameView.player = Player()
+        gameState = GameState()
+        gameState.loading = false
+        gameController = GameController(mGameView)
+
+//        gameView!!.setGameState(gameState)
 //        gameState.myPlayer = gameView!!.player!!
     }
 
-    /**
-     * Test to ensure that on player Action we indicate we passed the level
-     */
     @Test
-    fun testCheckNewLevel() {
-        whenever(mGameController.getAction(1800f,50f,MotionEvent.ACTION_DOWN)).thenReturn(1)
+    fun testGetAction() {
+        whenever(MotionEvent.obtain(50,50,MotionEvent.ACTION_DOWN,1800f,50f,0)).thenCallRealMethod()
+        gameController!!.input = MotionEvent.obtain(50,50,MotionEvent.ACTION_DOWN,1800f,50f,0)
 
+        Assert.assertEquals(gameController!!.getAction(1800f, 50f, MotionEvent.ACTION_DOWN), 1)
 
-        GameMockitoTest.gameState.loading = false
-//        gameState.loading = true
-
-//        GameMockitoTest.mGameController.getAction(1800f, 50f, MotionEvent.ACTION_DOWN)
-        GameMockitoTest.mGameView.checkNewLevel(GameMockitoTest.gameState, GameMockitoTest.mGameController)
-
-        Assert.assertEquals(GameMockitoTest.gameState.loading, true)
     }
+
+//    /**
+//     * Test to ensure that on player Action we indicate we passed the level
+//     */
+//    @Test
+//    fun testCheckNewLevel() {
+//        whenever(mGameController.getAction(1880f, 50f,MotionEvent.ACTION_DOWN)).thenReturn(1)
+//
+//        GameMockitoTest.gameState.loading = false
+////        gameState.loading = true
+//
+////        GameMockitoTest.mGameController.getAction(1800f, 50f, MotionEvent.ACTION_DOWN)
+//        GameMockitoTest.mGameView.checkNewLevel(GameMockitoTest.gameState, mGameController)
+//
+//        Assert.assertEquals(GameMockitoTest.gameState.loading, true)
+//    }
 
     @Test
     fun updateVerificationInvokesNewDungeonLevelOnFloorTransition() {
@@ -123,15 +139,23 @@ class GameMockitoTest {
     }
 
     @Test
-    fun updateOffset() {
-        whenever(mDrawPlayer.updateBoundaries(Player())).thenReturn(Point(5,6))
-
-        mGameView.testUpdate(mDrawPlayer, mGameController)
-
-//        Assert.assertEquals(mGameView.minX, 5)
-//        Assert.assertEquals(mGameView.minY, 6)
-        Assert.assertEquals(mGameView.offsetPoint.x, 5)
-
-//        Mockito.`when`(lvlHandler.genericLevel(3,3)).thenReturn(lvlArray)
+    fun testDebug() {
+        onView
     }
+
+//    @Test
+//    fun updateOffset() {
+//        whenever(mDrawPlayer.updateBoundaries(Player())).thenReturn(Point(5,6))
+//        whenever(mGameView.testUpdate(mDrawPlayer, mGameController)).thenCallRealMethod()
+//
+//        var gView = GameView
+//
+//        val p = mGameView.testUpdate(mDrawPlayer, mGameController)
+//
+////        Assert.assertEquals(mGameView.minX, 5)
+////        Assert.assertEquals(mGameView.minY, 6)
+//        Assert.assertEquals(p.x, 5)
+//
+////        Mockito.`when`(lvlHandler.genericLevel(3,3)).thenReturn(lvlArray)
+//    }
 }

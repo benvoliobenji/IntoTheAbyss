@@ -129,6 +129,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameController!!.updatePlayerLocation()
 //        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
         System.out.println("$gAction")
+        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
         checkNewLevel(gameState!!, gameController)
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
@@ -137,8 +138,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         minY = p.y
     }
 
-    fun testUpdate(testDrawPlayer: DrawPlayer, testGameController: GameController) {
-        offsetPoint = testDrawPlayer.updateBoundaries(Player())
+    fun testUpdate(testDrawPlayer: DrawPlayer, testGameController: GameController): Point {
+        var p = testDrawPlayer.updateBoundaries(Player())
+        p.x = p.x + 1
 //        testGameController!!.updatePlayerLocation()
 //        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
 //        System.out.println("$gAction")
@@ -148,29 +150,17 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 //        var p = testDrawPlayer.updateBoundaries(player!!)      //Make sure screen follows player around
 //        minX = p.x
 //        minY = p.y
+        return p
     }
 
     fun checkNewLevel(g: GameState, gc: GameController) {
-        gAction = gc.getAction(event!!.x, event!!.y, event!!.action)
+
 
         if (gAction > 0) {
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
                 player!!.floorNumber++
-                g.loading = true //Indicate that we want a new level
+                gameState!!.loading = true //Indicate that we want a new level
                 println("Attempting to descend level. Currently at ${player!!.floorNumber}")
-//                gAction = 0
-            }
-        }
-    }
-
-    fun testCheckNewLevel(g: GameState, gc: GameController) {
-        val gAction = gc.getAction(event!!.x, event!!.y, event!!.action)
-
-        if (gAction > 0) {
-            if (true) {
-//                player!!.floorNumber++
-                g.loading = true //Indicate that we want a new level
-//                println("Attempting to descend level. Currently at ${player!!.floorNumber}")
 //                gAction = 0
             }
         }
