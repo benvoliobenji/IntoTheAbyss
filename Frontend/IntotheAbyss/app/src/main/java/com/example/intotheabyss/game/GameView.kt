@@ -36,8 +36,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     private val tileSize = 64
     //How many tiles will fit on screen
-    private val dimWidth: Int = sWidth / tileSize
-    private val dimHeight: Int = sHeight / tileSize
+    val dimWidth: Int = sWidth / tileSize
+    val dimHeight: Int = sHeight / tileSize
 
     //Variables for displaying player
     var player: Player? = null
@@ -66,6 +66,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private val yBuffer: Int = 5
     var minX: Int = 0
     var minY: Int = 0
+    var offsetPoint = Point(0,0)
 
 
     init {
@@ -128,39 +129,52 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameController!!.updatePlayerLocation()
 //        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
         System.out.println("$gAction")
-        checkNewLevel()
+        checkNewLevel(gameState!!, gameController)
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
-        updateBoundaries(player!!)      //Make sure screen follows player around
+        var p = drawPlayer.updateBoundaries(player!!)      //Make sure screen follows player around
+        minX = p.x
+        minY = p.y
     }
 
-    fun checkNewLevel() {
-        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+    fun testUpdate(testDrawPlayer: DrawPlayer, testGameController: GameController) {
+        offsetPoint = testDrawPlayer.updateBoundaries(Player())
+//        testGameController!!.updatePlayerLocation()
+//        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+//        System.out.println("$gAction")
+//        checkNewLevel()
+//        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+//        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
+//        var p = testDrawPlayer.updateBoundaries(player!!)      //Make sure screen follows player around
+//        minX = p.x
+//        minY = p.y
+    }
+
+    fun checkNewLevel(g: GameState, gc: GameController) {
+        gAction = gc.getAction(event!!.x, event!!.y, event!!.action)
 
         if (gAction > 0) {
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
                 player!!.floorNumber++
-                gameState!!.loading = true //Not sure if this is the purpose of it or not
+                g.loading = true //Indicate that we want a new level
                 println("Attempting to descend level. Currently at ${player!!.floorNumber}")
 //                gAction = 0
             }
         }
     }
 
-//    fun setGAction(a: Int): Int {
-//        System.out.print("set Action called\n")
-//        thisTimeAction = System.currentTimeMillis()
-//        if (thisTimeAction - lastTimeAction > actionTimer) {
-//            lastTimeAction = thisTimeAction
-//            if (a == 1)
-//                gAction = a
-//            System.out.print("Action set $a\n")
-//            return 1
-//
-//        }
-//
-//        return 0
-//    }
+    fun testCheckNewLevel(g: GameState, gc: GameController) {
+        val gAction = gc.getAction(event!!.x, event!!.y, event!!.action)
+
+        if (gAction > 0) {
+            if (true) {
+//                player!!.floorNumber++
+                g.loading = true //Indicate that we want a new level
+//                println("Attempting to descend level. Currently at ${player!!.floorNumber}")
+//                gAction = 0
+            }
+        }
+    }
 
     /**
      * This is where we will draw things onto the game "canvas"
@@ -186,22 +200,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 //        return super.dispatchTouchEvent(event)
     }
 
-    private fun updateBoundaries(player: Player) {
-        val x = player.x
-        val y = player.y
 
-        if (x - xBuffer < minX) {
-            minX--
-        } else if ((x + xBuffer) > (minX + dimWidth)) {
-            minX++
-        }
-
-        if (y - yBuffer < minY) {
-            minY--
-        } else if ((y + yBuffer) > (minY + dimHeight)) {
-            minY++
-        }
-    }
 
      fun setGameState(gState: GameState)  {
         gameState = gState

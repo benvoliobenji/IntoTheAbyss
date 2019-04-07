@@ -1,26 +1,36 @@
 package com.example.intotheabyss
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Point
 import android.view.MotionEvent
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.game.GameView
+import com.example.intotheabyss.game.drawplayer.DrawPlayer
+import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
+import com.example.intotheabyss.game.drawplayer.gameView
 import com.example.intotheabyss.game.gamecontroller.GameController
+import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
 import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.player.PlayerInterface
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.updateverification.UpdateVerification
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
 import org.junit.Before
 //import com.nhaarman.mockitokotlin2.*
 import org.junit.Test
 import org.mockito.*
+import java.util.regex.Pattern.matches
 
 class GameMockitoTest {
 
@@ -28,6 +38,8 @@ class GameMockitoTest {
         var gameState = GameState()
         var mGameController = mock<GameController>()
         var mGameView = mock<GameView>()
+        var mDrawPlayer = mock<DrawPlayer>()
+        var mPlayer = mock<PlayerInterface>()
         var updateVerification = UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y,
             gameState.myPlayer.floorNumber)
     }
@@ -73,20 +85,52 @@ class GameMockitoTest {
     @Before
     fun setupTests() {
         mGameView.setGameState(gameState)
+        mGameView.player = Player()
+//        gameState.myPlayer = gameView!!.player!!
     }
 
+    /**
+     * Test to ensure that on player Action we indicate we passed the level
+     */
     @Test
     fun testCheckNewLevel() {
         whenever(mGameController.getAction(1800f,50f,MotionEvent.ACTION_DOWN)).thenReturn(1)
 
-        mGameView.checkNewLevel()
 
-        Assert.assertEquals(gameState.loading, true)
+        GameMockitoTest.gameState.loading = false
+//        gameState.loading = true
+
+//        GameMockitoTest.mGameController.getAction(1800f, 50f, MotionEvent.ACTION_DOWN)
+        GameMockitoTest.mGameView.checkNewLevel(GameMockitoTest.gameState, GameMockitoTest.mGameController)
+
+        Assert.assertEquals(GameMockitoTest.gameState.loading, true)
     }
 
     @Test
-    fun testGenericLevel() {
+    fun updateVerificationInvokesNewDungeonLevelOnFloorTransition() {
+        UpdateHandlerTests.gameState.myPlayer.floorNumber = 1
+        UpdateHandlerTests.updateVerification.verifyGameState(
+            UpdateHandlerTests.gameState,
+            UpdateHandlerTests.mockKryoNetwork,
+            UpdateHandlerTests.mockVolleyNetwork
+        )
 
+        verify(UpdateHandlerTests.mockVolleyNetwork, times(1)).retrieveNewDungeonLevel(
+            UpdateHandlerTests.gameState.myPlayer.floorNumber,
+            UpdateHandlerTests.mockKryoNetwork
+        )
+
+    }
+
+    @Test
+    fun updateOffset() {
+        whenever(mDrawPlayer.updateBoundaries(Player())).thenReturn(Point(5,6))
+
+        mGameView.testUpdate(mDrawPlayer, mGameController)
+
+//        Assert.assertEquals(mGameView.minX, 5)
+//        Assert.assertEquals(mGameView.minY, 6)
+        Assert.assertEquals(mGameView.offsetPoint.x, 5)
 
 //        Mockito.`when`(lvlHandler.genericLevel(3,3)).thenReturn(lvlArray)
     }

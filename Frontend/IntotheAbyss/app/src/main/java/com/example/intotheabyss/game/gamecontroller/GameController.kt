@@ -162,4 +162,14 @@ class GameController(gameView: GameView): GameControllerInterface  {
             }
         }
     }
+
+    override fun testPlayerUpdateMoveRight()  {
+        //Player should face right
+        gameView.dX = 1
+        gameView.dY = 0
+
+        //Update x-coordinates
+        gameView.player!!.x = gameView.player!!.x + 1
+        gameView.playerIdle = false
+    }
 }

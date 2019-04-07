@@ -7,11 +7,17 @@ import com.example.intotheabyss.game.player.Player
 
 var gameView: GameView? = null
 private var playerImage: Bitmap? = null
-private var animState = 0
+var animState = 0
 const val tileSize = 64
 private var rect: Rect = Rect()
 private var playerIdle = true
-private var animCount = 7
+var animCount = 7
+
+//Variables for following player
+private val xBuffer: Int = 5
+private val yBuffer: Int = 5
+var minX: Int = 0
+var minY: Int = 0
 
 class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
 
@@ -143,4 +149,24 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         player.playerName = "joevt"
         canvas.drawText(player.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
+
+    override fun updateBoundaries(player: Player): Point {
+        val x = player.x
+        val y = player.y
+
+        if (x - xBuffer < minX) {
+            minX--
+        } else if ((x + xBuffer) > (minX + gameView!!.dimWidth)) {
+            minX++
+        }
+
+        if (y - yBuffer < minY) {
+            minY--
+        } else if ((y + yBuffer) > (minY + gameView!!.dimHeight)) {
+            minY++
+        }
+
+        return Point(minX, minY)
+    }
+
 }
