@@ -5,6 +5,8 @@
     <string name="settings">Settings</string>
     <string name="menubackgroundimage">menuBackgroundImage</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="debug_string">Debug</string>
+    <string name="not_debug_string">Not Debug</string>
 
     <!-- Strings related to Settings -->
 

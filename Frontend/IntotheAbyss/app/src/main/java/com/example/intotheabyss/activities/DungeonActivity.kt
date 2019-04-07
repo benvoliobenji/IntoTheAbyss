@@ -9,6 +9,7 @@ import com.example.intotheabyss.R
 import com.example.intotheabyss.game.GameView
 
 import com.example.intotheabyss.networking.NetworkRunnable
+import kotlinx.android.synthetic.main.activity_dungeon.*
 
 class DungeonActivity : AppCompatActivity() {
     private var networkThread = Thread()
@@ -26,6 +27,13 @@ class DungeonActivity : AppCompatActivity() {
 
         gameView.setGameState(gameState)
         gameView.debug = debug
+
+        if (debug) {
+            debugString.setText(R.string.debug_string)
+        } else  {
+            debugString.setText(R.string.not_debug_string)
+        }
+
         gameView.setOnTouchListener { _, event ->
             gameView.dispatchTouchEvent(event)
 //            gameView.invalidate()

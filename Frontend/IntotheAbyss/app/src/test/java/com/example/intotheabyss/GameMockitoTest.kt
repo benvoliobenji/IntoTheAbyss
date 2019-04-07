@@ -140,7 +140,7 @@ class GameMockitoTest {
 
     @Test
     fun testDebug() {
-        onView
+
     }
 
 //    @Test
