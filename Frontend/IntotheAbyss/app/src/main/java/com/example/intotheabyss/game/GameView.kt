@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.player.Player
 import android.content.res.Resources
@@ -13,8 +12,11 @@ import android.view.MotionEvent
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
 import com.example.intotheabyss.dungeonassets.Tile
+import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.gamecontroller.GameController
+import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
+import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -23,9 +25,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private val thread: GameThread
     private var gameState: GameState? = null
 
-    private var gameController: GameController
-    private var drawPlayer: DrawPlayer
-    private val levelHandler = LevelHandler()
+    private var gameControllerInterface: GameControllerInterface
+    private var drawPlayerInterface: DrawPlayerInterface
+    private val levelHandlerInterface: LevelHandlerInterface = LevelHandler()
     var gAction = 0         //GameController sets to 0 if no action, something else if there is
     var event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0)
 
@@ -76,8 +78,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
-        gameController = GameController(this)
-        drawPlayer = DrawPlayer(this, playerImage)
+        gameControllerInterface = GameController(this)
+        drawPlayerInterface = DrawPlayer(this, playerImage)
 
 
         try {
@@ -126,14 +128,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables
      */
     fun update() {
-        gameController!!.updatePlayerLocation()
-//        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+        gameControllerInterface!!.updatePlayerLocation()
+//        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
         System.out.println("$gAction")
-        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
-        checkNewLevel(gameState!!, gameController)
+        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
+        checkNewLevel(gameState!!, gameControllerInterface)
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
-        var p = drawPlayer.updateBoundaries(player!!)      //Make sure screen follows player around
+        var p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
         minX = p.x
         minY = p.y
     }
@@ -142,7 +144,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         var p = testDrawPlayer.updateBoundaries(Player())
         p.x = p.x + 1
 //        testGameController!!.updatePlayerLocation()
-//        gAction = gameController!!.getAction(event!!.x, event!!.y, event!!.action)
+//        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
 //        System.out.println("$gAction")
 //        checkNewLevel()
 //        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
@@ -153,7 +155,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         return p
     }
 
-    fun checkNewLevel(g: GameState, gc: GameController) {
+    fun checkNewLevel(g: GameState, gc: GameControllerInterface) {
 
 
         if (gAction > 0) {
@@ -173,8 +175,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         super.draw(canvas)
         drawBG(canvas)
 
-        drawPlayer.setPlayerImage(dX,dY,context,gAction)
-        drawPlayer.drawPlayer(canvas,player!!, gAction)
+        drawPlayerInterface.setPlayerImage(dX,dY,context,gAction)
+        drawPlayerInterface.drawPlayer(canvas,player!!, gAction)
     }
 
     /**
@@ -183,7 +185,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         event!!
 
-        this.event = gameController.setEvent(event)
+        this.event = gameControllerInterface.setEvent(event)
         return true
 
 //        Removing the super call seems dangerous, but it fixed my problems so idk
@@ -197,7 +199,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     private fun setLevel() {
-        lvlArray = levelHandler.genericLevel(lvlSize.x, lvlSize.y)
+        lvlArray = levelHandlerInterface.genericLevel(lvlSize.x, lvlSize.y)
     }
 
     private fun drawBG(canvas: Canvas) {
