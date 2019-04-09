@@ -155,6 +155,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         drawPlayerInterface.setPlayerImage(dX,dY,context,gAction)
         drawPlayerInterface.drawPlayer(canvas,player!!, gAction)
+        gameControllerInterface.drawController(canvas)
     }
 
     /**

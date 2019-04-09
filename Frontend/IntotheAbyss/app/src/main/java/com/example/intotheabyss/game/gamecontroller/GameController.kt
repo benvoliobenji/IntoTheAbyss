@@ -102,7 +102,8 @@ class GameController(gameView: GameView): GameControllerInterface  {
         }
     }
 
-    fun drawControlls(canvas: Canvas)   {
-
+    override fun drawController(canvas: Canvas)   {
+        gcHelper!!.drawMovement(canvas)
+        gcHelper!!.drawAction(canvas)
     }
 }
