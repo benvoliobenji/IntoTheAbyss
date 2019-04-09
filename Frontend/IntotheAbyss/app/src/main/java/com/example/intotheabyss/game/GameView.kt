@@ -130,7 +130,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     fun update() {
         gameControllerInterface!!.updatePlayerLocation()
 //        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
-        System.out.println("$gAction")
         gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
         checkNewLevel(gameState!!, gameControllerInterface)
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt

@@ -8,6 +8,4 @@ import com.example.intotheabyss.game.player.Player
 
 interface LevelHandlerInterface {
     fun genericLevel(xSize: Int, ySize: Int): Array<Array<Tile>>
-//    fun checkNewLevel(g: GameState, gc: GameController)
-//    fun updateBoundaries(player: Player): Point
 }

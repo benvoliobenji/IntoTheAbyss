@@ -51,22 +51,6 @@ class GameMockitoTest {
             gameState.myPlayer.floorNumber)
     }
 
-//    @Mock
-//    lateinit var gameView: GameView
-//
-//    @Mock
-//    lateinit var player: Player
-//
-//    @Mock
-//    lateinit var gameController: GameController
-//
-//    @Mock
-//    lateinit var system: System
-//
-//    @Mock
-//    lateinit var lvlHandler: LevelHandlerInterface
-
-//    var lvlArray = Array(3) { Array(3) { tile } }
 //
 //    @Before
 //    fun initObjects() {
