@@ -1,17 +1,17 @@
 package com.example.intotheabyss.game.gamecontroller
 
-import android.graphics.Point
+import android.graphics.*
 import android.view.MotionEvent
 import com.example.intotheabyss.game.GameView
 import com.example.intotheabyss.game.drawplayer.gameView
 
 //Ranges for movement buttons
-private var leftXRange: ClosedFloatingPointRange<Float> = 0f..10f
-private var middleXRange: ClosedFloatingPointRange<Float> = 0f..10f
-private var rightXRange: ClosedFloatingPointRange<Float> = 0f..10f
-private var middleYRange: ClosedFloatingPointRange<Float> = 0f..10f
-private var upYRange: ClosedFloatingPointRange<Float> = 0f..10f
-private var downYRange: ClosedFloatingPointRange<Float> = 0f..10f
+var leftXRange: ClosedFloatingPointRange<Float> = 0f..10f
+var middleXRange: ClosedFloatingPointRange<Float> = 0f..10f
+var rightXRange: ClosedFloatingPointRange<Float> = 0f..10f
+var middleYRange: ClosedFloatingPointRange<Float> = 0f..10f
+var upYRange: ClosedFloatingPointRange<Float> = 0f..10f
+var downYRange: ClosedFloatingPointRange<Float> = 0f..10f
 
 
 //Range for action button
@@ -87,5 +87,56 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
         }
 
     return Point(0,0)
+    }
+
+    override fun drawAction(canvas: Canvas) {
+        val rectPaint = Paint()
+        rectPaint.color = Color.YELLOW
+        rectPaint.alpha = 25
+
+        var rect = Rect(actionX.start.toInt(), actionY.start.toInt(), actionX.endInclusive.toInt(), actionY.endInclusive.toInt())
+        canvas.drawRect(rect, rectPaint)
+    }
+
+    override fun drawMovement(canvas: Canvas) {
+        val rectPaint = Paint()
+        rectPaint.color = Color.YELLOW
+        rectPaint.alpha = 25
+
+        val textPaint = Paint()
+        textPaint.color = Color.WHITE
+        textPaint.alpha = 200
+        textPaint.textSize = 50f
+
+        var rect = Rect(leftXRange.start.toInt(), middleYRange.start.toInt(), leftXRange.endInclusive.toInt(), middleYRange.endInclusive.toInt())
+        canvas.drawRect(rect, rectPaint)
+//        canvas.drawText("Left", leftXRange.start + buttonSize/4, middleYRange.start + buttonSize/4, textPaint)
+
+        rect.left = leftXRange.endInclusive.toInt() - 2
+        rect.right = rightXRange.start.toInt() + 2
+        rectPaint.color = Color.BLACK
+        canvas.drawRect(rect, rectPaint)
+
+        rect.left = rightXRange.start.toInt()
+        rect.right = rightXRange.endInclusive.toInt()
+        rectPaint.color = Color.YELLOW
+        rectPaint.alpha = 25
+        canvas.drawRect(rect, rectPaint)
+//        canvas.drawText("Right", rightXRange.start + buttonSize/4, middleYRange.start + buttonSize/4, textPaint)
+
+        rect.left = middleXRange.start.toInt()
+        rect.right = middleXRange.endInclusive.toInt()
+        rect.bottom = upYRange.endInclusive.toInt()
+        rect.top = upYRange.start.toInt()
+        canvas.drawRect(rect, rectPaint)
+
+        rect.bottom = downYRange.endInclusive.toInt()
+        rect.top = downYRange.start.toInt()
+        canvas.drawRect(rect, rectPaint)
+
+        rect.top = downYRange.endInclusive.toInt() -2
+        rect.bottom = upYRange.start.toInt() +2
+        rectPaint.color = Color.BLACK
+        canvas.drawRect(rect, rectPaint)
     }
 }
