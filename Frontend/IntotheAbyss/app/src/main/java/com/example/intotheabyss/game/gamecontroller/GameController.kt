@@ -54,7 +54,7 @@ class GameController(gameView: GameView): GameControllerInterface  {
     override fun getAction(x: Float, y: Float, action: Int): Int {
         thisTimeAction = System.currentTimeMillis()
         if (thisTimeAction - lastTimeAction > actionTimer) {
-            if (gcHelper!!.checkActionRange(x, y, action, input!!)) {
+            if (gcHelper!!.checkActionRange(x, y, action)) {
                         lastTimeAction = thisTimeAction
                         return 1
                     }
@@ -65,27 +65,39 @@ class GameController(gameView: GameView): GameControllerInterface  {
     override fun updatePlayerLocation() {
         var newX: Int
         var newY: Int
-        var moved = false
+        var flag = false
         val waitTime: Long = 100
         var curX = 0f
         var curY = 0f
 
-        var p = gcHelper!!.checkMovementDir(input!!)
-        System.out.println("$p")
+        if (input != null) {
+            for (i in 0..input!!.pointerCount - 1) {
+                if (input!!.actionMasked == MotionEvent.ACTION_UP) {
+                    com.example.intotheabyss.game.drawplayer.gameView!!.playerIdle = true
+                    flag = true
+                }
+                var x = input!!.getX(i)
+                var y = input!!.getY(i)
 
+                System.out.println("$x, $y")
 
-        currentTime = System.currentTimeMillis()
-        if (currentTime - lastTime > waitTime) {
-            if ((p.x != 0) or (p.y != 0))  {
-                System.out.println("Got here")
-                gameView.player!!.x = gameView.player!!.x + p.x
-                gameView.player!!.y = gameView.player!!.y + p.y
-                gameView.dX = p.x
-                gameView.dY = -p.y
-                gameView.playerIdle = false
-                lastTime = System.currentTimeMillis()
-            }   else {
-                gameView.playerIdle = true
+                var p = gcHelper!!.checkMovementDir(x, y)
+                System.out.println("$p")
+                if ((p.x != 0) or (p.y != 0) and (!flag)) {
+                    currentTime = System.currentTimeMillis()
+                    if (currentTime - lastTime > waitTime) {
+                        System.out.println("$p")
+
+                        System.out.println("Got here")
+                        gameView.player!!.x = gameView.player!!.x + p.x
+                        gameView.player!!.y = gameView.player!!.y + p.y
+                        gameView.dX = p.x
+                        gameView.dY = -p.y
+                        gameView.playerIdle = false
+                        lastTime = System.currentTimeMillis()
+                        break
+                    }
+                }
             }
         }
     }

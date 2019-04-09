@@ -14,6 +14,7 @@ import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.drawplayer.gameView
 import com.example.intotheabyss.game.gamecontroller.GameController
+import com.example.intotheabyss.game.gamecontroller.GameControllerHelperInterface
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
@@ -33,120 +34,44 @@ import java.util.regex.Pattern.matches
 
 class GameMockitoTest {
     var gameView = GameView
-
+//    var input = MotionEvent.obtain(10, 10, MotionEvent.ACTION_DOWN, 1800f, 100f, 0)
 
     companion object {
         var gameController: GameController? = null
-
-
+        var me = mock<MotionEvent>()
 
         var gameState = GameState()
-        var mGameController = mock<GameController>()
         var mGameView = mock<GameView>()
-        var mContext = mock<Context>()
-
-        var mDrawPlayer = mock<DrawPlayer>()
-        var mPlayer = mock<PlayerInterface>()
-        var updateVerification = UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y,
-            gameState.myPlayer.floorNumber)
+        var mGameControllerHelper = mock<GameControllerHelperInterface>()
     }
 
-//
-//    @Before
-//    fun initObjects() {
-//        gameView.sHeight = 1080
-//        gameView.sWidth = 1920
-//
-//        gameController.lastTimeAction = 0
-//        gameController.thisTimeAction = 250
-//        gameController.input = MotionEvent.obtain(5, 5, MotionEvent.ACTION_DOWN, 1800f, 50f, 0)
-//
-//
-//        for (i in 0 until lvlArray.size) {
-//            for (j in 0 until lvlArray[i].size) {
-//                if ((i == 0) or (i == lvlArray.size-1) or (j == 0) or (j == lvlArray[0].size-1)) {
-//                    lvlArray[i][j] = Wall()
-//                } else {
-//                    lvlArray[i][j] = Floor()
-//                }
-//            }
-//        }
-//    }
 
     @Before
     fun setupTests() {
+
         gameState = GameState()
         gameState.loading = false
         gameController = GameController(mGameView)
-
-//        gameView!!.setGameState(gameState)
-//        gameState.myPlayer = gameView!!.player!!
     }
 
     @Test
-    fun testGetAction() {
-        whenever(MotionEvent.obtain(50,50,MotionEvent.ACTION_DOWN,1800f,50f,0)).thenCallRealMethod()
-        gameController!!.input = MotionEvent.obtain(50,50,MotionEvent.ACTION_DOWN,1800f,50f,0)
+    fun testGetActionSucceed() {
+//        var input = MotionEvent.obtain(10, 10, MotionEvent.ACTION_DOWN, 1800f, 100f, 0)
 
-        Assert.assertEquals(gameController!!.getAction(1800f, 50f, MotionEvent.ACTION_DOWN), 1)
+        whenever(mGameControllerHelper.checkActionRange(1800f, 100f, 0)).thenReturn(true)
 
-    }
+        gameController!!.gcHelper = mGameControllerHelper
 
-//    /**
-//     * Test to ensure that on player Action we indicate we passed the level
-//     */
-//    @Test
-//    fun testCheckNewLevel() {
-//        whenever(mGameController.getAction(1880f, 50f,MotionEvent.ACTION_DOWN)).thenReturn(1)
-//
-//        GameMockitoTest.gameState.loading = false
-////        gameState.loading = true
-//
-////        GameMockitoTest.mGameController.getAction(1800f, 50f, MotionEvent.ACTION_DOWN)
-//        var mockattribute = mock<AttributeSet>()
-//        val gameView = GameView(mContext, mockattribute)
-//        gameView.setGameState(gameState)
-//        gameView.checkNewLevel(gameState, mGameController)
-//
-//        // GameMockitoTest.mGameView.checkNewLevel(GameMockitoTest.gameState, mGameController)
-//
-//        Assert.assertEquals(GameMockitoTest.gameState.loading, true)
-//    }
-
-    @Test
-    fun updateVerificationInvokesNewDungeonLevelOnFloorTransition() {
-        UpdateHandlerTests.gameState.myPlayer.floorNumber = 1
-        UpdateHandlerTests.updateVerification.verifyGameState(
-            UpdateHandlerTests.gameState,
-            UpdateHandlerTests.mockKryoNetwork,
-            UpdateHandlerTests.mockVolleyNetwork
-        )
-
-        verify(UpdateHandlerTests.mockVolleyNetwork, times(1)).retrieveNewDungeonLevel(
-            UpdateHandlerTests.gameState.myPlayer.floorNumber,
-            UpdateHandlerTests.mockKryoNetwork
-        )
-
+        Assert.assertEquals(gameController!!.getAction(1800f, 100f, 0), 1)
     }
 
     @Test
-    fun testDebug() {
+    fun testGetActionFail() {
+        whenever(mGameControllerHelper.checkActionRange(900f, 100f, 0)).thenReturn(false)
 
+        gameController!!.gcHelper = mGameControllerHelper
+
+        Assert.assertEquals(gameController!!.getAction(900f, 100f, 0), 0)
     }
 
-//    @Test
-//    fun updateOffset() {
-//        whenever(mDrawPlayer.updateBoundaries(Player())).thenReturn(Point(5,6))
-//        whenever(mGameView.testUpdate(mDrawPlayer, mGameController)).thenCallRealMethod()
-//
-//        var gView = GameView
-//
-//        val p = mGameView.testUpdate(mDrawPlayer, mGameController)
-//
-////        Assert.assertEquals(mGameView.minX, 5)
-////        Assert.assertEquals(mGameView.minY, 6)
-//        Assert.assertEquals(p.x, 5)
-//
-////        Mockito.`when`(lvlHandler.genericLevel(3,3)).thenReturn(lvlArray)
-//    }
 }

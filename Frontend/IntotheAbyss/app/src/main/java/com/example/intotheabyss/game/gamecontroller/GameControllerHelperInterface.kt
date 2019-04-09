@@ -5,6 +5,6 @@ import android.view.MotionEvent
 
 
 interface GameControllerHelperInterface    {
-    fun checkActionRange(x: Float, y: Float, action: Int, input: MotionEvent): Boolean
-    fun checkMovementDir(input: MotionEvent): Point
+    fun checkActionRange(x: Float, y: Float, action: Int): Boolean
+    fun checkMovementDir(curX: Float, curY: Float): Point
 }

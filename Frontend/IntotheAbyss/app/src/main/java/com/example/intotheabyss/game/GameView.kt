@@ -47,11 +47,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
     var playerIdle = true   //True if player not moving, false if player is moving
 
-    //Action timer variables
-    var lastTimeAction: Long = 0
-    var thisTimeAction: Long = 1000
-    var actionTimer: Long = 500
-
     //Vars for creating default levels
     private val lvlSize: Point = Point(100, 25)
     var lvlArray = Array(lvlSize.y) { Array(lvlSize.x) { tile } }
@@ -68,7 +63,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private val yBuffer: Int = 5
     var minX: Int = 0
     var minY: Int = 0
-    var offsetPoint = Point(0,0)
 
 
     init {
@@ -137,21 +131,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         var p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
         minX = p.x
         minY = p.y
-    }
-
-    fun testUpdate(testDrawPlayer: DrawPlayer, testGameController: GameController): Point {
-        var p = testDrawPlayer.updateBoundaries(Player())
-        p.x = p.x + 1
-//        testGameController!!.updatePlayerLocation()
-//        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
-//        System.out.println("$gAction")
-//        checkNewLevel()
-//        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
-//        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
-//        var p = testDrawPlayer.updateBoundaries(player!!)      //Make sure screen follows player around
-//        minX = p.x
-//        minY = p.y
-        return p
     }
 
     fun checkNewLevel(g: GameState, gc: GameControllerInterface) {

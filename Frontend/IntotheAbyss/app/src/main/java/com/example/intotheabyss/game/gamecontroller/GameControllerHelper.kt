@@ -39,73 +39,53 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
         actionY = gameView!!.sHeight*0.5f..gameView!!.sHeight.toFloat()
     }
 
-    override fun checkActionRange(x: Float, y: Float, action: Int, input: MotionEvent): Boolean {
-        var aAction = 0
-
-        if (input != null) {
-            for (i in 0..input!!.pointerCount - 1) {
-                aAction = input.actionMasked
+    override fun checkActionRange(x: Float, y: Float, action: Int): Boolean {
                 if ((actionX.contains(x)) and (actionY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
                     return true
                 }
-            }
-        }
-
         return false
     }
 
-    override fun checkMovementDir(input: MotionEvent): Point {
+    override fun checkMovementDir(curX: Float, curY: Float): Point {
         var newX: Int
         var newY: Int
         var moved = false
         val waitTime: Long = 100
-        var curX = 0f
-        var curY = 0f
         var mAction: Int
 
+        System.out.println("$curX, $curY")
 
-        if (input != null) {
-            for (i in 0..input!!.pointerCount - 1) {
-                curX = input!!.getX(i)
-                curY = input!!.getY(i)
-                mAction = input!!.actionMasked
-                if (mAction == MotionEvent.ACTION_UP) {
-//                    gameView.dX = 0
-//                    gameView.dY = 0
-                    gameView!!.playerIdle = true
-                    break
-                }
-                if ((rightXRange.contains(curX)) and (middleYRange.contains(curY))) {
-                    newX = gameView!!.player!!.x + 1
-                    if (gameView!!.lvlArray[gameView!!.player!!.y][newX].isPassable) {
-                        gameView!!.playerIdle = false
-                        return Point(1,0)
-                    }
-                } else if ((leftXRange.contains(curX)) and (middleYRange.contains(curY))) {
-                    newX = gameView!!.player!!.x - 1
-                    if (gameView!!.lvlArray[gameView!!.player!!.y][newX].isPassable) {
-                        gameView!!.playerIdle = false
-                        return Point(-1,0)
-                    }
-                }
 
-                if ((middleXRange.contains(curX)) and (upYRange.contains(curY))) {
-                    newY = gameView!!.player!!.y + 1
-                    if (gameView!!.lvlArray[newY][gameView!!.player!!.x].isPassable) {
-                        gameView!!.playerIdle = false
-                        return Point(0,1)
-                    }
-                } else if ((middleXRange.contains(curX)) and (downYRange.contains(curY)) and (curY != 0f)) {
-                    newY = gameView!!.player!!.y - 1
-                    if (newY < gameView!!.lvlArray.size) {
-                        if (gameView!!.lvlArray[newY][gameView!!.player!!.x].isPassable) {
-                            gameView!!.playerIdle = false
-                            return Point(0,-1)
-                        }
-                    }
+        if ((rightXRange.contains(curX)) and (middleYRange.contains(curY))) {
+            newX = gameView!!.player!!.x + 1
+            if (gameView!!.lvlArray[gameView!!.player!!.y][newX].isPassable) {
+                gameView!!.playerIdle = false
+                return Point(1,0)
+            }
+        } else if ((leftXRange.contains(curX)) and (middleYRange.contains(curY))) {
+            newX = gameView!!.player!!.x - 1
+            if (gameView!!.lvlArray[gameView!!.player!!.y][newX].isPassable) {
+                gameView!!.playerIdle = false
+                return Point(-1,0)
+            }
+        }
+
+        if ((middleXRange.contains(curX)) and (upYRange.contains(curY))) {
+            newY = gameView!!.player!!.y + 1
+            if (gameView!!.lvlArray[newY][gameView!!.player!!.x].isPassable) {
+                gameView!!.playerIdle = false
+                return Point(0,1)
+            }
+        } else if ((middleXRange.contains(curX)) and (downYRange.contains(curY)) and (curY != 0f)) {
+            newY = gameView!!.player!!.y - 1
+            if (newY < gameView!!.lvlArray.size) {
+                if (gameView!!.lvlArray[newY][gameView!!.player!!.x].isPassable) {
+                    gameView!!.playerIdle = false
+                    return Point(0,-1)
                 }
             }
         }
+
     return Point(0,0)
     }
 }
