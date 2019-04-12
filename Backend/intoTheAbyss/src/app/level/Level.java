@@ -9,7 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import app.player.Player;
+import app.player.PlayerInterface;
+import app.room.RoomInterface;
 import app.tiles.Floor;
 import app.tiles.Stair;
 import app.tiles.Tile;
@@ -18,49 +19,40 @@ import app.utils.TileTypes;
 
 @Entity
 public class Level implements LevelInterface {
-	public static final int mapWidth = 100;
-	public static final int mapHeight = 25;
 
 	@Id
 	private Integer level;
 	private Random rand;
-	private Hashtable<String, Player> playersT;
-
+	private Hashtable<String, PlayerInterface> players;
 	@Transient
 	private Tile[][] grid;
 	@Transient
-	private Room[] rooms;
+	private RoomInterface[] rooms;
 	private Point spawn;
 	private Point stair;
 
 	public Level() {
-		playersT = new Hashtable<String, Player>();
-		grid = new Tile[mapHeight][mapWidth];
 		rand = new Random();
-		generate();
-
-	}
-
-	public Level(Integer level) {
-		playersT = new Hashtable<String, Player>();
-		this.level = level;
-		grid = new Tile[mapHeight][mapWidth];
-		rand = new Random();
-		generate();
-	}
-
-	public void buildDefaultLevel() {
-		playersT = new Hashtable<String, Player>();
-		grid = new Tile[mapHeight][mapWidth];
+		players = new Hashtable<String, PlayerInterface>();
+		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		fillGridForDefaultMap();
 	}
 
-	public ArrayList<Player> getPlayers() {
-		return new ArrayList<Player>(playersT.values());
+	public Level(Integer level, RoomInterface room) {
+		players = new Hashtable<String, PlayerInterface>();
+		this.level = level;
+		grid = new Tile[MAPHEIGHT][MAPWIDTH];
+		rand = new Random();
+		if (level % 5 != 0)
+			generate(room);
+		else
+			fillGridForDefaultMap();
 	}
 
-	public Player getPlayer(String ID) {
-		return playersT.get(ID);
+	public void buildDefaultLevel() {
+		players = new Hashtable<String, PlayerInterface>();
+		grid = new Tile[MAPHEIGHT][MAPWIDTH];
+		fillGridForDefaultMap();
 	}
 
 	public Tile[][] getGrid() {
@@ -75,34 +67,62 @@ public class Level implements LevelInterface {
 		return stair;
 	}
 
-	public void addPlayer(Player p) {
-		playersT.put(p.getPlayerID(), p);
+	public Integer getLevel() {
+		return level;
+	}
+
+	public PlayerInterface getPlayer(String ID) {
+		return players.get(ID);
+	}
+
+	public ArrayList<PlayerInterface> getPlayers() {
+		return new ArrayList<PlayerInterface>(players.values());
+	}
+
+	public void addPlayer(PlayerInterface p) {
+		players.put(p.getPlayerID(), p);
 	}
 
 	public void removePlayer(String playerID) {
-		playersT.remove(playerID);
+		players.remove(playerID);
+	}
+
+	public boolean isEmpty() {
+		return players.isEmpty();
 	}
 
 	public void fillGridForDefaultMap() {
-		for (int i = 0; i < mapHeight; i++) {
-			for (int j = 0; j < mapWidth; j++) {
+		for (int i = 0; i < MAPHEIGHT; i++) {
+			for (int j = 0; j < MAPWIDTH; j++) {
 				// Checks if the selected index is an edge of the grid
-				if (i == 0 || j == 0 || i == mapHeight - 1 || j == mapWidth - 1) {
+				if (i == 0 || j == 0 || i == MAPHEIGHT - 1 || j == MAPWIDTH - 1) {
 					grid[i][j] = new Wall();
 				} else {
 					grid[i][j] = new Floor();
 				}
 			}
 		}
-		grid[mapHeight / 2][mapWidth / 2] = new Stair();
-		stair.y = mapHeight / 2;
-		stair.x = mapWidth / 2;
-		spawn.x = mapWidth / 2;
-		spawn.y = mapHeight / 2;
-
+		grid[MAPHEIGHT / 2][MAPWIDTH / 2] = new Stair();
+		stair = new Point(MAPWIDTH / 2, MAPHEIGHT / 2);
+		spawn = new Point((MAPWIDTH / 2) - 1, (MAPHEIGHT / 2) - 1);
 	}
 
-	private void generate() {
+	public void printLevel() {
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				if (grid[i][j].getType() == TileTypes.WALL)
+					System.out.print('#');
+				else if (grid[i][j].getType() == TileTypes.FLOOR)
+					System.out.print('.');
+				else if (grid[i][j].getType() == TileTypes.STAIR)
+					System.out.print('S');
+			}
+			System.out.println("");
+		}
+	}
+
+	private void generate(RoomInterface room) {
+		// fill level with walls
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
 				grid[i][j] = new Wall();
@@ -110,10 +130,10 @@ public class Level implements LevelInterface {
 		}
 
 		int numRooms = 0;
-		rooms = new Room[8];
+		rooms = new RoomInterface[MAXROOMS];
 
-		while (numRooms < 8) {
-			createRoom(numRooms);
+		while (numRooms < MAXROOMS) {
+			createRoom(numRooms, room);
 			numRooms++;
 		}
 
@@ -123,36 +143,13 @@ public class Level implements LevelInterface {
 
 	}
 
-	private void createRoom(int idx) {
-		/* generate height, width, then top left corner x,y */
-		int i, j;
-		int x, y;
-		boolean loop;
-
-		do {
-			/* create entry in room array */
-			// y length and x length
-			// y corner x corner
-			rooms[idx] = new Room(rand);
-
-			/* check that the room's position is valid */
-			loop = false;
-			for (i = 0; i < rooms[idx].getyLength() + 2; i++) {
-				for (j = 0; j < rooms[idx].getxLength() + 2; j++) {
-					x = rooms[idx].getCorner().x;
-					y = rooms[idx].getCorner().y;
-					if (grid[y + i - 1][x + j - 1].getType() != TileTypes.WALL) // add an enum or smth for tile types?
-						loop = true;
-				}
-			}
-			/* if not, retry */
-		} while (loop);
-
+	private void createRoom(int idx, RoomInterface room) {
+		rooms[idx] = room.genValidRoom(rand, grid);
 		/* write array into grid */
-		for (i = 0; i < rooms[idx].getyLength(); i++) {
-			for (j = 0; j < rooms[idx].getxLength(); j++) {
-				x = rooms[idx].getCorner().x;
-				y = rooms[idx].getCorner().y;
+		for (int i = 0; i < rooms[idx].getyLength(); i++) {
+			for (int j = 0; j < rooms[idx].getxLength(); j++) {
+				int x = rooms[idx].getCorner().x;
+				int y = rooms[idx].getCorner().y;
 				grid[y + i][x + j] = new Floor();
 			}
 		}
@@ -210,10 +207,7 @@ public class Level implements LevelInterface {
 		for (i = 0; i < rooms.length; i++) {
 			p = rooms[i].getCenter();
 			curr_dist = Math.sqrt((cX - p.x) * (cX - p.x) + 4 * (cY - p.y) * (cY - p.y));
-			if (curr_dist < dist) {
-				dist = curr_dist;
-				idx = i;
-			}
+			if (curr_dist < dist) { dist = curr_dist; idx = i; }
 		}
 
 		return idx;

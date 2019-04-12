@@ -39,9 +39,7 @@ public class RequestHandler {
 			handlePlayerRequest(connection, (PlayerPacket) object);
 		} else if (object instanceof PlayerLocationPacket) {
 			handlePlayerLocationRequest(connection, object);
-		} else if (object instanceof MoveFloorPacket) {
-			handleMoveFloorPacket(connection, object);
-		}
+		} else if (object instanceof MoveFloorPacket) { handleMoveFloorPacket(connection, object); }
 	}
 
 	public void handleConnectionRequest(Connection connection, Object object) {
@@ -52,6 +50,32 @@ public class RequestHandler {
 		System.out.println("User added to world :" + p.toString());
 	}
 
+	public void handlePlayerLocationRequest(Connection connection, Object object) {
+		PlayerLocationPacket packet = ((PlayerLocationPacket) object);
+		Level level = (Level) world.getLevel(packet.getPlayerFloor());
+		Player p = (Player) level.getPlayer(packet.getPlayerID());
+		p.setPosX(Integer.valueOf(packet.getXPos()));
+		p.setPosY(Integer.valueOf(packet.getYPos()));
+		System.out.println(p.toString());
+	}
+
+	public void handleMoveFloorPacket(Connection connection, Object object) {
+		MoveFloorPacket packet = ((MoveFloorPacket) object);
+		// Check if the floor is in the world
+		if (world.getLevel(packet.getFloorNum()) != null) {
+			Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(packet.getFloorNum()));
+			world.addLevel(newLevel.get());
+		}
+		Player p = playerRepository.getPlayerByPlayerID(packet.getUserID());
+		world.switchFloors(p, packet.getFloorNum() - 1, packet.getFloorNum());
+		playerRepository.save(p);
+		connection.sendTCP(new PlayerPacket(p));
+		System.out.println(p.toString());
+	}
+
+	/*
+	 * Believed to be needed only for testing with the test utility I made.
+	 */
 	public void handlePlayerRequest(Connection connection, Object object) {
 		String id = ((PlayerPacket) object).getID();
 		if (playerRepository.findById(id) == null) {
@@ -62,32 +86,9 @@ public class RequestHandler {
 
 	public void handleMapRequest(Connection connection, Object object) {
 		int floor = ((MapRequestPacket) object).getFloorNum();
-		Level requestedLevel = world.getLevel(floor);
+		Level requestedLevel = (Level) world.getLevel(floor);
 		MapPacket map = new MapPacket(requestedLevel.getGrid());
-		server.sendToUDP(connection.getID(), map);
-	}
-
-	public void handlePlayerLocationRequest(Connection connection, Object object) {
-		PlayerLocationPacket packet = ((PlayerLocationPacket) object);
-		Level level = world.getLevel(packet.getPlayerFloor());
-		Player p = level.getPlayer(packet.getPlayerID());
-		p.setPosX(Integer.valueOf(packet.getXPos()));
-		p.setPosY(Integer.valueOf(packet.getYPos()));
-		System.out.println(p.toString());
-	}
-
-	public void handleMoveFloorPacket(Connection connection, Object object) {
-		MoveFloorPacket packet = ((MoveFloorPacket) object);
-		System.out.println(world.getDepth());
-		if (world.getDepth() == packet.getFloorNum()) {
-			Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(packet.getFloorNum()));
-			world.addLevel(newLevel.get());
-		}
-		Player p = playerRepository.getPlayerByPlayerID(packet.getUserID());
-		world.switchFloors(p, packet.getFloorNum() - 1, packet.getFloorNum());
-		playerRepository.save(p);
-		connection.sendUDP(new PlayerPacket(p));
-		System.out.println(p.toString());
+		server.sendToTCP(connection.getID(), map);
 	}
 
 }

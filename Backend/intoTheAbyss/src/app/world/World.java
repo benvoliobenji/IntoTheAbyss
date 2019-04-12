@@ -1,48 +1,45 @@
 package app.world;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 import app.level.Level;
-import app.player.Player;
+import app.level.LevelInterface;
+import app.player.PlayerInterface;
+import app.room.Room;
 
 public class World {
-	private ArrayList<Level> levels;
-	private Hashtable<Integer, Level> levelsT;
+	private Hashtable<Integer, LevelInterface> levels;
 
 	public World() {
-		levels = new ArrayList<Level>();
-		levelsT = new Hashtable<Integer, Level>();
+		levels = new Hashtable<Integer, LevelInterface>();
 		addLevel(0);
 		levels.get(0).fillGridForDefaultMap();
+		addLevel(1);
 	}
 
-	public World(int seed) {
-
-	}
-
-	public Level getLevel(int floorNumber) {
+	public LevelInterface getLevel(int floorNumber) {
 		return levels.get(floorNumber);
 	}
 
-	public void addLevel() {
-		levels.add(new Level());
-	}
-
 	public void addLevel(int levelNum) {
-		levels.add(new Level(levelNum));
+		levels.put(levelNum, new Level(levelNum, new Room(new Random())));
 	}
 
-	public void addLevel(Level level) {
-		levels.add(level);
+	public void removeLevel(int levelNum) {
+		levels.remove(levelNum);
 	}
 
-	public void switchFloors(Player player, int fOne, int fTwo) {
-		levels.get(fOne).removePlayer(player.getPlayerID());
-		levels.get(fTwo).addPlayer(player);
-		player.setFloor(Integer.valueOf(fTwo));
-		player.setPosX(Integer.valueOf(levels.get(fTwo).getSpawn().x));
-		player.setPosY(Integer.valueOf(levels.get(fTwo).getSpawn().y));
+	public void addLevel(LevelInterface level) {
+		levels.put(level.getLevel(), level);
+	}
+
+	public void switchFloors(PlayerInterface player, int from, int to) {
+		levels.get(from).removePlayer(player.getPlayerID());
+		levels.get(to).addPlayer(player);
+		player.setFloor(Integer.valueOf(to));
+		player.setPosX(Integer.valueOf(levels.get(to).getSpawn().x));
+		player.setPosY(Integer.valueOf(levels.get(to).getSpawn().y));
 	}
 
 	public int getDepth() {
