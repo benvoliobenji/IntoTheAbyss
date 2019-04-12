@@ -4,19 +4,25 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import app.group.Group;
 import network.packets.PlayerPacket;
 
 @Entity
-public class Player {
+public class Player implements PlayerInterface {
 	@Id
 	@Column(length = 50)
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String playerID;
 	private String username;
+	@ManyToOne
+	@JoinColumn(name = "groupID")
+	private Group group;
 	private Integer posX, posY, floor, health;
 
 	public Player() {
@@ -86,5 +92,13 @@ public class Player {
 
 	public void setHealth(Integer health) {
 		this.health = Integer.valueOf(health);
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	public Group getGroup() {
+		return group;
 	}
 }

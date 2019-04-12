@@ -9,8 +9,6 @@ import com.esotericsoftware.kryonet.Server;
 
 import app.db.LevelRepository;
 import app.db.PlayerRepository;
-import app.level.Level;
-import app.player.Player;
 import app.world.World;
 import network.packets.ConnectionPacket;
 import network.packets.MapPacket;

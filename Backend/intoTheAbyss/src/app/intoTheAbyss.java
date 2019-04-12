@@ -5,20 +5,17 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
 
-import network.server.NetworkHandler;
 import app.db.LevelRepository;
 import app.db.PlayerRepository;
+import app.level.Level;
 import app.world.World;
+import network.server.NetworkHandler;
 
 @SpringBootApplication
-@EnableAutoConfiguration
-@ComponentScan
 public class intoTheAbyss {
 	@Autowired
 	private PlayerRepository playerRepository;
@@ -37,9 +34,8 @@ public class intoTheAbyss {
 	@EventListener(ApplicationReadyEvent.class)
 	public void startListener() {
 		World world = new World();
-		levelRepository.save(world.getLevel(0));
-		world.addLevel();
-		world.addLevel();
+		levelRepository.save((Level) world.getLevel(0));
+		levelRepository.save((Level) world.getLevel(1));
 
 		NetworkHandler network = new NetworkHandler(world, playerRepository, levelRepository);
 		network.registerPackets();
