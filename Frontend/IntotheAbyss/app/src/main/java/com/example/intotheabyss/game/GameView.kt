@@ -81,6 +81,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
+
+        var testPlayer = Player("test", "pid", 10, 0, 15, 15)
+//        gameState!!.playersInLevel["test"] = testPlayer
+//        gameState!!.playersInLevel.put("test", testPlayer)
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -156,6 +160,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         drawPlayerInterface.setPlayerImage(dX,dY,context,gAction)
         drawPlayerInterface.drawPlayer(canvas,player!!, gAction)
         gameControllerInterface.drawController(canvas)
+        drawOtherPlayers(canvas)
     }
 
     /**
@@ -224,6 +229,18 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), (((j-minY) * tileSize)+1).toFloat(), null)
                 }
             }
+        }
+    }
+
+    private fun drawOtherPlayers(canvas: Canvas) {
+
+        var otherPlayers = gameState!!.playersInLevel.asIterable()
+
+        var curPlayer: Player
+
+        while (otherPlayers.iterator().hasNext())   {
+            curPlayer = otherPlayers.iterator().next().value
+            drawPlayerInterface.drawPlayer(canvas, curPlayer, curPlayer.actionStatus)
         }
     }
 
