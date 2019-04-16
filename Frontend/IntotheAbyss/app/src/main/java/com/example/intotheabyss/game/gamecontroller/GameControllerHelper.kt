@@ -18,7 +18,9 @@ var downYRange: ClosedFloatingPointRange<Float> = 0f..10f
 private var actionX: ClosedFloatingPointRange<Float> = 0f..10f
 private var actionY: ClosedFloatingPointRange<Float> = 0f..10f
 
-private var buttonSize = 10f
+private var buttonSize = 5f
+val partition = gameView!!.sHeight.toFloat()/64
+var controllerPaint = Paint()
 
 private var gameView: GameView? = null
 
@@ -26,14 +28,17 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
 
     init{
         gameView = g
-        buttonSize = ((gameView!!.sWidth)/4).toFloat()
+        buttonSize = gameView!!.sHeight.toFloat() * 10 / 64
 
-        leftXRange = 0f..buttonSize
-        middleXRange = buttonSize/2..(3/2)*buttonSize
-        rightXRange = buttonSize..2*buttonSize
-        middleYRange = (gameView!!.sHeight.toFloat() - (3/2)*buttonSize)..(gameView!!.sHeight.toFloat() - buttonSize/2)
-        upYRange = (gameView!!.sHeight.toFloat() - buttonSize)..(gameView!!.sHeight.toFloat() - 0f)
-        downYRange = (gameView!!.sHeight.toFloat() - 2*buttonSize)..(gameView!!.sHeight.toFloat() - buttonSize)
+        controllerPaint.color = Color.LTGRAY
+        controllerPaint.alpha = 50
+
+        leftXRange = 0f..2*buttonSize
+        middleXRange = 2*buttonSize..3* buttonSize
+        rightXRange = 3*buttonSize..5*buttonSize
+        middleYRange = (gameView!!.sHeight.toFloat()*27/64)..(gameView!!.sHeight.toFloat()*37/64)
+        downYRange = (gameView!!.sHeight.toFloat()*27/64 - 2* buttonSize)..(gameView!!.sHeight.toFloat()*27/64)
+        upYRange = (gameView!!.sHeight.toFloat()*37/64)..(gameView!!.sHeight.toFloat()*37/64 + 2* buttonSize)
 
         actionX = gameView!!.sWidth*0.75f..gameView!!.sWidth.toFloat()
         actionY = gameView!!.sHeight*0.5f..gameView!!.sHeight.toFloat()
@@ -90,53 +95,28 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
     }
 
     override fun drawAction(canvas: Canvas) {
-        val rectPaint = Paint()
-        rectPaint.color = Color.YELLOW
-        rectPaint.alpha = 25
 
         var rect = Rect(actionX.start.toInt(), actionY.start.toInt(), actionX.endInclusive.toInt(), actionY.endInclusive.toInt())
-        canvas.drawRect(rect, rectPaint)
+        canvas.drawRect(rect, controllerPaint)
     }
 
     override fun drawMovement(canvas: Canvas) {
-        val rectPaint = Paint()
-        rectPaint.color = Color.YELLOW
-        rectPaint.alpha = 25
-
-        val textPaint = Paint()
-        textPaint.color = Color.WHITE
-        textPaint.alpha = 200
-        textPaint.textSize = 50f
 
         var rect = Rect(leftXRange.start.toInt(), middleYRange.start.toInt(), leftXRange.endInclusive.toInt(), middleYRange.endInclusive.toInt())
-        canvas.drawRect(rect, rectPaint)
-//        canvas.drawText("Left", leftXRange.start + buttonSize/4, middleYRange.start + buttonSize/4, textPaint)
-
-        rect.left = leftXRange.endInclusive.toInt() - 2
-        rect.right = rightXRange.start.toInt() + 2
-        rectPaint.color = Color.BLACK
-        canvas.drawRect(rect, rectPaint)
+        canvas.drawRect(rect, controllerPaint)
 
         rect.left = rightXRange.start.toInt()
         rect.right = rightXRange.endInclusive.toInt()
-        rectPaint.color = Color.YELLOW
-        rectPaint.alpha = 25
-        canvas.drawRect(rect, rectPaint)
-//        canvas.drawText("Right", rightXRange.start + buttonSize/4, middleYRange.start + buttonSize/4, textPaint)
+        canvas.drawRect(rect, controllerPaint)
 
         rect.left = middleXRange.start.toInt()
         rect.right = middleXRange.endInclusive.toInt()
         rect.bottom = upYRange.endInclusive.toInt()
         rect.top = upYRange.start.toInt()
-        canvas.drawRect(rect, rectPaint)
+        canvas.drawRect(rect, controllerPaint)
 
         rect.bottom = downYRange.endInclusive.toInt()
         rect.top = downYRange.start.toInt()
-        canvas.drawRect(rect, rectPaint)
-
-        rect.top = downYRange.endInclusive.toInt() -2
-        rect.bottom = upYRange.start.toInt() +2
-        rectPaint.color = Color.BLACK
-        canvas.drawRect(rect, rectPaint)
+        canvas.drawRect(rect, controllerPaint)
     }
 }
