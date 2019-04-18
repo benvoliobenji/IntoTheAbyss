@@ -65,6 +65,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var minY: Int = 0
 
 
+    /**
+     * This is kinda like a constructor. Just code that needs to be ran on startup. A lot of initialization of stuff, etc
+     */
     init {
 
         // Don't really know what this does
@@ -87,6 +90,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 //        gameState!!.playersInLevel.put("test", testPlayer)
     }
 
+    /**
+     * More code that is a bit of a mystery to me
+     */
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
         //When surface is "destroyed", stop the thread
         var retry = true
@@ -102,6 +108,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
+    /**
+     * On game init need to do some start up things (get threads going)
+     * @param p0 The SurfaceHolder object that I have know idea what it does
+     */
     override fun surfaceCreated(p0: SurfaceHolder?) {
         if (player == null) {
             try {
@@ -118,12 +128,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         thread.start()
     }
 
+    /**
+     * I have no idea what this is for. I got some skelaton code from online and I have yet found a reason to use
+     * this method.
+     */
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
         //TODO: ??? Don't really know what to do here, yet!
     }
 
     /**
-     * This is where we will update game variables
+     * This is where we will update game variables. The calling thread will call this before the draw ;method
      */
     fun update() {
         gameControllerInterface!!.updatePlayerLocation()
@@ -137,6 +151,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         minY = p.y
     }
 
+    /**
+     * Method to check if we need to advance to the next level.
+     * It just checks if an action has been performed AND the player is on the stairs
+     *
+     * @param g GameState variable that will be modified to reflect a new level is needed
+     * @param gc The GameControllerInterface that does nothing but I'm not going to remove RIGHT now for fear of losing shit
+     */
     fun checkNewLevel(g: GameState, gc: GameControllerInterface) {
 
 
@@ -152,19 +173,23 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     /**
      * This is where we will draw things onto the game "canvas"
+     * @param canvas The Canvas object that we will be drawing to
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         drawBG(canvas)
 
-        drawPlayerInterface.setPlayerImage(dX,dY,context,gAction)
-        drawPlayerInterface.drawPlayer(canvas,player!!, gAction)
+//        drawPlayerInterface.setPlayerImage(dX,dY,context,gAction)
+        drawPlayerInterface.drawPlayer(dX, dY, context, canvas,player!!, gAction)
         gameControllerInterface.drawController(canvas)
         drawOtherPlayers(canvas)
     }
 
     /**
      * How we get info from screen touch events.
+     * @param event The motionEvent object obtained from the screen
+     *
+     * I probably butchered this, but it works so YOLO
      */
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         event!!
@@ -177,15 +202,25 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
 
-
+    /**
+     * Method to set the gameState for this object to reference
+     * @param gState The gameState variable to set gameState equal to
+     */
      fun setGameState(gState: GameState)  {
         gameState = gState
     }
 
+    /**
+     *Method to set the level to a generic level if no connection established
+     */
     private fun setLevel() {
         lvlArray = levelHandlerInterface.genericLevel(lvlSize.x, lvlSize.y)
     }
 
+    /**
+     * Method to draw the background (aka the level)
+     * @Param canvas - the canvas object to draw to
+     */
     private fun drawBG(canvas: Canvas) {
         if (debug) {
             setLevel()
@@ -232,16 +267,64 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
     }
 
+    /**
+    Function to draw other entities. This includes other players AND monsters
+     *@param canvas The canvas object to draw to
+     */
     private fun drawOtherPlayers(canvas: Canvas) {
 
-        var otherPlayers = gameState!!.playersInLevel.asIterable()
+        var testPlayer = Player("test", "pid", 10, 0, 15, 15)
+        var playerList = gameState!!.playersInLevel
+//        playerList.put("test", testPlayer)
+//        var otherPlayers = gameState!!.playersInLevel.asIterable()
+        var otherPlayers = playerList.asIterable()
 
         var curPlayer: Player
 
+        //Iterate through all entities in the list
         while (otherPlayers.iterator().hasNext())   {
             curPlayer = otherPlayers.iterator().next().value
-            drawPlayerInterface.drawPlayer(canvas, curPlayer, curPlayer.actionStatus)
+
+            if (isVisible(gameState!!.myPlayer, curPlayer)) {   //Check if entity should be visible
+                drawPlayerInterface.drawPlayer(0, 0, context, canvas, curPlayer, curPlayer.actionStatus)    //Draw player if so
+            }
         }
+    }
+
+    /**
+    Function to determine if one player is visible from the other.
+    *@Param p1 - the originating player to start from
+    *@Param p2 - Next player. Checking to see if in LOS of p1
+    *@Return true if a straight line can be drawn from p1 -> p2 without intersecting a wall.
+    *@Return false otherwise.
+     */
+    private fun isVisible(p1: Player, p2: Player) : Boolean {
+        var xDif = (p2.x - p1.x).toDouble()
+        var yDif = (p2.y - p1.y).toDouble()
+        var distAway = Math.sqrt(xDif*xDif+yDif*yDif)
+
+        var x = p1.x.toDouble()
+        var y = p1.y.toDouble()
+
+        xDif = xDif/distAway    //Get x component of unit vector (x,y)
+        yDif = yDif/distAway    //Get y component of unit vector (x,y)
+
+        var change = 0
+
+        while (change < distAway) {
+            x += xDif   //Add unit vector components
+            y += yDif   //Add unit vector components
+            change++    //Increase distance traveled by 1 unit
+
+            //Check if collision with wall
+            if ((lvlArray[x.toInt()][y.toInt()].type == TileTypes.WALL) || (lvlArray[x.toInt()+1][y.toInt()].type == TileTypes.WALL) ||
+                (lvlArray[x.toInt()][y.toInt()+1].type == TileTypes.WALL) || (lvlArray[x.toInt()+1][y.toInt()].type == TileTypes.WALL)) {
+                return false
+            }
+        }
+
+        //No collision, so display
+        return true
     }
 
     companion object {
