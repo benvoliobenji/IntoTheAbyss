@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import java.io.File
 import kotlin.random.Random
 
@@ -12,6 +13,12 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
 
     override fun run() {
         val volleyNetworkInterface: VolleyNetworkInterface = VolleyNetwork(context, gameState)
+
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        val displayName = account?.displayName
+        val personID = account?.id
+
+        //TODO: CHANGE RETRIEVE PLAYER DATA AND CREATE NEW PLAYER TO BE THE SAME FUNCTION
         val playerFile = File(context.filesDir, "PlayerID")
         if (playerFile.exists()) {
             val playerID = playerFile.readText()
