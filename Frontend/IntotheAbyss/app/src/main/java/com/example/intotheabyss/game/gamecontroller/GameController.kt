@@ -60,7 +60,17 @@ class GameController(gameView: GameView): GameControllerInterface  {
                     }
                 }
         return 0
+    }
+
+    /**
+     * Parse touch events to see if action button occurs
+     */
+    override fun getPList(x: Float, y: Float, action: Int, boolean: Boolean): Boolean {
+        if (gcHelper!!.checkPlayerListButton(x, y, action, boolean)) {
+            return true
         }
+        return false
+    }
 
     override fun updatePlayerLocation() {
         var newX: Int

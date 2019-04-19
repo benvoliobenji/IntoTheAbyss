@@ -64,6 +64,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var minX: Int = 0
     var minY: Int = 0
 
+    var pList = false
 
     /**
      * This is kinda like a constructor. Just code that needs to be ran on startup. A lot of initialization of stuff, etc
@@ -144,6 +145,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 //        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
         gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
         checkNewLevel(gameState!!, gameControllerInterface)
+
+        pList = gameControllerInterface!!.getPList(event!!.x, event!!.y, event!!.action, pList)
+
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
         var p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
@@ -176,13 +180,25 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * @param canvas The Canvas object that we will be drawing to
      */
     override fun draw(canvas: Canvas) {
-        super.draw(canvas)
-        drawBG(canvas)
+        if (!pList) {
+            super.draw(canvas)
+            drawBG(canvas)
 
-//        drawPlayerInterface.setPlayerImage(dX,dY,context,gAction)
-        drawPlayerInterface.drawPlayer(dX, dY, context, canvas,player!!, gAction)
-        gameControllerInterface.drawController(canvas)
-        drawOtherPlayers(canvas)
+            drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction)
+            gameControllerInterface.drawController(canvas)
+            drawOtherPlayers(canvas)
+        } else  {
+
+            canvas.drawColor(Color.BLACK)
+        }
+
+        var paint = Paint()
+        paint.color = Color.RED
+        paint.textSize = 100f
+
+        if (pList) {
+            canvas.drawText("TEST", 0f, 100f, paint)
+        }
     }
 
     /**

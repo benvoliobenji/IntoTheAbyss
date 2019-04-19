@@ -8,4 +8,5 @@ interface GameControllerInterface {
     fun getAction(x: Float, y: Float, action: Int): Int
     fun updatePlayerLocation()
     fun drawController(canvas: Canvas)
+    fun getPList(x: Float, y: Float, action: Int, bool: Boolean): Boolean
 }
