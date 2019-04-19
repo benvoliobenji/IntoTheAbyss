@@ -8,6 +8,7 @@ import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.player.Player
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Log
 import android.view.MotionEvent
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.utils.TileTypes
@@ -85,10 +86,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
-
-        var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-//        gameState!!.playersInLevel["test"] = testPlayer
-//        gameState!!.playersInLevel.put("test", testPlayer)
     }
 
     /**
@@ -292,20 +289,30 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         var testPlayer = Player("test", "pid", 10, 0, 15, 15)
         var playerList = gameState!!.playersInLevel
-//        playerList.put("test", testPlayer)
+        playerList["test"] = testPlayer
+        Log.i("playerList", gameState!!.playersInLevel.toString())
 //        var otherPlayers = gameState!!.playersInLevel.asIterable()
         var otherPlayers = playerList.asIterable()
 
         var curPlayer: Player
 
-        //Iterate through all entities in the list
-        while (otherPlayers.iterator().hasNext())   {
-            curPlayer = otherPlayers.iterator().next().value
+        if (gameState!!.playersInLevel.isNotEmpty()) {
+            for (key in gameState!!.playersInLevel.keys) {
+                var otherPlayer = gameState!!.playersInLevel[key]
 
-            if (isVisible(gameState!!.myPlayer, curPlayer)) {   //Check if entity should be visible
-                drawPlayerInterface.drawPlayer(0, 0, context, canvas, curPlayer, curPlayer.actionStatus)    //Draw player if so
+                if (isVisible(gameState!!.myPlayer, otherPlayer!!)) {
+                    drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.actionStatus)
+                }
             }
         }
+//        //Iterate through all entities in the list
+//        while (otherPlayers.iterator().hasNext())   {
+//            curPlayer = otherPlayers.iterator().next().value
+//
+//            if (isVisible(gameState!!.myPlayer, curPlayer)) {   //Check if entity should be visible
+//                drawPlayerInterface.drawPlayer(0, 0, context, canvas, curPlayer, curPlayer.actionStatus)    //Draw player if so
+//            }
+//        }
 
         if (pList)  {
             var i = 0
@@ -318,6 +325,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             paint.textSize = 35f
             canvas.drawText("Player Name", 25f, rect.exactCenterY(), paint)
 
+            //TODO: LOOK AT ABOVE CODE FOR CHANGES
             otherPlayers = playerList.asIterable()
             while (otherPlayers.iterator().hasNext())   {
                 var rect = Rect(25, i*buttonSize.toInt(), 125, (i+3)*buttonSize.toInt())

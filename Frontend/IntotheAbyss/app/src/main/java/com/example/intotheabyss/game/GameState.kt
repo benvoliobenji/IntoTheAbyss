@@ -10,4 +10,5 @@ class GameState {
     var loading: Boolean = true
     var playersInLevel: HashMap<String, Player> = hashMapOf()
     var monstersInLevel: HashMap<String, Monster> = hashMapOf()
+    //var charactersInLevel: HashMap<String, EntityCharacter> = hashMapOf()
 }
