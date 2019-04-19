@@ -198,6 +198,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         if (pList) {
             canvas.drawText("TEST", 0f, 100f, paint)
+            drawOtherPlayers(canvas)
         }
     }
 
@@ -303,6 +304,24 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
             if (isVisible(gameState!!.myPlayer, curPlayer)) {   //Check if entity should be visible
                 drawPlayerInterface.drawPlayer(0, 0, context, canvas, curPlayer, curPlayer.actionStatus)    //Draw player if so
+            }
+        }
+
+        if (pList)  {
+            var i = 0
+            var buttonSize = 25f
+            var paint = Paint()
+            paint.color = Color.WHITE
+            var rect = Rect(25, i*buttonSize.toInt(), 250, (i+3)*buttonSize.toInt())
+            canvas.drawRect(rect, paint)
+            paint.color = Color.BLACK
+            paint.textSize = 35f
+            canvas.drawText("Player Name", 25f, rect.exactCenterY(), paint)
+
+            otherPlayers = playerList.asIterable()
+            while (otherPlayers.iterator().hasNext())   {
+                var rect = Rect(25, i*buttonSize.toInt(), 125, (i+3)*buttonSize.toInt())
+                canvas.drawRect(rect, paint)
             }
         }
     }
