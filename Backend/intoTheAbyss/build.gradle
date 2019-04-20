@@ -12,15 +12,16 @@ buildscript {
 	}
 }
 
-plugins {
-    id "com.adarshr.test-logger" version "1.6.0"
-}
+//plugins {
+//    id "com.adarshr.test-logger" version "1.6.0"
+//}
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
 
 version = '0.0.1'
 sourceCompatibility = '1.8'
@@ -48,12 +49,14 @@ dependencies {
 	compile("org.mockito:mockito-core:2.+")
 	compile('org.junit.jupiter:junit-jupiter-api:5.4.0')
 	compile('org.springframework.boot:spring-boot-starter')
+	compile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.27.0'
 	
     testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile("org.mockito:mockito-core:2.+")
+	//testCompile('org.mockito:mockito-junit-jupiter:2.25.1')
+	testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.27.0'
 	testCompile('org.junit.jupiter:junit-jupiter-api:5.4.0')
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.0")
-	
 }
 
 test {
@@ -72,7 +75,7 @@ sourceSets {
 	}
 	test{
 		java {
-			srcDirs = ['src/test/java']
+			srcDirs = ['tests']
 		}
 	}
 }
