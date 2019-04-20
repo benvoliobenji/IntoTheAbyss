@@ -3,6 +3,7 @@ package app.level;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import app.entity.Entity;
 import app.player.PlayerInterface;
 import app.tiles.Tile;
 
@@ -29,7 +30,13 @@ public interface LevelInterface {
 
 	public void addPlayer(PlayerInterface p);
 
+	public void addEntity(Entity e);
+
+	public void removeEntity(String entityID);
+
 	public void removePlayer(String playerID);
+
+	public void replacePlayer(String playerID, PlayerInterface p);
 
 	public void fillGridForDefaultMap();
 

@@ -10,11 +10,11 @@ import com.esotericsoftware.kryonet.Server;
 import app.db.LevelRepository;
 import app.db.PlayerRepository;
 import app.world.World;
+import network.actions.Action;
+import network.actions.ActionTypes;
 import network.packets.ConnectionPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
-import network.packets.MoveFloorPacket;
-import network.packets.PlayerLocationPacket;
 import network.packets.PlayerPacket;
 
 public class NetworkHandler {
@@ -45,8 +45,8 @@ public class NetworkHandler {
 		kryo.register(app.tiles.Tile[][].class);
 		kryo.register(app.tiles.Stair.class);
 		kryo.register(PlayerPacket.class);
-		kryo.register(MoveFloorPacket.class);
-		kryo.register(PlayerLocationPacket.class);
+		kryo.register(Action.class);
+		kryo.register(ActionTypes.class);
 	}
 
 	public void setupListener() {
