@@ -25,6 +25,7 @@ import network.packets.PlayerPacket;
  * TODO Fix the to all method calls such that they don't send to the sender
  * TODO Fix storage of connections such that we are able to keep them by floor this may
  * be part of a larger fix.
+ * TODO Check for consistent data across DB, server, and client.
  */
 public class RequestHandler {
 
