@@ -2,6 +2,7 @@ package network.server;
 
 import java.util.Optional;
 
+import com.esotericsoftware.jsonbeans.Json;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
@@ -10,14 +11,23 @@ import app.db.PlayerRepository;
 import app.level.Level;
 import app.player.Player;
 import app.world.World;
+import network.actions.Action;
+import network.actions.ActionTypes;
+import network.actions.Attack;
+import network.actions.Move;
 import network.packets.ConnectionPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
-import network.packets.MoveFloorPacket;
-import network.packets.PlayerLocationPacket;
 import network.packets.PlayerPacket;
 
+/*
+ * TODO Document this with good comments explaining the processing.
+ * TODO Fix the to all method calls such that they don't send to the sender
+ * TODO Fix storage of connections such that we are able to keep them by floor this may
+ * be part of a larger fix.
+ */
 public class RequestHandler {
+
 	private PlayerRepository playerRepository;
 	private LevelRepository levelRepository;
 	private Server server;
@@ -37,40 +47,83 @@ public class RequestHandler {
 			handleMapRequest(connection, object);
 		} else if (object instanceof PlayerPacket) {
 			handlePlayerRequest(connection, (PlayerPacket) object);
-		} else if (object instanceof PlayerLocationPacket) {
-			handlePlayerLocationRequest(connection, object);
-		} else if (object instanceof MoveFloorPacket) { handleMoveFloorPacket(connection, object); }
+		} else if (object instanceof Action)
+			handleActionPacket(connection, object);
+	}
+
+	public void handleActionPacket(Connection connection, Object object) {
+		// Action action = ((ActionPacket) object).getAction();
+		Action action = (Action) object;
+		Json json = new Json();
+		switch (action.getActionType()) {
+		case MOVE:
+			handleMoveAction(action, json);
+			server.sendToAllTCP(action);
+			break;
+		case ATTACK:
+			handleAttackAction(action, json);
+			server.sendToAllExceptTCP(connection.getID(), action);
+			break;
+		case JOIN:
+			break;
+		case REQUEST:
+			break;
+		case KICK:
+			break;
+		default:
+			System.out.println("Unrecognized Action type found.");
+		}
+
 	}
 
 	public void handleConnectionRequest(Connection connection, Object object) {
 		ConnectionPacket request = (ConnectionPacket) object;
 		Player p = playerRepository.getPlayerByPlayerID(request.getID());
-		if (p != null)
+		if (p != null) {
 			world.getLevel(p.getFloor()).addPlayer(p);
-		System.out.println("User added to world :" + p.toString());
-	}
-
-	public void handlePlayerLocationRequest(Connection connection, Object object) {
-		PlayerLocationPacket packet = ((PlayerLocationPacket) object);
-		Level level = (Level) world.getLevel(packet.getPlayerFloor());
-		Player p = (Player) level.getPlayer(packet.getPlayerID());
-		p.setPosX(Integer.valueOf(packet.getXPos()));
-		p.setPosY(Integer.valueOf(packet.getYPos()));
-		System.out.println(p.toString());
-	}
-
-	public void handleMoveFloorPacket(Connection connection, Object object) {
-		MoveFloorPacket packet = ((MoveFloorPacket) object);
-		// Check if the floor is in the world
-		if (world.getLevel(packet.getFloorNum()) != null) {
-			Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(packet.getFloorNum()));
-			world.addLevel(newLevel.get());
+			Action action = new Action();
+			action.setActionType(ActionTypes.ADD);
+			action.setFloor(p.getFloor());
+			action.setPerformerID(p.getID());
+			action.setPayload(new Json().toJson(p, Player.class));
+			server.sendToAllTCP(action);
+			System.out.println("User added to world :" + p.toString());
 		}
-		Player p = playerRepository.getPlayerByPlayerID(packet.getUserID());
-		world.switchFloors(p, packet.getFloorNum() - 1, packet.getFloorNum());
-		playerRepository.save(p);
-		connection.sendTCP(new PlayerPacket(p));
-		System.out.println(p.toString());
+	}
+
+	public void handleMoveAction(Action action, Json json) {
+		Move move = json.fromJson(Move.class, action.getPayload());
+		Player moved = (Player) world.getLevel(action.getFloor()).getPlayer(action.getPerformerID());
+		if (moved != null) {
+			// If the move action was on the same floor they obviously didn't switch floors.
+			if (move.getFloorMovedTo() == action.getFloor()) {
+				moved.setPosX(move.getLocation().x);
+				moved.setPosY(move.getLocation().y);
+				world.getLevel(action.getFloor()).replacePlayer(moved.getID(), moved);
+				playerRepository.save(moved);
+			} else {
+				// Get floor from DB, this should be there as clients request prior to sending
+				// the move action
+				if (world.getLevel(moved.getFloor()) != null) {
+					Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(move.getFloorMovedTo()));
+					world.addLevel(newLevel.get());
+				}
+
+				Player p = playerRepository.getPlayerByPlayerID(action.getPerformerID());
+				world.switchFloors(p, action.getFloor(), move.getFloorMovedTo());
+				p = (Player) world.getLevel(move.getFloorMovedTo()).getPlayer(action.getPerformerID());
+				playerRepository.save(p);
+				System.out.println(p.toString());
+			}
+		}
+	}
+
+	// TODO convert to use entities allowing for monsters.
+	private void handleAttackAction(Action action, Json json) {
+		Attack atk = json.fromJson(Attack.class, action.getPayload());
+		Player attacked = (Player) world.getLevel(action.getFloor()).getPlayer(action.getPerformerID());
+		attacked.setHealth(attacked.getHealth() - atk.getDmg());
+		attacked = playerRepository.save(attacked);
 	}
 
 	/*
