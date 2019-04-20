@@ -8,7 +8,7 @@ import app.level.LevelInterface;
 import app.player.PlayerInterface;
 import app.room.Room;
 
-public class World {
+public class World implements WorldInterface {
 	private Hashtable<Integer, LevelInterface> levels;
 
 	public World() {
@@ -35,7 +35,7 @@ public class World {
 	}
 
 	public void switchFloors(PlayerInterface player, int from, int to) {
-		levels.get(from).removePlayer(player.getPlayerID());
+		levels.get(from).removePlayer(player.getID());
 		levels.get(to).addPlayer(player);
 		player.setFloor(Integer.valueOf(to));
 		player.setPosX(Integer.valueOf(levels.get(to).getSpawn().x));

@@ -24,6 +24,7 @@ public class Level implements LevelInterface {
 	private Integer level;
 	private Random rand;
 	private Hashtable<String, PlayerInterface> players;
+	private Hashtable<String, app.entity.Entity> entities;
 	@Transient
 	private Tile[][] grid;
 	@Transient
@@ -34,12 +35,14 @@ public class Level implements LevelInterface {
 	public Level() {
 		rand = new Random();
 		players = new Hashtable<String, PlayerInterface>();
+		entities = new Hashtable<String, app.entity.Entity>();
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		fillGridForDefaultMap();
 	}
 
 	public Level(Integer level, RoomInterface room) {
 		players = new Hashtable<String, PlayerInterface>();
+		entities = new Hashtable<String, app.entity.Entity>();
 		this.level = level;
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		rand = new Random();
@@ -80,11 +83,23 @@ public class Level implements LevelInterface {
 	}
 
 	public void addPlayer(PlayerInterface p) {
-		players.put(p.getPlayerID(), p);
+		players.put(p.getID(), p);
 	}
 
 	public void removePlayer(String playerID) {
 		players.remove(playerID);
+	}
+
+	public void replacePlayer(String playerID, PlayerInterface p) {
+		players.replace(playerID, p);
+	}
+
+	public void addEntity(app.entity.Entity e) {
+		entities.put(e.getID(), e);
+	}
+
+	public void removeEntity(String entityID) {
+		entities.remove(entityID);
 	}
 
 	public boolean isEmpty() {

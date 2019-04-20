@@ -2,18 +2,23 @@ package network.server;
 
 import java.io.IOException;
 
+import com.esotericsoftware.jsonbeans.Json;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import app.level.Level;
 import app.player.Player;
 import app.tiles.Tile;
 import app.utils.TileTypes;
 import app.world.World;
-import network.packets.*;
-
+import network.actions.Action;
+import network.actions.ActionTypes;
+import network.actions.Move;
+import network.packets.ConnectionPacket;
+import network.packets.MapPacket;
+import network.packets.MapRequestPacket;
+import network.packets.PlayerPacket;
 
 public class NetworkHandler {
 	private static int portTCP = 44444;
@@ -40,8 +45,8 @@ public class NetworkHandler {
 		kryo.register(app.tiles.Tile[][].class);
 		kryo.register(app.tiles.Stair.class);
 		kryo.register(PlayerPacket.class);
-		kryo.register(MoveFloorPacket.class);
-		kryo.register(PlayerLocationPacket.class);
+		kryo.register(Action.class);
+		kryo.register(ActionTypes.class);
 	}
 
 	public void setupListener() {
@@ -52,20 +57,18 @@ public class NetworkHandler {
 
 			public void received(Connection connection, Object object) {
 				if (object instanceof ConnectionPacket) {
-					
+
 				} else if (object instanceof MapPacket) {
 					System.out.println("Map packet recieved Successfully");
 					Tile[][] grid = ((MapPacket) object).getGrid();
 
 					for (int i = 0; i < grid.length; i++) {
 						for (int j = 0; j < grid[0].length; j++) {
-							if(grid[i][j].getType() == TileTypes.WALL) {
+							if (grid[i][j].getType() == TileTypes.WALL) {
 								System.out.print("8");
-							}else if(grid[i][j].getType() == TileTypes.FLOOR) {
+							} else if (grid[i][j].getType() == TileTypes.FLOOR) {
 								System.out.print("-");
-							}else if (grid[i][j].getType() == TileTypes.STAIR) {
-								System.out.print("#");
-							}
+							} else if (grid[i][j].getType() == TileTypes.STAIR) { System.out.print("#"); }
 						}
 						System.out.print("\n");
 					}
@@ -74,6 +77,15 @@ public class NetworkHandler {
 				} else if (object instanceof PlayerPacket) {
 					Player p = new Player((PlayerPacket) object);
 					System.out.println(p.toString());
+				} else if (object instanceof Action) {
+					Action action = (Action) object;
+					Json json = new Json();
+					Move move = json.fromJson(Move.class, action.getPayload());
+					System.out.print("Action recieved: ");
+					System.out.print("Floor " + move.getFloorMovedTo() + ", ");
+					System.out.println(action.getPayload());
+					long endTime = System.currentTimeMillis();
+					System.out.println(endTime);
 				}
 			}
 		});

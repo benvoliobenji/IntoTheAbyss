@@ -6,6 +6,16 @@ public class Action {
 	private int floor;
 	private String payload;
 
+	public Action() {
+
+	}
+
+	public Action(String pID, ActionTypes actionType, int floor) {
+		performerID = pID;
+		this.actionType = actionType;
+		this.floor = floor;
+	}
+
 	public String getPerformerID() {
 		return performerID;
 	}

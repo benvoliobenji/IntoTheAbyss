@@ -53,11 +53,11 @@ public class Player implements PlayerInterface {
 		this.username = uname;
 	}
 
-	public String getPlayerID() {
+	public String getID() {
 		return playerID;
 	}
 
-	public void setPlayerID(String playerid) {
+	public void setID(String playerid) {
 		this.playerID = playerid;
 
 	}
