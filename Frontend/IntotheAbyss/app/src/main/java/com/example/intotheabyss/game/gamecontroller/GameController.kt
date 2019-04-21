@@ -73,12 +73,8 @@ class GameController(gameView: GameView): GameControllerInterface  {
     }
 
     override fun updatePlayerLocation() {
-        var newX: Int
-        var newY: Int
         var flag = false
         val waitTime: Long = 100
-        var curX = 0f
-        var curY = 0f
 
         if (input != null) {
             for (i in 0..input!!.pointerCount - 1) {
@@ -88,8 +84,6 @@ class GameController(gameView: GameView): GameControllerInterface  {
                 }
                 var x = input!!.getX(i)
                 var y = input!!.getY(i)
-
-                System.out.println("$x, $y")
 
                 var p = gcHelper!!.checkMovementDir(x, y)
                 System.out.println("$p")
