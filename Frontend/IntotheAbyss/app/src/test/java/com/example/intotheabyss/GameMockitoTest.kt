@@ -1,36 +1,15 @@
 package com.example.intotheabyss
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Point
-import android.util.AttributeSet
 import android.view.MotionEvent
-import com.example.intotheabyss.dungeonassets.Floor
-import com.example.intotheabyss.dungeonassets.Tile
-import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.game.GameView
-import com.example.intotheabyss.game.drawplayer.DrawPlayer
-import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
-import com.example.intotheabyss.game.drawplayer.gameView
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerHelperInterface
-import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
-import com.example.intotheabyss.game.levelhandler.LevelHandler
-import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
-import com.example.intotheabyss.game.player.Player
-import com.example.intotheabyss.game.player.PlayerInterface
-import com.example.intotheabyss.networking.Network
-import com.example.intotheabyss.networking.updateverification.UpdateVerification
-import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert
 import org.junit.Before
 //import com.nhaarman.mockitokotlin2.*
 import org.junit.Test
-import org.mockito.*
-import java.util.jar.Attributes
-import java.util.regex.Pattern.matches
 
 class GameMockitoTest {
     var gameView = GameView

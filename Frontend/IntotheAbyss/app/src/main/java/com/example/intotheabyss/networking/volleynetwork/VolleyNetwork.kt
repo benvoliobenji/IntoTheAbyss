@@ -10,7 +10,7 @@ import com.android.volley.toolbox.Volley
 import com.example.intotheabyss.dungeonassets.Stair
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.Network
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
@@ -99,8 +99,6 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 val startY = spawn.getInt("y")
                 gameState.myPlayer.x = startX
                 gameState.myPlayer.y = startY
-
-                network.updateLevel(gameState.myPlayer.playerID, gameState.myPlayer.floorNumber)
 
                 gameState.loading = false
                 Log.i("DungeonLevel", spawn.toString())

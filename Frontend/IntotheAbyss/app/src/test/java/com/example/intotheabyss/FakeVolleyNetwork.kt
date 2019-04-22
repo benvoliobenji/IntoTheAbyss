@@ -3,7 +3,7 @@ package com.example.intotheabyss
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.GameState
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 

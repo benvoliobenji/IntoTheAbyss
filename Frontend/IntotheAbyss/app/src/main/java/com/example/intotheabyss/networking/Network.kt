@@ -10,8 +10,10 @@ import com.esotericsoftware.minlog.Log as kryolog
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.entityaction.EntityAction
+import com.example.intotheabyss.entityaction.EntityActionType
 import com.example.intotheabyss.networking.packets.*
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
@@ -43,21 +45,19 @@ class Network(private var gameState: GameState): Listener() {
             register(Stair::class.java)
 
             register(PlayerPacket::class.java)
-            register(MoveFloorPacket::class.java)
-
-            // Player location registration
-            register(PlayerLocationPacket::class.java)
+            register(EntityAction::class.java)
+            register(EntityActionType::class.java)
         }
 
 
         //Add the class registration when we get to this part
         client.start()
         client.addListener(this)
-        try{
+        try {
             // Attempt to connect within a 5000 ms window before timing out
             client.connect(5000, ip, tcpPort, udpPort)
-            Log.d("Networking","Sending Floor Request")
-            client.sendTCP(ConnectionPackage(gameState.myPlayer.playerID))
+            Log.d("Networking", "Sending Floor Request")
+            client.sendTCP(ConnectionPackage(gameState.myPlayer.ID))
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -81,10 +81,5 @@ class Network(private var gameState: GameState): Listener() {
     fun updatePosition(playerID: String, floor: Int, posX: Int, posY: Int) {
         val positionPacket = PlayerLocationPacket(playerID, floor, posX, posY)
         client.sendTCP(positionPacket)
-    }
-
-    fun updateLevel(playerID: String, floor: Int) {
-        val floorPacket = MoveFloorPacket(playerID, floor)
-        client.sendTCP(floorPacket)
     }
 }

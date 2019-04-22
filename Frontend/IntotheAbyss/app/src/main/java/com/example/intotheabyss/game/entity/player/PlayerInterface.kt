@@ -1,4 +1,4 @@
-package com.example.intotheabyss.game.player
+package com.example.intotheabyss.game.entity.player
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.intotheabyss.dungeonassets.Wall
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
