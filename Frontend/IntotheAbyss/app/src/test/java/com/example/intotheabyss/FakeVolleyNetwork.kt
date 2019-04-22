@@ -8,12 +8,9 @@ import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 
 class FakeVolleyNetwork(var gameState: GameState): VolleyNetworkInterface {
-    override fun createNewPlayer(playerName: String) {
-        gameState.myPlayer = Player(playerName, "1", 0, 1, 1)
-    }
 
-    override fun retrievePlayerData(playerName: String) {
-        gameState.myPlayer = Player(playerName, "2", 3, 23, 12)
+    override fun retrievePlayerData(playerID: String, playerName: String) {
+        gameState.myPlayer = Player(playerName, playerID, 3, 23, 12)
     }
 
     override fun retrieveNewDungeonLevel(level: Int, network: Network) {

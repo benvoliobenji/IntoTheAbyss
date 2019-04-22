@@ -32,8 +32,8 @@ class UpdateHandlerTests {
     @Test
     fun updateVerificationReceivesCorrectInfoOnNewPlayer() {
         var fakeVolleyNetwork = FakeVolleyNetwork(gameState)
-        whenever(mockVolleyNetwork.createNewPlayer("1")).then {
-            fakeVolleyNetwork.createNewPlayer("1")
+        whenever(mockVolleyNetwork.retrievePlayerData("1", "player")).then {
+            fakeVolleyNetwork.retrievePlayerData("1", "player")
         }
 
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
@@ -46,8 +46,8 @@ class UpdateHandlerTests {
     @Test
     fun updateVerificationReceivesCorrectInfoOnPlayerInDatabase() {
         var fakeVolleyNetwork = FakeVolleyNetwork(gameState)
-        whenever(mockVolleyNetwork.retrievePlayerData("2")).then {
-            fakeVolleyNetwork.retrievePlayerData("2")
+        whenever(mockVolleyNetwork.retrievePlayerData("2", "oldPlayer")).then {
+            fakeVolleyNetwork.retrievePlayerData("2", "oldPlayer")
         }
 
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
