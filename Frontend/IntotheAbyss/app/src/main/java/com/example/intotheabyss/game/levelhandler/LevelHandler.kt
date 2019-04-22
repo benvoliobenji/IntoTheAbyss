@@ -3,13 +3,12 @@ package com.example.intotheabyss.game.levelhandler
 import com.example.intotheabyss.dungeonassets.Floor
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
-import com.example.intotheabyss.game.GameView
 
 class LevelHandler: LevelHandlerInterface {
 
 
     override fun genericLevel(xSize: Int, ySize: Int): Array<Array<Tile>> {
-        var lvlArray = Array(ySize) { Array(xSize) { tile } }
+        val lvlArray = Array(ySize) { Array(xSize) { tile } }
 
         val wall = Wall()
         val floor = Floor()

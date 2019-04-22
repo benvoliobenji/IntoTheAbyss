@@ -25,10 +25,7 @@ private var playersCloseX: ClosedFloatingPointRange<Float> = 0f..10f
 private var playersCloseY: ClosedFloatingPointRange<Float> = 0f..10f
 
 private var buttonSize = 5f
-val partition = gameView!!.sHeight.toFloat()/64
 var controllerPaint = Paint()
-
-private var gameView: GameView? = null
 
 class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
 
@@ -91,14 +88,8 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
      * These will be used to determine which direction the player is facing
      */
     override fun checkMovementDir(curX: Float, curY: Float): Point {
-        var newX: Int
-        var newY: Int
-        var moved = false
-        val waitTime: Long = 100
-        var mAction: Int
-
-        System.out.println("$curX, $curY")
-
+        val newX: Int
+        val newY: Int
 
         if ((rightXRange.contains(curX)) and (middleYRange.contains(curY))) {
             newX = gameView!!.player!!.x + 1
@@ -139,7 +130,7 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
      */
     override fun drawAction(canvas: Canvas) {
 
-        var rect = Rect(actionX.start.toInt(), actionY.start.toInt(), actionX.endInclusive.toInt(), actionY.endInclusive.toInt())
+        val rect = Rect(actionX.start.toInt(), actionY.start.toInt(), actionX.endInclusive.toInt(), actionY.endInclusive.toInt())
         canvas.drawRect(rect, controllerPaint)
 
         drawPlayerBoardButton(canvas)
@@ -151,7 +142,7 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
      */
     override fun drawMovement(canvas: Canvas) {
 
-        var rect = Rect(leftXRange.start.toInt(), middleYRange.start.toInt(), leftXRange.endInclusive.toInt(), middleYRange.endInclusive.toInt())
+        val rect = Rect(leftXRange.start.toInt(), middleYRange.start.toInt(), leftXRange.endInclusive.toInt(), middleYRange.endInclusive.toInt())
         canvas.drawRect(rect, controllerPaint)
 
         rect.left = rightXRange.start.toInt()
@@ -174,8 +165,8 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
      * @param canvas The Canvas object that we will be drawing on
      */
     override fun drawPlayerBoardButton(canvas: Canvas) {
-        var rect = Rect(playersX.start.toInt(), playersY.start.toInt(), playersX.endInclusive.toInt(), playersY.endInclusive.toInt())
-        var paint = Paint()
+        val rect = Rect(playersX.start.toInt(), playersY.start.toInt(), playersX.endInclusive.toInt(), playersY.endInclusive.toInt())
+        val paint = Paint()
         paint.color = Color.WHITE
         paint.alpha = 80
         canvas.drawRect(rect, paint)
@@ -183,5 +174,17 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
         paint.alpha = 100
         paint.textSize = 64f
         canvas.drawText("Player list", rect.left.toFloat(), rect.centerY().toFloat()+25f, paint)
+    }
+
+    override fun drawExitButton(canvas: Canvas) {
+        val rect = Rect(playersCloseX.start.toInt(), playersCloseY.start.toInt(), playersCloseX.endInclusive.toInt(), playersCloseY.endInclusive.toInt())
+        val paint = Paint()
+        paint.color = Color.WHITE
+        paint.alpha = 80
+        canvas.drawRect(rect, paint)
+        paint.color = Color.WHITE
+        paint.alpha = 100
+        paint.textSize = 64f
+        canvas.drawText("Exit", rect.left.toFloat(), rect.centerY().toFloat()+25f, paint)
     }
 }

@@ -14,8 +14,8 @@ private var playerIdle = true
 var animCount = 7
 
 //Variables for following player
-private val xBuffer: Int = 5
-private val yBuffer: Int = 5
+private const val xBuffer: Int = 5
+private const val yBuffer: Int = 5
 var minX: Int = 0
 var minY: Int = 0
 
@@ -26,130 +26,126 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         playerImage = pImage
     }
 
-    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: Player, gAction: Int)  {
+    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: Player, gAction: Int, isPlayer: Boolean)  {
         val x = player.x
         val y = player.y
-
-        //TODO: Find way to account for direction of player
-        //Basically will need to call setPlayerImage in here to get the proper image. Want to wait on that
-        //So I don't have to rewrite after a merge
-
-        drawAction(canvas, gAction)
-        setAnimState()
-        setPlayerImage(dX, dY, context, player.actionStatus, player)
-        animState++
-        if (animState == 6) {
-            animState = 0
-        }
 
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
+        drawAction(gAction)
+        val image = setPlayerImage(dX, dY, context, player.actionStatus, player)
+        setAnimState(image)
+
+
+        if (isPlayer) {
+            animState++
+            if (animState == 6) {
+                animState = 0
+            }
+            canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
+            drawHealth(player, canvas)
+        }
+
         val left = (x- gameView!!.minX)* tileSize
         val top = (y- gameView!!.minY)* tileSize
         val pos = Rect(left,top,left+3* tileSize /2,top+3* tileSize /2)
 
         canvas.drawBitmap(
-            playerImage,
+            image,
             rect, pos, null)
-        canvas.drawText("Player location: (${player.x},${player.y})",25f, 50f, paint)
 
-        drawHealth(player, canvas)
         drawUserName(player, canvas)
     }
 
-    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Player) {
+    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Player): Bitmap {
         var isMonster = false
-        if ((!player.playerID.isNullOrBlank()) && (player.playerID.length>2)) {
+        if ((!player.playerID.isBlank()) && (player.playerID.length>2)) {
             if ((player.playerID[0] == 'M') && player.playerID[1] == 'M') {
                 isMonster = true
             }
         }
-        if (gAction > 0) {
+
+        var image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
+        if (player.actionStatus == 1)   {
             animState = 0
-//            gameView!!.gAction = 0
         }
 
         when(dX) {
             -1 -> {
                 if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
                 } else{
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_left)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_left)
                 }
                 if (animCount < 6) {
                     animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
                 }
                 if (isMonster) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_left)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_left)
                 }
             }
             1 -> {
                 if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_right)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_right)
                 } else {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_right)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_right)
                 }
                 if (animCount < 6) {
                     animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
                 }
                 if (isMonster) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_right)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_right)
                 }
             }
         }
         when(dY) {
             -1 -> {
                 if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
                 } else {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_down)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_down)
                 }
                 if (animCount < 6) {
                     animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
                 }
                 if (isMonster) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_down)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_down)
                 }
             }
             1 -> {
                 if (playerIdle) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_up)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_up)
                 }  else {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_up)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_walk_up)
                 }
                 if (animCount < 6) {
                     animCount++
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
                 }
                 if (isMonster) {
-                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_up)
+                    image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_up)
                 }
             }
         }
+        return image
     }
 
     /**
      * Creates a Rect() object that will be the subset of the sprite sheet to display
      */
-    private fun setAnimState() {
-        val pWidth = playerImage!!.width
+    private fun setAnimState(image: Bitmap) {
+        val pWidth = image.width
         rect = Rect((pWidth/6)*(animState),0,(pWidth/6)*(animState +1),192)
     }
 
-    private fun drawAction(canvas: Canvas, gAction: Int) {
+    private fun drawAction(gAction: Int) {
         if (gAction > 0) {
-            val paint = Paint()
-            paint.color = Color.RED
-            paint.style = Paint.Style.FILL
-            paint.textSize = 80f
-            canvas.drawText("Action", 500f, 500f, paint)
-
             animCount = 0
         }
     }
@@ -168,7 +164,6 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
 
-        player.playerName = "joevt"
         canvas.drawText(player.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
 

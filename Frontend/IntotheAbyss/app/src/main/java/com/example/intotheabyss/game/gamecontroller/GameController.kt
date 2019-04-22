@@ -1,30 +1,29 @@
 package com.example.intotheabyss.game.gamecontroller
 
 import android.graphics.Canvas
-import android.graphics.Point
 import android.view.MotionEvent
+import android.view.MotionEvent.*
 import com.example.intotheabyss.game.GameView
 
-class GameController(gameView: GameView): GameControllerInterface  {
+class GameController(//Don't know why I need to do this
+    private var gameView: GameView
+): GameControllerInterface  {
     //Variables for reading player input
-    var input: MotionEvent? = null
+    private var input: MotionEvent? = null
 
-    var iX: Float = 0.toFloat()     //x coord of finger press
-    var iY: Float = 0.toFloat()     //y coord of finger press
+    private var iX: Float = 0.toFloat()     //x coord of finger press
+    private var iY: Float = 0.toFloat()     //y coord of finger press
 
     //Tracking time for player speed
     private var lastTime: Long = 0
     private var currentTime: Long = 10000   //Just some number significantly longer than last time to start
 
     //Action timer
-    var lastTimeAction: Long = 0
-    var thisTimeAction: Long = 1000
-    var actionTimer: Long = 500
+    private var lastTimeAction: Long = 0
+    private var thisTimeAction: Long = 1000
+    private var actionTimer: Long = 500
 
     var gcHelper: GameControllerHelperInterface? = null
-
-    //Don't know why I need to do this
-    var gameView: GameView = gameView
 
     init {
         gcHelper = GameControllerHelper(gameView)
@@ -58,8 +57,8 @@ class GameController(gameView: GameView): GameControllerInterface  {
     /**
      * Parse touch events to see if action button occurs
      */
-    override fun getPList(x: Float, y: Float, action: Int, boolean: Boolean): Boolean {
-        if (gcHelper!!.checkPlayerListButton(x, y, action, boolean)) {
+    override fun getPList(x: Float, y: Float, action: Int, bool: Boolean): Boolean {
+        if (gcHelper!!.checkPlayerListButton(x, y, action, bool)) {
             return true
         }
         return false
@@ -70,15 +69,15 @@ class GameController(gameView: GameView): GameControllerInterface  {
         val waitTime: Long = 100
 
         if (input != null) {
-            for (i in 0..input!!.pointerCount - 1) {
-                if (input!!.actionMasked == MotionEvent.ACTION_UP) {
+            for (i in 0 until input!!.pointerCount) {
+                if (input!!.actionMasked == ACTION_UP) {
                     com.example.intotheabyss.game.drawplayer.gameView!!.playerIdle = true
                     flag = true
                 }
-                var x = input!!.getX(i)
-                var y = input!!.getY(i)
+                val x = input!!.getX(i)
+                val y = input!!.getY(i)
 
-                var p = gcHelper!!.checkMovementDir(x, y)
+                val p = gcHelper!!.checkMovementDir(x, y)
                 System.out.println("$p")
                 if ((p.x != 0) or (p.y != 0) and (!flag)) {
                     currentTime = System.currentTimeMillis()
@@ -102,5 +101,9 @@ class GameController(gameView: GameView): GameControllerInterface  {
     override fun drawController(canvas: Canvas)   {
         gcHelper!!.drawMovement(canvas)
         gcHelper!!.drawAction(canvas)
+    }
+
+    override fun drawExitButton(canvas: Canvas) {
+        gcHelper!!.drawExitButton(canvas)
     }
 }
