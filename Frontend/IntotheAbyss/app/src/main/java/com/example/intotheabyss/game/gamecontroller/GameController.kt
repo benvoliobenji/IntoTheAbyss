@@ -1,7 +1,6 @@
 package com.example.intotheabyss.game.gamecontroller
 
 import android.graphics.Canvas
-import android.graphics.Point
 import android.view.MotionEvent
 import com.example.intotheabyss.game.GameView
 

@@ -147,7 +147,8 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         paint.textSize = 30f
 
         player.playerName = "joevt"
-        canvas.drawText(player.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
+        canvas.drawText(player.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(),
+            (player.x- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
 
     override fun updateBoundaries(player: Player): Point {

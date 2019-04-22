@@ -30,8 +30,8 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
             Response.Listener { response ->
                 val playerID = response.getString("playerID")
                 val networkPlayerName = response.getString("username")
-                val posX = response.getInt("posX")
-                val posY = response.getInt("posY")
+                val posX = response.getInt("x")
+                val posY = response.getInt("y")
                 val player = Player(networkPlayerName, playerID, 0, posX, posY)
                 gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
@@ -57,8 +57,8 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
             Response.Listener { response ->
                 val playerID = response.getString("playerID")
                 val networkPlayerName = response.getString("username")
-                val posX = response.getInt("posX")
-                val posY = response.getInt("posY")
+                val posX = response.getInt("x")
+                val posY = response.getInt("y")
                 val player = Player(networkPlayerName, playerID, 0, posX, posY)
                 gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))

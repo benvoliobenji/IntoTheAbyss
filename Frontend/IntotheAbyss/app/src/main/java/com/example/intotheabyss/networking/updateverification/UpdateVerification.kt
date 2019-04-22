@@ -10,12 +10,12 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
         if ((posX != gameState.myPlayer.x) or (posY != gameState.myPlayer.y)) {
             posX = gameState.myPlayer.x
             posY = gameState.myPlayer.y
-            network.updatePosition(gameState.myPlayer.playerID, floorNum, posX, posY)
+            network.updatePosition(gameState.myPlayer.ID, floorNum, posX, posY)
             return UpdateVerificationType.POSITION
         }
 
-        if (floorNum != gameState.myPlayer.floorNumber) {
-            floorNum = gameState.myPlayer.floorNumber
+        if (floorNum != gameState.myPlayer.floor) {
+            floorNum = gameState.myPlayer.floor
             volleyNetworkInterface.retrieveNewDungeonLevel(floorNum, network)
             return UpdateVerificationType.LEVEL
         }

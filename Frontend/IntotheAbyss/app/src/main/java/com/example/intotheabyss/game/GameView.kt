@@ -138,9 +138,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         if (gAction > 0) {
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
-                player!!.floorNumber++
+                player!!.floor++
                 gameState!!.loading = true //Indicate that we want a new level
-                println("Attempting to descend level. Currently at ${player!!.floorNumber}")
+                println("Attempting to descend level. Currently at ${player!!.floor}")
 //                gAction = 0
             }
         }
