@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 class Player: PlayerInterface {
     var playerName: String = ""
-    var playerID: String = Random.nextInt(0, 1000000).toString()
+    var playerID: String = ""
     var health = 10
     var floorNumber: Int = 0
     var x: Int = 1

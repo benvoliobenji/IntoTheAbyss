@@ -5,8 +5,6 @@ import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import java.io.File
-import kotlin.random.Random
 
 class NetworkRunnable(private val gameState: GameState, private val context: Context): Runnable {
     private var updateThread = Thread()
@@ -18,16 +16,8 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
         val displayName = account?.displayName
         val personID = account?.id
 
-        //TODO: CHANGE RETRIEVE PLAYER DATA AND CREATE NEW PLAYER TO BE THE SAME FUNCTION
-        val playerFile = File(context.filesDir, "PlayerID")
-        if (playerFile.exists()) {
-            val playerID = playerFile.readText()
-            volleyNetworkInterface.retrievePlayerData(playerID)
-        } else {
-            // Temporary name until we get the Google Account API linked
-            val playerName = Random.nextInt(0, 1000000).toString()
-            volleyNetworkInterface.createNewPlayer(playerName)
-        }
+        // Add/Retrieve data from server
+        volleyNetworkInterface.retrievePlayerData(personID!!, displayName!!)
 
         val network = Network(gameState)
         network.connect()
