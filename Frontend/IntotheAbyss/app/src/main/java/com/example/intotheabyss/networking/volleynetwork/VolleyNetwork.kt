@@ -22,44 +22,20 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
         this.requestQueue = Volley.newRequestQueue(context)
     }
 
-    override fun createNewPlayer(playerName: String) {
-        // Create new player URL
-        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/add?username=$playerName"
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            Response.Listener { response ->
-                val playerID = response.getString("playerID")
-                val networkPlayerName = response.getString("username")
-                val posX = response.getInt("posX")
-                val posY = response.getInt("posY")
-                val player = Player(networkPlayerName, playerID, 0, posX, posY)
-                gameState.myPlayer = player
-                Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
-
-                // Save new playerID
-                val file = File(context.filesDir, "PlayerID")
-                file.writeText(playerID)
-            },
-            Response.ErrorListener { error ->
-                Log.i("PlayerRegistrationError", "Error: %s".format(error.toString()))
-            }
-        )
-
-        requestQueue?.add(jsonObjectRequest)
-
-    }
-
-    override fun retrievePlayerData(playerName: String) {
+    //TODO: CHANGE URL TO MATCH NEW URL FOR ID AND NAME
+    // TODO: CHANGE TESTS TO WORK WITH NEW VOLLEYNETWORK INTERFACE
+    override fun retrievePlayerData(playerID: String, playerName: String) {
         // Add the playerName to the url
-        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerName"
+        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
+                "?playerNamePassed=$playerName"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
-                val playerID = response.getString("playerID")
+                val networkPlayerID = response.getString("playerID")
                 val networkPlayerName = response.getString("username")
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
-                val player = Player(networkPlayerName, playerID, 0, posX, posY)
+                val player = Player(networkPlayerName, networkPlayerID, 0, posX, posY)
                 gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
                 Log.i("PlayerRegistrationX", posX.toString())
