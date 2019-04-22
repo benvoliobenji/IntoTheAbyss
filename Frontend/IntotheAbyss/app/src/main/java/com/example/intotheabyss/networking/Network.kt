@@ -13,12 +13,14 @@ import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.entity.entityaction.EntityAction
 import com.example.intotheabyss.game.entity.entityaction.EntityActionType
+import com.example.intotheabyss.game.entity.entityaction.Move
 import com.example.intotheabyss.networking.packets.*
 import com.example.intotheabyss.game.entity.player.Player
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
 import org.json.JSONObject
+import org.json.JSONStringer
 
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
@@ -106,9 +108,13 @@ class Network(private var gameState: GameState): Listener() {
         // Will verify the instance of each object and then call functions based on the object type
     }
 
-    fun updatePosition(playerID: String, floor: Int, posX: Int, posY: Int) {
+    fun updatePosition(playerID: String, oldFloor: Int, floor: Int, posX: Int, posY: Int) {
+        var json = JSONObject()
 
-        val positionPacket = PlayerLocationPacket(playerID, floor, posX, posY)
+        val movement = Move(Pair(posX, posY), floor)
+        json.put("location", movement.location)
+        json.put("floorMovedTo", movement.floorMovedTo)
+        val positionPacket = EntityAction(playerID, EntityActionType.MOVE, oldFloor, json.toString())
         client.sendTCP(positionPacket)
     }
 
