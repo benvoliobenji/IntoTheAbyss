@@ -10,4 +10,6 @@ interface GameControllerHelperInterface    {
     fun checkMovementDir(curX: Float, curY: Float): Point
     fun drawMovement(canvas: Canvas)
     fun drawAction(canvas: Canvas)
+    fun drawPlayerBoardButton(canvas: Canvas)
+    fun checkPlayerListButton(x: Float, y: Float, action: Int, boolean: Boolean): Boolean
 }

@@ -8,16 +8,9 @@ import com.example.intotheabyss.game.GameView
 class GameController(gameView: GameView): GameControllerInterface  {
     //Variables for reading player input
     var input: MotionEvent? = null
-    var downTime: Long = 0
-    var eventTime: Long = 0
-    var aAction: Int = 0
-    var mAction: Int = 0
+
     var iX: Float = 0.toFloat()     //x coord of finger press
     var iY: Float = 0.toFloat()     //y coord of finger press
-    var metaState: Int = 0
-
-//    val buttonSize = 450f
-    private val buttonSize = ((gameView.sWidth)/4).toFloat()
 
     //Tracking time for player speed
     private var lastTime: Long = 0
@@ -60,15 +53,21 @@ class GameController(gameView: GameView): GameControllerInterface  {
                     }
                 }
         return 0
+    }
+
+    /**
+     * Parse touch events to see if action button occurs
+     */
+    override fun getPList(x: Float, y: Float, action: Int, boolean: Boolean): Boolean {
+        if (gcHelper!!.checkPlayerListButton(x, y, action, boolean)) {
+            return true
         }
+        return false
+    }
 
     override fun updatePlayerLocation() {
-        var newX: Int
-        var newY: Int
         var flag = false
         val waitTime: Long = 100
-        var curX = 0f
-        var curY = 0f
 
         if (input != null) {
             for (i in 0..input!!.pointerCount - 1) {
@@ -78,8 +77,6 @@ class GameController(gameView: GameView): GameControllerInterface  {
                 }
                 var x = input!!.getX(i)
                 var y = input!!.getY(i)
-
-                System.out.println("$x, $y")
 
                 var p = gcHelper!!.checkMovementDir(x, y)
                 System.out.println("$p")

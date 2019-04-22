@@ -26,13 +26,17 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         playerImage = pImage
     }
 
-    override fun drawPlayer(canvas: Canvas, player: Player, gAction: Int)  {
+    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: Player, gAction: Int)  {
         val x = player.x
         val y = player.y
 
+        //TODO: Find way to account for direction of player
+        //Basically will need to call setPlayerImage in here to get the proper image. Want to wait on that
+        //So I don't have to rewrite after a merge
+
         drawAction(canvas, gAction)
         setAnimState()
-
+        setPlayerImage(dX, dY, context, player.actionStatus, player)
         animState++
         if (animState == 6) {
             animState = 0
@@ -56,7 +60,13 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         drawUserName(player, canvas)
     }
 
-    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int) {
+    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Player) {
+        var isMonster = false
+        if ((!player.playerID.isNullOrBlank()) && (player.playerID.length>2)) {
+            if ((player.playerID[0] == 'M') && player.playerID[1] == 'M') {
+                isMonster = true
+            }
+        }
         if (gAction > 0) {
             animState = 0
 //            gameView!!.gAction = 0
@@ -73,6 +83,9 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
                     animCount++
                     playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_left)
                 }
+                if (isMonster) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_left)
+                }
             }
             1 -> {
                 if (playerIdle) {
@@ -83,6 +96,9 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
                 if (animCount < 6) {
                     animCount++
                     playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_right)
+                }
+                if (isMonster) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_right)
                 }
             }
         }
@@ -97,6 +113,9 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
                     animCount++
                     playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_down)
                 }
+                if (isMonster) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_down)
+                }
             }
             1 -> {
                 if (playerIdle) {
@@ -107,6 +126,9 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
                 if (animCount < 6) {
                     animCount++
                     playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_atk_up)
+                }
+                if (isMonster) {
+                    playerImage = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.skel_walk_up)
                 }
             }
         }

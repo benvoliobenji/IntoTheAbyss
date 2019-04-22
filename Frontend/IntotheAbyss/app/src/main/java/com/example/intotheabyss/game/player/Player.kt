@@ -15,6 +15,7 @@ class Player: PlayerInterface {
     var x: Int = 1
     var y: Int = 1
     private var image: Bitmap? = null
+    var actionStatus = 0
 
     constructor() {
         this.playerName = ""
