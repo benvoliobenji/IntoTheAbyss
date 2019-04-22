@@ -11,6 +11,7 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
             posX = gameState.myPlayer.x
             posY = gameState.myPlayer.y
             network.updatePosition(gameState.myPlayer.ID, floorNum, posX, posY)
+
             return UpdateVerificationType.POSITION
         }
 

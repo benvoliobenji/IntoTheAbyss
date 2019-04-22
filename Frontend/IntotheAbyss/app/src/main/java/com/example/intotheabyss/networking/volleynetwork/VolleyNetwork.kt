@@ -100,6 +100,16 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 gameState.myPlayer.x = startX
                 gameState.myPlayer.y = startY
 
+                // Empty entities in the level to make sure that nothing gets carried over
+                gameState.entitiesInLevel = hashMapOf()
+
+                // Add party members if player is in party
+                if(gameState.myPlayer.party.isNotEmpty()) {
+                    for (key in gameState.myPlayer.party.keys) {
+                        gameState.entitiesInLevel[key] = gameState.myPlayer.party[key]!!
+                    }
+                }
+
                 gameState.loading = false
                 Log.i("DungeonLevel", spawn.toString())
                 Log.i("DungeonLevel", stairs.toString())

@@ -1,4 +1,4 @@
-package com.example.intotheabyss.entityaction
+package com.example.intotheabyss.game.entity.entityaction
 
 enum class EntityActionType {
     ADD,

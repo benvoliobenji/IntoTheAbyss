@@ -10,6 +10,7 @@ import kotlin.random.Random
 
 class Player: PlayerInterface, Entity {
     var playerName: String = ""
+    var party: HashMap<String, Player> = hashMapOf()
     private var image: Bitmap? = null
 
     constructor(): super("", 1, 1, 0, 10) {
@@ -25,6 +26,10 @@ class Player: PlayerInterface, Entity {
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int):
             super(playerID, xPos, yPos, floorNumber, health) {
         this.playerName = playerName
+    }
+
+    constructor(player: Player) : super(player.ID, player.x, player.y, player.floor, player.health) {
+        this.playerName = player.playerName
     }
 
     override fun setImage(im: Bitmap) {

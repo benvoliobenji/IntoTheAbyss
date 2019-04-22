@@ -1,4 +1,4 @@
-package com.example.intotheabyss.entityaction
+package com.example.intotheabyss.game.entity.entityaction
 
 class Attack(var attackID: String, var dmg: Int,
              private var attackPerformerID: String, private var attackFloor: Int, private var attackPayload: String):

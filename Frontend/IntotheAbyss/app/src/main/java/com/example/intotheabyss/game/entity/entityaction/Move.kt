@@ -1,4 +1,4 @@
-package com.example.intotheabyss.entityaction
+package com.example.intotheabyss.game.entity.entityaction
 
 
 class Move(var location: Pair<Int, Int>, floorMovedTo: Int, private var attackPerformerID: String,
