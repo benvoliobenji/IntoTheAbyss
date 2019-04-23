@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '5.1.1'
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
