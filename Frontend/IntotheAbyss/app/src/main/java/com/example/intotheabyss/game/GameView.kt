@@ -237,14 +237,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun drawBG(canvas: Canvas) {
         if (debug) {
             setLevel()
-//            debug = false
         } else {
             lvlArray = gameState!!.level
         }
-        //val level: Level = gameState.level
 
         //If offline, try adding in the ValidLevel thing to fix it
-        if (/*!validLevel or */(lvlArray.isNullOrEmpty())) {
+        if (lvlArray.isNullOrEmpty()) {
             if (gameState!!.level.isNotEmpty()) {
                 lvlArray = gameState!!.level
             }
@@ -286,6 +284,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     private fun drawOtherPlayers(canvas: Canvas) {
 
+        /////
+        //TODO: Remove this code later.
         var testPlayer = Player("test", "pid", 10, 0, 15, 15)
         val playerList = gameState!!.playersInLevel
         playerList["test"] = testPlayer
@@ -298,6 +298,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
         playerList["test4"] = testPlayer
+
 
         if (gameState!!.playersInLevel.isNotEmpty()) {
             var i = 0

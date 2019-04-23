@@ -30,12 +30,13 @@ var controllerPaint = Paint()
 class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
 
     init{
-        gameView = g
-        buttonSize = gameView!!.sHeight.toFloat() * 10 / 64
+        gameView = g    //Initialize which gameView we will be referencing
+        buttonSize = gameView!!.sHeight.toFloat() * 10 / 64 //Determine proper size for buttons.
 
-        controllerPaint.color = Color.LTGRAY
+        controllerPaint.color = Color.LTGRAY    //Initialize paint for buttons
         controllerPaint.alpha = 50
 
+        //Set up appropriate ranges for movement buttons. Long and skinny kinda.
         leftXRange = 0f..2*buttonSize
         middleXRange = 2*buttonSize..3* buttonSize
         rightXRange = 3*buttonSize..5*buttonSize
@@ -43,18 +44,27 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
         downYRange = (gameView!!.sHeight.toFloat()*27/64 - 2* buttonSize)..(gameView!!.sHeight.toFloat()*27/64)
         upYRange = (gameView!!.sHeight.toFloat()*37/64)..(gameView!!.sHeight.toFloat()*37/64 + 2* buttonSize)
 
+        //Set up range for the action inputs. Bottom right corner of screen.
         actionX = gameView!!.sWidth*0.75f..gameView!!.sWidth.toFloat()
         actionY = gameView!!.sHeight*0.5f..gameView!!.sHeight.toFloat()
 
+        //Set up range for open playerBoard button. Top right corner. Only active when playerBoard is off.
         playersX = (gameView!!.sWidth - 3* buttonSize)..gameView!!.sWidth.toFloat()
         playersY = (0.75* buttonSize).toFloat()..(1.5* buttonSize).toFloat()
 
+        //Set up range for close playerBoard. Top left corner, only active when playerBoard is on.
         playersCloseX = (0f)..3*buttonSize
         playersCloseY = (0.75* buttonSize).toFloat()..(1.5* buttonSize).toFloat()
     }
 
     /**
-     * Check if the action button was pressed
+     * Check if the action button was pressed. Checks if input coordinates fall in range
+     * of the action button. Also checks that the action status of the input wasn't ACTION_UP
+     *
+     * @param x The x-coordinate of the input
+     * @param y The y-coordinate of the input.
+     * @param action The action status of the user input.
+     * @return A boolean value. True if an action has occurred. False if not.
      */
     override fun checkActionRange(x: Float, y: Float, action: Int): Boolean {
                 if ((actionX.contains(x)) and (actionY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
@@ -63,6 +73,16 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
         return false
     }
 
+    /**
+     * Function to check if the playerListButton has been pressed.
+     * Returns if or if not it has been.
+     *
+     * @param x x-coordinate of the input
+     * @param y y-coordinate of the input
+     * @param action Action status of the user input
+     * @param boolean Whether or not the playerListBoard is alraedy up or not.
+     * @return Returns boolean if button not pressed. Returns inverse of boolean if button is pressed.
+     */
     override fun checkPlayerListButton(x: Float, y: Float, action: Int, boolean: Boolean): Boolean {
         if (!boolean) {
             if ((playersX.contains(x)) and (playersY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
@@ -176,6 +196,12 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
         canvas.drawText("Player list", rect.left.toFloat(), rect.centerY().toFloat()+25f, paint)
     }
 
+    /**
+     * Method to draw the exitPlayerListBoard button.
+     * Only draws button if playerListBoard is currently active.
+     *
+     * @param canvas The canvas that is being drawn to.
+     */
     override fun drawExitButton(canvas: Canvas) {
         val rect = Rect(playersCloseX.start.toInt(), playersCloseY.start.toInt(), playersCloseX.endInclusive.toInt(), playersCloseY.endInclusive.toInt())
         val paint = Paint()

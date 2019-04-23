@@ -7,6 +7,14 @@ import com.example.intotheabyss.dungeonassets.Wall
 class LevelHandler: LevelHandlerInterface {
 
 
+    /**
+     * Method to generate a sample level. Just makes a big wide room that can be traversed by the player.
+     * Places no stairs.
+     *
+     * @param xSize The width of the room
+     * @param ySize The height of the room
+     * @return A 2D array of Tiles. WALLs for walls and FLOORs for floors
+     */
     override fun genericLevel(xSize: Int, ySize: Int): Array<Array<Tile>> {
         val lvlArray = Array(ySize) { Array(xSize) { tile } }
 
