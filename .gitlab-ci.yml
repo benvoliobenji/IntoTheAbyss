@@ -7,7 +7,7 @@ stages:
 
 # Builiding, Testing, and Deploying the Server
 server-build:
-  image: javiersantos/android-ci:latest
+  image: gradle:latest
   stage: serverbuild
   before_script:
     - export GRADLE_USER_HOME='pwd'/.gradle
@@ -17,7 +17,6 @@ server-build:
     - server_docker
   script:
     - cd Backend/intoTheAbyss
-    - ./gradlew wrapper
     - ./gradlew buildRun
   artifacts:
       paths:
@@ -25,7 +24,7 @@ server-build:
 
 # Ideally we build the jar file here, but I don't know how to do that with gradle
 server-test:
-  image: javiersantos/android-ci:latest
+  image: gradle:latest
   stage: servertest
   before_script:
     - export GRADLE_USER_HOME='pwd'/.gradle
