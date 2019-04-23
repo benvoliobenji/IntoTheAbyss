@@ -62,6 +62,7 @@ hs_err_pid*
 
 # package files
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.ear
 
