@@ -12,10 +12,6 @@ buildscript {
 	}
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
-}
-
 plugins {
     id "com.adarshr.test-logger" version "1.6.0"
 }
