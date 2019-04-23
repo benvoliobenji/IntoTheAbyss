@@ -105,7 +105,7 @@ public class RequestHandler {
 			} else {
 				// Get floor from DB, this should be there as clients request prior to sending
 				// the move action
-				if (world.getLevel(moved.getFloor()) != null) {
+				if (world.getLevel(move.getFloorMovedTo()) == null) {
 					Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(move.getFloorMovedTo()));
 					world.addLevel(newLevel.get());
 				}
