@@ -13,8 +13,8 @@ server-build:
     - export GRADLE_USER_HOME='pwd'/.gradle
     - chmod +x ./Backend/intoTheAbyss/gradlew
   tags:
-    - -back_end
-    - -docker_runner
+    - back_end
+    - server_docker
   script:
     - cd Backend/intoTheAbyss
     - ./gradlew buildRun
@@ -30,8 +30,8 @@ server-test:
     - export GRADLE_USER_HOME='pwd'/.gradle
     - chmod +x ./Backend/intoTheAbyss/gradlew
   tags:
-    - -back_end
-    - -docker_runner
+    - back_end
+    - server_docker
   script:
     - cd Backend/intoTheAbyss
     - ./gradlew test
@@ -39,8 +39,8 @@ server-test:
 autoDeploy:
   stage: autodeploy
   tags:
-    - -back_end
-    - -docker_runner
+    - back_end
+    - server_docker
   script:
     - cd Spring
     - gradle bootJar
@@ -55,8 +55,8 @@ android-build:
   image: javiersantos/android-ci:latest
   stage: androidbuild
   tags:
-    - -android_tag
-    - -front_end
+    - android
+    - front_end
   script:
     - cd Frontend/intoTheAbyss
     - ./gradlew assemble
@@ -68,8 +68,8 @@ android-tests:
   image: javiersantos/android-ci:latest
   stage: androidtest
   tags:
-    - -android_tag
-    - -front_end
+    - android
+    - front_end
   script:
     - cd Frontend/intoTheAbyss
     - ./gradlew test
