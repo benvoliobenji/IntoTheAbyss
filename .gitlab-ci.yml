@@ -1,0 +1,74 @@
+stages:
+  - serverbuild
+  - servertest
+  - autodeploy
+  - androidbuild
+  - androidtest
+
+# Builiding, Testing, and Deploying the Server
+server-build:
+  image: javiersantos/android-ci:latest
+  stage: serverbuild
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Backend/intoTheAbyss/gradlew
+  tags:
+    - back_end
+    - docker_runner
+  script:
+    - cd Backend/intoTheAbyss
+    - ./gradlew buildRun
+  artifacts:
+      paths: Spring/target/*.jar
+
+# Ideally we build the jar file here, but I don't know how to do that with gradle
+server-test:
+  image: javiersantos/android-ci:latest
+  stage: servertest
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Backend/intoTheAbyss/gradlew
+  tags:
+    - back_end
+    - docker_runner
+  script:
+    - cd Backend/intoTheAbyss
+    - ./gradlew test
+
+autoDeploy:
+  stage: autodeploy
+  tags:
+    - back_end
+    - docker_runner
+  script:
+    - cd Spring
+    - gradle bootJar
+    - sudo mv target/*.jar /target/web-demo.jar
+    - sudo systemctl stop system-web-demo
+    - sudo systemctl start system-web-demo
+
+
+
+# Building and Testing Android files
+android-build:
+  image: javiersantos/android-ci:latest
+  stage: androidbuild
+  tags:
+    - android_tag
+    - front_end
+  script:
+    - cd Frontend/intoTheAbyss
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - Frontend/intoTheAbyss/app/build/outputs/
+
+android-tests:
+  image: javiersantos/android-ci:latest
+  stage: androidtest
+  tags:
+    - android_tag
+    - front_end
+  script:
+    - cd Frontend/intoTheAbyss
+    - ./gradlew test
