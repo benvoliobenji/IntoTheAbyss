@@ -1,7 +1,6 @@
 package com.example.intotheabyss.networking
 
 import android.util.Log
-import com.esotericsoftware.jsonbeans.Json
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
@@ -11,6 +10,7 @@ import com.esotericsoftware.minlog.Log as kryolog
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.entityaction.EntityAction
 import com.example.intotheabyss.game.entity.entityaction.EntityActionType
 import com.example.intotheabyss.game.entity.entityaction.Move
@@ -19,8 +19,8 @@ import com.example.intotheabyss.game.entity.player.Player
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
+import com.google.gson.Gson
 import org.json.JSONObject
-import org.json.JSONStringer
 
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
@@ -109,12 +109,10 @@ class Network(private var gameState: GameState): Listener() {
     }
 
     fun updatePosition(playerID: String, oldFloor: Int, floor: Int, posX: Int, posY: Int) {
-        var json = JSONObject()
-
+        val gson = Gson()
         val movement = Move(Pair(posX, posY), floor)
-        json.put("location", movement.location)
-        json.put("floorMovedTo", movement.floorMovedTo)
-        val positionPacket = EntityAction(playerID, EntityActionType.MOVE, oldFloor, json.toString())
+        val jsonPacket = gson.toJson(movement)
+        val positionPacket = EntityAction(playerID, EntityActionType.MOVE, oldFloor, jsonPacket)
         client.sendTCP(positionPacket)
     }
 
@@ -131,14 +129,9 @@ class Network(private var gameState: GameState): Listener() {
             gameState.myPlayer.health = json.getInt("health")
         } else {
             // Regardless if it's in the hash map or not, it will be modified or added the same way
-            var otherPlayer = Player()
-            otherPlayer.ID = json.getString("playerID")
-            otherPlayer.playerName = json.getString("username")
-            otherPlayer.x = json.getInt("posX")
-            otherPlayer.y = json.getInt("posY")
-            otherPlayer.floor = json.getInt("floor")
-            otherPlayer.health = json.getInt("health")
-            gameState.entitiesInLevel[action.performerID] = otherPlayer
+            var gson = Gson()
+            var entity = gson.fromJson<Entity>(json.toString(), Entity::class.java)
+            gameState.entitiesInLevel[action.performerID] = entity
         }
     }
 }
