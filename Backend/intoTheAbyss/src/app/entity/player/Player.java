@@ -1,4 +1,4 @@
-package app.player;
+package app.entity.player;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +18,7 @@ public class Player implements PlayerInterface {
 	@Column(length = 50)
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	public String playerID;
+	public String ID;
 	private String username;
 	@ManyToOne
 	@JoinColumn(name = "groupID")
@@ -54,11 +54,11 @@ public class Player implements PlayerInterface {
 	}
 
 	public String getID() {
-		return playerID;
+		return ID;
 	}
 
 	public void setID(String playerid) {
-		this.playerID = playerid;
+		this.ID = playerid;
 
 	}
 

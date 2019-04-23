@@ -1,4 +1,4 @@
-package app.player;
+package app.entity.player;
 
 import app.entity.Entity;
 
@@ -11,4 +11,8 @@ public interface PlayerInterface extends Entity {
 	public Integer getHealth();
 
 	public void setHealth(Integer health);
+//	
+//	public Group getGroup();
+//	
+//	public void setGroup(Group group);
 }

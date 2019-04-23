@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import app.db.GroupRepository;
-import app.player.Player;
+import app.entity.player.Player;
 
 @Controller
 @RequestMapping(path = "/group")

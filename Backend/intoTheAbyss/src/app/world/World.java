@@ -3,9 +3,9 @@ package app.world;
 import java.util.Hashtable;
 import java.util.Random;
 
+import app.entity.player.PlayerInterface;
 import app.level.Level;
 import app.level.LevelInterface;
-import app.player.PlayerInterface;
 import app.room.Room;
 
 public class World implements WorldInterface {

@@ -1,6 +1,6 @@
 package network.packets;
 
-import app.player.Player;
+import app.entity.player.Player;
 
 public class PlayerPacket {
 	private String id, username;

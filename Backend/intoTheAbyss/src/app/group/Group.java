@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import app.player.Player;
+import app.entity.player.Player;
 
 @Entity
 @Table(name = "\"Table\"")

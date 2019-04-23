@@ -19,8 +19,4 @@ public interface Entity {
 	public Integer getFloor();
 
 	public void setFloor(Integer floor);
-
-	public Integer getHealth();
-
-	public void setHealth(Integer Health);
 }

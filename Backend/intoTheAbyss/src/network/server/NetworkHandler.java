@@ -51,6 +51,7 @@ public class NetworkHandler {
 
 	public void setupListener() {
 		server.addListener(new Listener() {
+			@SuppressWarnings("unused")
 			public void connect(Connection connection) {
 				System.out.println("Connected");
 			}
@@ -59,6 +60,7 @@ public class NetworkHandler {
 				requestHandler.handleRequests(connection, object);
 			}
 
+			@SuppressWarnings("unused")
 			public void disconnect(Connection connetion) {
 				System.out.println("disconnected");
 			}

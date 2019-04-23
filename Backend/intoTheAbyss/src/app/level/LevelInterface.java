@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import app.entity.Entity;
-import app.player.PlayerInterface;
+import app.entity.player.PlayerInterface;
 import app.tiles.Tile;
 
 public interface LevelInterface {

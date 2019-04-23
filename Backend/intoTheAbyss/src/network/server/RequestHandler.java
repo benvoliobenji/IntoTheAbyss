@@ -8,8 +8,8 @@ import com.esotericsoftware.kryonet.Server;
 
 import app.db.LevelRepository;
 import app.db.PlayerRepository;
+import app.entity.player.Player;
 import app.level.Level;
-import app.player.Player;
 import app.world.World;
 import network.actions.Action;
 import network.actions.ActionTypes;
@@ -59,11 +59,11 @@ public class RequestHandler {
 		switch (action.getActionType()) {
 		case MOVE:
 			handleMoveAction(action, json);
-			server.sendToAllTCP(action);
+			server.sendToAllExceptUDP(connection.getID(), action);
 			break;
 		case ATTACK:
 			handleAttackAction(action, json);
-			server.sendToAllExceptTCP(connection.getID(), action);
+			server.sendToAllExceptUDP(connection.getID(), action);
 			break;
 		case JOIN:
 			break;
@@ -87,7 +87,7 @@ public class RequestHandler {
 			action.setFloor(p.getFloor());
 			action.setPerformerID(p.getID());
 			action.setPayload(new Json().toJson(p, Player.class));
-			server.sendToAllTCP(action);
+			server.sendToAllExceptTCP(connection.getID(), action);
 			System.out.println("User added to world :" + p.toString());
 		}
 	}

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import app.player.PlayerInterface;
+import app.entity.player.PlayerInterface;
 import app.room.RoomInterface;
 import app.tiles.Floor;
 import app.tiles.Stair;
