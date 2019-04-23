@@ -17,6 +17,7 @@ server-build:
     - server_docker
   script:
     - cd Backend/intoTheAbyss
+    - ./gradlew wrapper
     - ./gradlew buildRun
   artifacts:
       paths:
