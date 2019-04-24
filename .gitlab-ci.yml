@@ -20,7 +20,7 @@ server-build:
     - ./gradlew build
   artifacts:
       paths:
-        - target/*.jar
+        - Spring/target/*.jar
 
 # Ideally we build the jar file here, but I don't know how to do that with gradle
 server-test:
@@ -42,7 +42,7 @@ autoDeploy:
     - back_end
     - server_docker
   script:
-    - cd target/
+    - cd Spring
     - gradle bootJar
     - sudo mv target/*.jar /target/web-demo.jar
     - sudo systemctl stop system-web-demo
