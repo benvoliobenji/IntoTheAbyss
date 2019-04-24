@@ -64,11 +64,11 @@ android-build:
     - android
     - front_end
   script:
-    - cd Frontend/intoTheAbyss
+    - cd Frontend/IntoTheAbyss
     - ./gradlew assemble
   artifacts:
     paths:
-      - Frontend/intoTheAbyss/app/build/outputs/
+      - Frontend/IntoTheAbyss/app/build/outputs/
 
 android-tests:
   image: javiersantos/android-ci:latest
@@ -77,5 +77,5 @@ android-tests:
     - android
     - front_end
   script:
-    - cd Frontend/intoTheAbyss
+    - cd Frontend/IntoTheAbyss
     - ./gradlew test
