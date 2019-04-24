@@ -17,7 +17,7 @@ server-build:
     - server_docker
   script:
     - cd Backend/intoTheAbyss
-    - ./gradlew buildRun
+    - ./gradlew build
   artifacts:
       paths:
         - Spring/target/*.jar
