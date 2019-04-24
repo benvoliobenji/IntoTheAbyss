@@ -1,23 +1,22 @@
 package com.example.intotheabyss.game
 
 import android.content.Context
-import android.util.AttributeSet
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import com.example.intotheabyss.dungeonassets.Wall
-import com.example.intotheabyss.game.player.Player
 import android.content.res.Resources
 import android.graphics.*
-import android.util.Log
+import android.util.AttributeSet
 import android.view.MotionEvent
-import com.example.intotheabyss.game.drawplayer.DrawPlayer
-import com.example.intotheabyss.utils.TileTypes
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import com.example.intotheabyss.dungeonassets.Tile
+import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
+import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.utils.TileTypes
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
@@ -60,12 +59,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
 
     //Variables for following player
-    private val xBuffer: Int = 5
-    private val yBuffer: Int = 5
     var minX: Int = 0
     var minY: Int = 0
 
-    var pList = false
+    //Variables relating to playerBorad
+    private var pList = false
+    private var playerTextPaint = Paint()
+    private var bSize = sHeight.toFloat() * 10 / 64
+    private var playerBoardPaint = Paint()
 
     /**
      * This is kinda like a constructor. Just code that needs to be ran on startup. A lot of initialization of stuff, etc
@@ -80,6 +81,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameControllerInterface = GameController(this)
         drawPlayerInterface = DrawPlayer(this, playerImage)
 
+        playerTextPaint.color = Color.BLACK
+        playerTextPaint.textSize = 70f
+
+        playerBoardPaint.color = Color.WHITE
+        playerBoardPaint.alpha = 90
 
         try {
             player = gameState!!.myPlayer
@@ -131,23 +137,23 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * this method.
      */
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-        //TODO: ??? Don't really know what to do here, yet!
+
     }
 
     /**
      * This is where we will update game variables. The calling thread will call this before the draw ;method
      */
     fun update() {
-        gameControllerInterface!!.updatePlayerLocation()
+        gameControllerInterface.updatePlayerLocation()
 //        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
-        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
-        checkNewLevel(gameState!!, gameControllerInterface)
+        gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
+        checkNewLevel()
 
-        pList = gameControllerInterface!!.getPList(event!!.x, event!!.y, event!!.action, pList)
+        pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
 
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
-        var p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
+        val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
         minX = p.x
         minY = p.y
     }
@@ -155,13 +161,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     /**
      * Method to check if we need to advance to the next level.
      * It just checks if an action has been performed AND the player is on the stairs
-     *
-     * @param g GameState variable that will be modified to reflect a new level is needed
-     * @param gc The GameControllerInterface that does nothing but I'm not going to remove RIGHT now for fear of losing shit
      */
-    fun checkNewLevel(g: GameState, gc: GameControllerInterface) {
-
-
+    private fun checkNewLevel() {
         if (gAction > 0) {
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
                 player!!.floorNumber++
@@ -181,22 +182,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             super.draw(canvas)
             drawBG(canvas)
 
-            drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction)
+            drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction, true)
             gameControllerInterface.drawController(canvas)
             drawOtherPlayers(canvas)
         } else  {
 
             canvas.drawColor(Color.BLACK)
+            gameControllerInterface.drawExitButton(canvas)
         }
 
-        var paint = Paint()
+        drawOtherPlayers(canvas)
+
+        val paint = Paint()
         paint.color = Color.RED
         paint.textSize = 100f
-
-        if (pList) {
-            canvas.drawText("TEST", 0f, 100f, paint)
-            drawOtherPlayers(canvas)
-        }
     }
 
     /**
@@ -238,14 +237,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun drawBG(canvas: Canvas) {
         if (debug) {
             setLevel()
-//            debug = false
         } else {
             lvlArray = gameState!!.level
         }
-        //val level: Level = gameState.level
 
         //If offline, try adding in the ValidLevel thing to fix it
-        if (/*!validLevel or */(lvlArray.isNullOrEmpty())) {
+        if (lvlArray.isNullOrEmpty()) {
             if (gameState!!.level.isNotEmpty()) {
                 lvlArray = gameState!!.level
             }
@@ -287,49 +284,37 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     private fun drawOtherPlayers(canvas: Canvas) {
 
+        /////
+        //TODO: Remove this code later.
         var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-        var playerList = gameState!!.playersInLevel
+        val playerList = gameState!!.playersInLevel
         playerList["test"] = testPlayer
-        Log.i("playerList", gameState!!.playersInLevel.toString())
-//        var otherPlayers = gameState!!.playersInLevel.asIterable()
-        var otherPlayers = playerList.asIterable()
 
-        var curPlayer: Player
+        testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
+        playerList["test2"] = testPlayer
+
+        testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
+        playerList["test3"] = testPlayer
+
+        testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
+        playerList["test4"] = testPlayer
+
 
         if (gameState!!.playersInLevel.isNotEmpty()) {
-            for (key in gameState!!.playersInLevel.keys) {
-                var otherPlayer = gameState!!.playersInLevel[key]
-
-                if (isVisible(gameState!!.myPlayer, otherPlayer!!)) {
-                    drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.actionStatus)
-                }
-            }
-        }
-//        //Iterate through all entities in the list
-//        while (otherPlayers.iterator().hasNext())   {
-//            curPlayer = otherPlayers.iterator().next().value
-//
-//            if (isVisible(gameState!!.myPlayer, curPlayer)) {   //Check if entity should be visible
-//                drawPlayerInterface.drawPlayer(0, 0, context, canvas, curPlayer, curPlayer.actionStatus)    //Draw player if so
-//            }
-//        }
-
-        if (pList)  {
             var i = 0
-            var buttonSize = 25f
-            var paint = Paint()
-            paint.color = Color.WHITE
-            var rect = Rect(25, i*buttonSize.toInt(), 250, (i+3)*buttonSize.toInt())
-            canvas.drawRect(rect, paint)
-            paint.color = Color.BLACK
-            paint.textSize = 35f
-            canvas.drawText("Player Name", 25f, rect.exactCenterY(), paint)
 
-            //TODO: LOOK AT ABOVE CODE FOR CHANGES
-            otherPlayers = playerList.asIterable()
-            while (otherPlayers.iterator().hasNext())   {
-                var rect = Rect(25, i*buttonSize.toInt(), 125, (i+3)*buttonSize.toInt())
-                canvas.drawRect(rect, paint)
+            for (key in gameState!!.playersInLevel.keys) {
+                val otherPlayer = gameState!!.playersInLevel[key]
+                if (!pList) {
+                    if (isVisible(gameState!!.myPlayer, otherPlayer!!) and (gameState!!.myPlayer != otherPlayer)) {
+                        drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.actionStatus, false)
+                    }
+                } else  {
+                    val rect = Rect(25, ((2+i)*bSize).toInt(), 25 + 3*bSize.toInt(), (3+i)*bSize.toInt())
+                    canvas.drawRect(rect, playerBoardPaint)
+                    canvas.drawText(gameState!!.playersInLevel[key]!!.playerName, 25f, rect.exactCenterY(), playerTextPaint)
+                }
+                i++
             }
         }
     }
@@ -344,13 +329,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun isVisible(p1: Player, p2: Player) : Boolean {
         var xDif = (p2.x - p1.x).toDouble()
         var yDif = (p2.y - p1.y).toDouble()
-        var distAway = Math.sqrt(xDif*xDif+yDif*yDif)
+        val distAway = Math.sqrt(xDif*xDif+yDif*yDif)
 
         var x = p1.x.toDouble()
         var y = p1.y.toDouble()
 
-        xDif = xDif/distAway    //Get x component of unit vector (x,y)
-        yDif = yDif/distAway    //Get y component of unit vector (x,y)
+        xDif /= distAway    //Get x component of unit vector (x,y)
+        yDif /= distAway    //Get y component of unit vector (x,y)
 
         var change = 0
 
