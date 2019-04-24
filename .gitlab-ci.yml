@@ -37,16 +37,21 @@ server-test:
     - ./gradlew test
 
 autoDeploy:
+  image: javiersantos/android-ci:latest
   stage: autodeploy
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Backend/intoTheAbyss/gradlew
   tags:
     - back_end
     - server_docker
   script:
-    - cd Spring
-    - gradle bootJar
-    - sudo mv target/*.jar /target/web-demo.jar
-    - sudo systemctl stop system-web-demo
-    - sudo systemctl start system-web-demo
+    - ./gradlew bootRun
+    # - cd Spring
+    # - gradle bootJar
+    # - sudo mv target/*.jar /target/web-demo.jar
+    # - sudo systemctl stop system-web-demo
+    # - sudo systemctl start system-web-demo
 
 
 
