@@ -1,0 +1,101 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GameController - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.game.gamecontroller</a>&nbsp;/&nbsp;<a href="./index.html">GameController</a><br/>
+<br/>
+<h1>GameController</h1>
+<code><span class="keyword">class </span><span class="identifier">GameController</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-game-controller-interface/index.html"><span class="identifier">GameControllerInterface</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">GameController</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$<init>(com.example.intotheabyss.game.GameView)/gameView">gameView</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-view/index.html"><span class="identifier">GameView</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="gc-helper.html">gcHelper</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">gcHelper</span><span class="symbol">: </span><a href="../-game-controller-helper-interface/index.html"><span class="identifier">GameControllerHelperInterface</span></a><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="draw-controller.html">drawController</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawController</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$drawController(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/graphics/Canvas.html"><span class="identifier">Canvas</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to call helper method to draw controlls.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="draw-exit-button.html">drawExitButton</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawExitButton</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$drawExitButton(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/graphics/Canvas.html"><span class="identifier">Canvas</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to draw the exit button. Will call on helper method.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="get-action.html">getAction</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getAction</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getAction(kotlin.Float, kotlin.Float, kotlin.Int)/x">x</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getAction(kotlin.Float, kotlin.Float, kotlin.Int)/y">y</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getAction(kotlin.Float, kotlin.Float, kotlin.Int)/action">action</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>Parse touch events to see if action button occurs.
+Will only accept a player action at a certain interval.
+Checks if player has touched in the action button range.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="get-p-list.html">getPList</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getPList</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getPList(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/x">x</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getPList(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/y">y</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getPList(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/action">action</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$getPList(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/bool">bool</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Parse touch event to see if user pressing playerBoard button.
+Looks for user input at button for playerBoard.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="set-event.html">setEvent</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setEvent</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameController$setEvent(android.view.MotionEvent)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/MotionEvent.html"><span class="identifier">MotionEvent</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://developer.android.com/reference/android/view/MotionEvent.html"><span class="identifier">MotionEvent</span></a></code>
+<p>Method to retrieve event(s) from GameView. This is in reference to MotionEvents aka user input</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="update-player-location.html">updatePlayerLocation</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">updatePlayerLocation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Updates the player location based on the user input and the game controller.
+Uses gameControllerHelper to determine which, if any, buttons were pressed.
+Then, if next location is valid, player will be moved to new location.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

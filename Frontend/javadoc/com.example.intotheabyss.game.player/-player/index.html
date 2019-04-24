@@ -1,0 +1,109 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Player - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.game.player</a>&nbsp;/&nbsp;<a href="./index.html">Player</a><br/>
+<br/>
+<h1>Player</h1>
+<code><span class="keyword">class </span><span class="identifier">Player</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-player-interface/index.html"><span class="identifier">PlayerInterface</span></a></code>
+<p>The Player class implements the PlayerInterface and creates and object that will represent the User and the other
+heros the User will see when playing the app. This holds values necessary for display and game logic such as
+name, ID, coordinates, health, floor, and image to draw the player to the canvas.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">Player</span><span class="symbol">(</span><span class="symbol">)</span></code><code><span class="identifier">Player</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerName">playerName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/floorNumber">floorNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/xPos">xPos</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/yPos">yPos</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span></code>
+<p>Another constructor that will set more values given they are provided.</p>
+<code><span class="identifier">Player</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/playerName">playerName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/health">health</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/floorNumber">floorNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/xPos">xPos</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/yPos">yPos</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span></code>
+<p>Another constructor that allows for the user to provide health as well as the other parameters.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="action-status.html">actionStatus</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">actionStatus</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="floor-number.html">floorNumber</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">floorNumber</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="health.html">health</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">health</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="player-i-d.html">playerID</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="player-name.html">playerName</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="x.html">x</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">x</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="y.html">y</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">y</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="draw.html">draw</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">draw</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.player.Player$draw(android.graphics.Canvas, kotlin.Int, kotlin.Int)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/graphics/Canvas.html"><span class="identifier">Canvas</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$draw(android.graphics.Canvas, kotlin.Int, kotlin.Int)/x">x</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.player.Player$draw(android.graphics.Canvas, kotlin.Int, kotlin.Int)/y">y</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Draws the current player on the canvas at the given x- and y-coordinates.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="set-image.html">setImage</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setImage</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.player.Player$setImage(android.graphics.Bitmap)/im">im</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/graphics/Bitmap.html"><span class="identifier">Bitmap</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Sets the current image that will allow the Player to be displayed on the Canvas.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

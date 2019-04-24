@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DrawPlayer.drawPlayer - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.game.drawplayer</a>&nbsp;/&nbsp;<a href="index.html">DrawPlayer</a>&nbsp;/&nbsp;<a href="./draw-player.html">drawPlayer</a><br/>
+<br/>
+<h1>drawPlayer</h1>
+<a name="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)"></a>
+<code><span class="keyword">fun </span><span class="identifier">drawPlayer</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/dX">dX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/dY">dY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/context">context</span><span class="symbol">:</span>&nbsp;<span class="identifier">Context</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<span class="identifier">Canvas</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/player">player</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game.player/-player/index.html"><span class="identifier">Player</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/gAction">gAction</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/isPlayer">isPlayer</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Overrides <a href="../-draw-player-interface/draw-player.html">DrawPlayerInterface.drawPlayer</a></p>
+<p>Function to draw a player to the canvas.
+Will call functions to update sprite for player.
+Does proper checks and then draws player to canvas.
+Draws player info if isPlayer is true.</p>
+<h3>Parameters</h3>
+<p><a name="dX"></a>
+<code>dX</code> - the x-direction that the player is facing. May be updated from current state. -1 is left, 1 is right, 0 is idle</p>
+<p><a name="dY"></a>
+<code>dY</code> - the y-direction taht the player is facing. -1 is down, 0 is idle, 1 is up</p>
+<p><a name="context"></a>
+<code>context</code> - The context so that we can access the game resources</p>
+<p><a name="canvas"></a>
+<code>canvas</code> - The canvas object to draw the player to</p>
+<p><a name="gAction"></a>
+<code>gAction</code> - The action status of the player we are drawing. 0 if no action, 1 if action</p>
+<p><a name="isPlayer"></a>
+<code>isPlayer</code> - Is this player the owner of the phone? False if not, true if so.</p>
+</BODY>
+</HTML>

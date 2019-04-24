@@ -1,3 +1,17 @@
+buildscript {
+    ext {
+        dokkaVersion = '0.9.18'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$dokkaVersion"
+    }
+}
+repositories {
+    jcenter()
+}
 
 apply plugin: 'com.android.application'
 
@@ -5,9 +19,19 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'org.jetbrains.dokka-android'
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '5.1.1'
+}
+
+task dokka(overwrite: true, type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+
+    skipEmptyPackages = true
+    skipDeprecated = false
 }
 
 android {
@@ -27,6 +51,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dokka {
+        outputFormat = 'html'
+        outputDirectory = "$buildDir/javadoc"
+        skipEmptyPackages = true
     }
 }
 

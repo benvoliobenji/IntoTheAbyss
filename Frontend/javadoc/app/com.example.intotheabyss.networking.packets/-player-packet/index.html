@@ -1,0 +1,88 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>PlayerPacket - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.networking.packets</a>&nbsp;/&nbsp;<a href="./index.html">PlayerPacket</a><br/>
+<br/>
+<h1>PlayerPacket</h1>
+<code><span class="keyword">class </span><span class="identifier">PlayerPacket</span></code>
+<p>The PlayerPacket is designed as the response to a ConnectionPacket upon the establishment of a connection to the
+server. This contains all the information of the User's player that's ID was provided in the ConnectionPacket.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">PlayerPacket</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerPacket$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerPacket$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/playerName">playerName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerPacket$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/floorNum">floorNum</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerPacket$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/posX">posX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerPacket$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/posY">posY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerPacket$<init>(kotlin.String, kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)/health">health</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span></code>
+<p>All of the user's player information.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="floor-num.html">floorNum</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">floorNum</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The current floor the player is on.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="health.html">health</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">health</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The current health of the player.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="player-i-d.html">playerID</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">playerID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The user's unique ID.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="player-name.html">playerName</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">playerName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The user's display name.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="pos-x.html">posX</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">posX</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The current x-position of the player.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="pos-y.html">posY</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">posY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The current y-position of the player.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

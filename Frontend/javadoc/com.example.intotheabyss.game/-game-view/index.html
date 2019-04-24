@@ -1,0 +1,197 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GameView - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.game</a>&nbsp;/&nbsp;<a href="./index.html">GameView</a><br/>
+<br/>
+<h1>GameView</h1>
+<code><span class="keyword">class </span><span class="identifier">GameView</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/SurfaceView.html"><span class="identifier">SurfaceView</span></a><span class="symbol">, </span><a href="https://developer.android.com/reference/android/view/SurfaceHolder/Callback.html"><span class="identifier">Callback</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">GameView</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$<init>(android.content.Context, android.util.AttributeSet)/context">context</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/content/Context.html"><span class="identifier">Context</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.GameView$<init>(android.content.Context, android.util.AttributeSet)/attributes">attributes</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/util/AttributeSet.html"><span class="identifier">AttributeSet</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="debug.html">debug</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">debug</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="dim-height.html">dimHeight</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">dimHeight</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="dim-width.html">dimWidth</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">dimWidth</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="d-x.html">dX</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">dX</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="d-y.html">dY</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">dY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="event.html">event</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">event</span><span class="symbol">: </span><a href="https://developer.android.com/reference/android/view/MotionEvent.html"><span class="identifier">MotionEvent</span></a><span class="symbol">!</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="g-action.html">gAction</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">gAction</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="lvl-array.html">lvlArray</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">lvlArray</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><a href="../../com.example.intotheabyss.dungeonassets/-tile/index.html"><span class="identifier">Tile</span></a><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="min-x.html">minX</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">minX</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="min-y.html">minY</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">minY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="player.html">player</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">player</span><span class="symbol">: </span><a href="../../com.example.intotheabyss.game.player/-player/index.html"><span class="identifier">Player</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="player-idle.html">playerIdle</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerIdle</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="s-height.html">sHeight</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">sHeight</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="s-width.html">sWidth</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">sWidth</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="dispatch-touch-event.html">dispatchTouchEvent</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">dispatchTouchEvent</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$dispatchTouchEvent(android.view.MotionEvent)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/MotionEvent.html"><span class="identifier">MotionEvent</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>How we get info from screen touch events.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="draw.html">draw</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">draw</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$draw(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/graphics/Canvas.html"><span class="identifier">Canvas</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This is where we will draw things onto the game "canvas"</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="set-game-state.html">setGameState</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setGameState</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$setGameState(com.example.intotheabyss.game.GameState)/gState">gState</span><span class="symbol">:</span>&nbsp;<a href="../-game-state/index.html"><span class="identifier">GameState</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to set the gameState for this object to reference</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="surface-changed.html">surfaceChanged</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">surfaceChanged</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$surfaceChanged(android.view.SurfaceHolder, kotlin.Int, kotlin.Int, kotlin.Int)/p0">p0</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/SurfaceHolder.html"><span class="identifier">SurfaceHolder</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.GameView$surfaceChanged(android.view.SurfaceHolder, kotlin.Int, kotlin.Int, kotlin.Int)/p1">p1</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.GameView$surfaceChanged(android.view.SurfaceHolder, kotlin.Int, kotlin.Int, kotlin.Int)/p2">p2</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.GameView$surfaceChanged(android.view.SurfaceHolder, kotlin.Int, kotlin.Int, kotlin.Int)/p3">p3</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>I have no idea what this is for. I got some skelaton code from online and I have yet found a reason to use
+this method.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="surface-created.html">surfaceCreated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">surfaceCreated</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$surfaceCreated(android.view.SurfaceHolder)/p0">p0</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/SurfaceHolder.html"><span class="identifier">SurfaceHolder</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>On game init need to do some start up things (get threads going)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="surface-destroyed.html">surfaceDestroyed</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">surfaceDestroyed</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.GameView$surfaceDestroyed(android.view.SurfaceHolder)/p0">p0</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/SurfaceHolder.html"><span class="identifier">SurfaceHolder</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>More code that is a bit of a mystery to me</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="update.html">update</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">update</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This is where we will update game variables. The calling thread will call this before the draw ;method</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>com.example.intotheabyss.dungeonassets - app</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">app</a>&nbsp;/&nbsp;<a href="./index.html">com.example.intotheabyss.dungeonassets</a><br/>
+<br/>
+<h2>Package com.example.intotheabyss.dungeonassets</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-floor/index.html">Floor</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Floor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-tile/index.html"><span class="identifier">Tile</span></a></code>
+<p>This is the specific class Floor which will be used to display the dungeon to the user,</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-level/index.html">Level</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Level</span></code>
+<p>DEPRECIATED
+Level is not used by the client-side, but was here for the beginning before networking was set up.
+This allowed the client-side development to work independently of the server-side until the server was running</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-stair/index.html">Stair</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Stair</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-tile/index.html"><span class="identifier">Tile</span></a></code>
+<p>This is a specific class Stair that inherits from the Tile superclass. This holds unique properties from Tile
+and will be used to display stairs to the player,</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-tile/index.html">Tile</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">Tile</span></code>
+<p>The Tile abstract class is what is used by GameState and the majority of the display logic to represent different
+tiles in the 2D dungeon array.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-wall/index.html">Wall</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Wall</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-tile/index.html"><span class="identifier">Tile</span></a></code>
+<p>A specific class Wall that inherits from the Tile superclass and will be used to represent Walls for the user and
+game logic.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

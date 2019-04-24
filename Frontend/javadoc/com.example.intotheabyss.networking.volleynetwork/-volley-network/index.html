@@ -1,0 +1,53 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>VolleyNetwork - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.networking.volleynetwork</a>&nbsp;/&nbsp;<a href="./index.html">VolleyNetwork</a><br/>
+<br/>
+<h1>VolleyNetwork</h1>
+<code><span class="keyword">class </span><span class="identifier">VolleyNetwork</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-volley-network-interface/index.html"><span class="identifier">VolleyNetworkInterface</span></a></code>
+<p>This class is designed to implement VolleyNetworkInterface and to query the server using Volley. These conenctions
+are often used for files that are of larger size than what Kryonet can support and are also necessary for the client
+and server to recieve an ACK back based on the GET and PUT methods.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">VolleyNetwork</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$<init>(android.content.Context, com.example.intotheabyss.game.GameState)/context">context</span><span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/content/Context.html"><span class="identifier">Context</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$<init>(android.content.Context, com.example.intotheabyss.game.GameState)/gameState">gameState</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-state/index.html"><span class="identifier">GameState</span></a><span class="symbol">)</span></code>
+<p>Constructs the VolleyNetwork object to query the server using HTTP/JSON requests over HTTP</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="retrieve-new-dungeon-level.html">retrieveNewDungeonLevel</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">retrieveNewDungeonLevel</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrieveNewDungeonLevel(kotlin.Int, com.example.intotheabyss.networking.Network)/level">level</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrieveNewDungeonLevel(kotlin.Int, com.example.intotheabyss.networking.Network)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Sends a JSONObjectRequest to get the 2D array of the dungeon layout of the given level.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="retrieve-player-data.html">retrievePlayerData</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">retrievePlayerData</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrievePlayerData(kotlin.String, kotlin.String)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrievePlayerData(kotlin.String, kotlin.String)/playerName">playerName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Retrieves the User's player data through a JSONObjectRequest.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
