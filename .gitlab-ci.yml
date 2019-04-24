@@ -20,7 +20,7 @@ server-build:
     - ./gradlew build
   artifacts:
       paths:
-        - Spring/target/*.jar
+        - target/*.jar
 
 # Ideally we build the jar file here, but I don't know how to do that with gradle
 server-test:
