@@ -62,7 +62,7 @@ android-build:
   stage: androidbuild
   before_script:
     - export GRADLE_USER_HOME='pwd'/.gradle
-    - chmod +x ./Frontend/IntoTheAbyss/gradlew
+    - chmod +x ./Frontend/IntotheAbyss/gradlew
   tags:
     - android
     - front_end
@@ -71,17 +71,17 @@ android-build:
     - ./gradlew assemble
   artifacts:
     paths:
-      - Frontend/IntoTheAbyss/app/build/outputs/
+      - Frontend/IntotheAbyss/app/build/outputs/
 
 android-tests:
   image: javiersantos/android-ci:latest
   stage: androidtest
   before_script:
     - export GRADLE_USER_HOME='pwd'/.gradle
-    - chmod +x ./Frontend/IntoTheAbyss/gradlew
+    - chmod +x ./Frontend/IntotheAbyss/gradlew
   tags:
     - android
     - front_end
   script:
-    - cd Frontend/IntoTheAbyss
+    - cd Frontend/IntotheAbyss
     - ./gradlew test
