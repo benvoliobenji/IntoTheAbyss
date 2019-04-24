@@ -67,7 +67,7 @@ android-build:
     - android
     - front_end
   script:
-    - cd Frontend/IntoTheAbyss
+    - cd Frontend/IntotheAbyss
     - ./gradlew assemble
   artifacts:
     paths:
