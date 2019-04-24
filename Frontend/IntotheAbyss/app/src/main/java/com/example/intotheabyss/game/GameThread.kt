@@ -9,17 +9,10 @@ class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView:
     private var running: Boolean = false
     private val targetFPS = 24
 
-    /**
-     * Method to toggle the running variable.
-     * @param isRunning Is the thread currently running.
-     */
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning
     }
 
-    /**
-     * The run functions. Define what we want to be done on each update of the thread.
-     */
     override fun run() {
         var startTime: Long
         var timeMillis: Long
