@@ -1,4 +1,4 @@
-package com.example.intotheabyss.activities
+package com.example.intotheabyss.EspressoTests
 
 
 import android.view.View
@@ -11,6 +11,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.example.intotheabyss.R
+import com.example.intotheabyss.activities.MainActivity
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf

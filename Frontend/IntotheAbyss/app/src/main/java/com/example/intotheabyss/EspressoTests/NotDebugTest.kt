@@ -1,4 +1,4 @@
-package com.example.intotheabyss.activities
+package com.example.intotheabyss.EspressoTests
 
 
 import android.view.View
@@ -12,6 +12,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.example.intotheabyss.R
+import com.example.intotheabyss.activities.MainActivity
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -22,44 +23,14 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class DungeonActivityTest {
+class NotDebugTest {
 
     @Rule
     @JvmField
     var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun dungeonActivityTest() {
-        val switch_ = onView(
-            allOf(
-                withId(R.id.debugToggle), withText("Debug"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    4
-                ),
-                isDisplayed()
-            )
-        )
-        switch_.perform(click())
-
-        val switch_2 = onView(
-            allOf(
-                withId(R.id.debugToggle), withText("Debug"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    4
-                ),
-                isDisplayed()
-            )
-        )
-        switch_2.perform(click())
-
+    fun notDebugTest() {
         val appCompatButton = onView(
             allOf(
                 withId(R.id.playButton), withText("Enter Dungeon"),
@@ -75,20 +46,52 @@ class DungeonActivityTest {
         )
         appCompatButton.perform(click())
 
-        val view = onView(
+        val textView = onView(
             allOf(
-                withId(R.id.gView),
+                withId(R.id.debugString), withText("Not Debug"),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
                         0
                     ),
-                    0
+                    1
                 ),
                 isDisplayed()
             )
         )
-        view.check(matches(isDisplayed()))
+        textView.check(matches(withText("Not Debug")))
+
+        val textView2 = onView(
+            allOf(
+                withId(R.id.debugString), withText("Not Debug"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        textView2.check(matches(isDisplayed()))
+
+        pressBack()
+
+        val appCompatButton2 = onView(
+            allOf(
+                withId(R.id.playButton), withText("Enter Dungeon"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatButton2.perform(click())
 
         pressBack()
     }
