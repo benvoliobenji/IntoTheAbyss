@@ -64,6 +64,7 @@ class Network(private var gameState: GameState): Listener() {
         }
     }
 
+
     override fun received(c: Connection, o: Any) {
         if (o is ConnectionPackage) {
             Log.i("Networking", o.playerID)

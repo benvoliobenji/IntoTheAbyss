@@ -7,6 +7,14 @@ import java.lang.Exception
 
 import kotlin.random.Random
 
+/**
+ * The Player class implements the PlayerInterface and creates and object that will represent the User and the other
+ * heros the User will see when playing the app. This holds values necessary for display and game logic such as
+ * name, ID, coordinates, health, floor, and image to draw the player to the canvas.
+ *
+ * @constructor Generates a default player with no name, ID, 10 health, no image, and a start coordinate of (1, 1)
+ * @author Benjamin Vogel
+ */
 class Player: PlayerInterface {
     var playerName: String = ""
     var playerID: String = ""
@@ -27,6 +35,14 @@ class Player: PlayerInterface {
         this.image = null
     }
 
+    /**
+     * Another constructor that will set more values given they are provided.
+     * @param playerName A name to be displayed above the player.
+     * @param playerID The unique ID that will be used for referencing the player client and server-side.
+     * @param floorNumber The floor the player is currently on.
+     * @param xPos The current x-position the player is at.
+     * @param yPos The current y-position the player is at.
+     */
     constructor(playerName: String, playerID: String, floorNumber: Int, xPos: Int, yPos: Int) {
         this.playerName = playerName
         this.playerID = playerID
@@ -36,6 +52,15 @@ class Player: PlayerInterface {
         this.y = yPos
     }
 
+    /**
+     * Another constructor that allows for the user to provide health as well as the other parameters.
+     * @param playerName A name to be displayed above the player.
+     * @param playerID The unique ID that will be used for referencing the player client- and server-side
+     * @param health The current amount of health the player has.
+     * @param floorNumber The floor the player is currently on.
+     * @param xPos The current x-position the player is at.
+     * @param yPos The current y-position the player is at.
+     */
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int) {
         this.playerName = playerName
         this.playerID = playerID
@@ -45,12 +70,19 @@ class Player: PlayerInterface {
         this.y = yPos
     }
 
+    /**
+     * Sets the current image that will allow the Player to be displayed on the Canvas.
+     * @param im A bitmap of the Player to be used to draw.
+     */
     override fun setImage(im: Bitmap) {
         image = im
     }
 
-    /*
-    Method to draw player to the canvas
+    /**
+     * Draws the current player on the canvas at the given x- and y-coordinates.
+     * @param canvas The Canvas to which the player's image should be drawn.
+     * @param x The x-coordinate to draw the player.
+     * @param y The y-coordinate to draw the player.
      */
     override fun draw(canvas: Canvas, x: Int, y: Int) {
         try {
