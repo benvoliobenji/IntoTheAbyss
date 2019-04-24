@@ -42,7 +42,7 @@ autoDeploy:
     - back_end
     - server_docker
   script:
-    - cd Spring
+    - cd target/
     - gradle bootJar
     - sudo mv target/*.jar /target/web-demo.jar
     - sudo systemctl stop system-web-demo
