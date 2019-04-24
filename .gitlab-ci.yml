@@ -60,6 +60,9 @@ autoDeploy:
 android-build:
   image: javiersantos/android-ci:latest
   stage: androidbuild
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Frontend/IntoTheAbyss/gradlew
   tags:
     - android
     - front_end
@@ -73,6 +76,9 @@ android-build:
 android-tests:
   image: javiersantos/android-ci:latest
   stage: androidtest
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Frontend/IntoTheAbyss/gradlew
   tags:
     - android
     - front_end
