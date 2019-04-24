@@ -46,6 +46,7 @@ autoDeploy:
     - back_end
     - server_docker
   script:
+    - cd Backend/intoTheAbyss
     - ./gradlew bootRun
     # - cd Spring
     # - gradle bootJar
