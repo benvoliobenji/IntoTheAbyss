@@ -3,7 +3,7 @@ package network.actions;
 /**
  * This is a Action Type, designed to be in the payload.
  */
-public class Attack extends Action {
+public class Attack {
 
 	/** The id of the person attacked. */
 	private String attackedID;
