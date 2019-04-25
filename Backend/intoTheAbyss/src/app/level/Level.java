@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import app.player.PlayerInterface;
+import app.entity.player.PlayerInterface;
 import app.room.RoomInterface;
 import app.tiles.Floor;
 import app.tiles.Stair;
@@ -17,6 +17,9 @@ import app.tiles.Tile;
 import app.tiles.Wall;
 import app.utils.TileTypes;
 
+/**
+ * This stores most of the data for a given floor of our dungeon.
+ */
 @Entity
 public class Level implements LevelInterface {
 
@@ -32,6 +35,9 @@ public class Level implements LevelInterface {
 	private Point spawn;
 	private Point stair;
 
+	/**
+	 * Instantiates a new level.
+	 */
 	public Level() {
 		rand = new Random();
 		players = new Hashtable<String, PlayerInterface>();
@@ -40,6 +46,12 @@ public class Level implements LevelInterface {
 		fillGridForDefaultMap();
 	}
 
+	/**
+	 * Instantiates a new level.
+	 *
+	 * @param level the level
+	 * @param room  the room
+	 */
 	public Level(Integer level, RoomInterface room) {
 		players = new Hashtable<String, PlayerInterface>();
 		entities = new Hashtable<String, app.entity.Entity>();
@@ -52,60 +64,131 @@ public class Level implements LevelInterface {
 			fillGridForDefaultMap();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#buildDefaultLevel()
+	 */
 	public void buildDefaultLevel() {
 		players = new Hashtable<String, PlayerInterface>();
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		fillGridForDefaultMap();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#getGrid()
+	 */
 	public Tile[][] getGrid() {
 		return grid;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#getSpawn()
+	 */
 	public Point getSpawn() {
 		return spawn;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#getStair()
+	 */
 	public Point getStair() {
 		return stair;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#getLevel()
+	 */
 	public Integer getLevel() {
 		return level;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#getPlayer(java.lang.String)
+	 */
 	public PlayerInterface getPlayer(String ID) {
 		return players.get(ID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#getPlayers()
+	 */
 	public ArrayList<PlayerInterface> getPlayers() {
 		return new ArrayList<PlayerInterface>(players.values());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#addPlayer(app.entity.player.PlayerInterface)
+	 */
 	public void addPlayer(PlayerInterface p) {
 		players.put(p.getID(), p);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#removePlayer(java.lang.String)
+	 */
 	public void removePlayer(String playerID) {
 		players.remove(playerID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#replacePlayer(java.lang.String,
+	 * app.entity.player.PlayerInterface)
+	 */
 	public void replacePlayer(String playerID, PlayerInterface p) {
 		players.replace(playerID, p);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#addEntity(app.entity.Entity)
+	 */
 	public void addEntity(app.entity.Entity e) {
 		entities.put(e.getID(), e);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#removeEntity(java.lang.String)
+	 */
 	public void removeEntity(String entityID) {
 		entities.remove(entityID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#isEmpty()
+	 */
 	public boolean isEmpty() {
 		return players.isEmpty();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.level.LevelInterface#fillGridForDefaultMap()
+	 */
 	public void fillGridForDefaultMap() {
 		for (int i = 0; i < MAPHEIGHT; i++) {
 			for (int j = 0; j < MAPWIDTH; j++) {
@@ -122,6 +205,9 @@ public class Level implements LevelInterface {
 		spawn = new Point((MAPWIDTH / 2) - 1, (MAPHEIGHT / 2) - 1);
 	}
 
+	/**
+	 * Prints the level on server side.
+	 */
 	public void printLevel() {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
@@ -136,6 +222,11 @@ public class Level implements LevelInterface {
 		}
 	}
 
+	/**
+	 * Generates a map in the tile array.
+	 *
+	 * @param room a room object to help with generation and placement of tiles.
+	 */
 	private void generate(RoomInterface room) {
 		// fill level with walls
 		for (int i = 0; i < grid.length; i++) {
@@ -158,6 +249,12 @@ public class Level implements LevelInterface {
 
 	}
 
+	/**
+	 * This creates a random valid room at an index idx.
+	 *
+	 * @param idx  the index to place the room in the level
+	 * @param room the room we use to generate a valid room
+	 */
 	private void createRoom(int idx, RoomInterface room) {
 		rooms[idx] = room.genValidRoom(rand, grid);
 		/* write array into grid */
@@ -183,6 +280,14 @@ public class Level implements LevelInterface {
 		}
 	}
 
+	/**
+	 * Draw corridor.
+	 *
+	 * @param x1 the x 1
+	 * @param y1 the y 1
+	 * @param x2 the x 2
+	 * @param y2 the y 2
+	 */
 	private void drawCorridor(int x1, int y1, int x2, int y2) {
 		boolean leftRoom = false;
 		int xsign = x1 > x2 ? -1 : 1;
@@ -210,6 +315,11 @@ public class Level implements LevelInterface {
 		}
 	}
 
+	/**
+	 * Find center room.
+	 *
+	 * @return the int
+	 */
 	private int findCenterRoom() {
 		int cX = 40;
 		int cY = 21 / 2;
@@ -228,6 +338,9 @@ public class Level implements LevelInterface {
 		return idx;
 	}
 
+	/**
+	 * Creates the stairs for the level.
+	 */
 	private void createStair() {
 		int idx = findCenterRoom();
 		int r = 0;
@@ -237,6 +350,9 @@ public class Level implements LevelInterface {
 		grid[stair.y][stair.x] = new Stair();
 	}
 
+	/**
+	 * Creates the spawn for the level.
+	 */
 	private void createSpawn() {
 		int idx = findCenterRoom();
 		spawn = rooms[idx].getCenter();
