@@ -7,6 +7,13 @@ import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
 import org.json.JSONArray
 
+/**
+ * This function is a helper function to retrieveNewDungeonLevel() in VolleyNetwork. This takes a JSONArray and
+ * returns a 2D array of type Tile to then display to the user.
+ * @param grid A JSONArray that contains the 2D dungeon array.
+ * @return A 2D array of type Tile.
+ * @author Benjamin Vogel
+ */
 fun gridParse(grid: JSONArray): Array<Array<Tile>> {
     // In order to dynamically resize the dungeon if needed, ArrayLists are created and then converted to Arrays for
     // display.

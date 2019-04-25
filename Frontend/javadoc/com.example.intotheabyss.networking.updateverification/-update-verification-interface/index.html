@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>UpdateVerificationInterface - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.networking.updateverification</a>&nbsp;/&nbsp;<a href="./index.html">UpdateVerificationInterface</a><br/>
+<br/>
+<h1>UpdateVerificationInterface</h1>
+<code><span class="keyword">interface </span><span class="identifier">UpdateVerificationInterface</span></code>
+<p>An Interface for UpdateVerfication. This is designed to allow for dependency injection.</p>
+<p><strong>Author</strong><br/>
+Benjamin Vogel</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="verify-game-state.html">verifyGameState</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">verifyGameState</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.updateverification.UpdateVerificationInterface$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)/gameState">gameState</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-state/index.html"><span class="identifier">GameState</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.updateverification.UpdateVerificationInterface$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.updateverification.UpdateVerificationInterface$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)/volleyNetworkInterface">volleyNetworkInterface</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking.volleynetwork/-volley-network-interface/index.html"><span class="identifier">VolleyNetworkInterface</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../-update-verification-type/index.html"><span class="identifier">UpdateVerificationType</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-update-verification/index.html">UpdateVerification</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">UpdateVerification</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">UpdateVerificationInterface</span></a></code>
+<p>UpdateVerification is a class that checks for differences between its values (x, y, floor) and those stored in
+GameState. If they are different, then UpdateVerification will call methods to the different networks to inform the
+server and get correct information to GameState.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

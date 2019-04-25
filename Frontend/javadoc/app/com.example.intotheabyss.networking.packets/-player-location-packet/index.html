@@ -1,0 +1,70 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>PlayerLocationPacket - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.networking.packets</a>&nbsp;/&nbsp;<a href="./index.html">PlayerLocationPacket</a><br/>
+<br/>
+<h1>PlayerLocationPacket</h1>
+<code><span class="keyword">class </span><span class="identifier">PlayerLocationPacket</span></code>
+<p>The packet that gets sent to the server whenever the user's player moves. The client then sends the information to
+the packet to notify other concurrent players and update monster logic.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">PlayerLocationPacket</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerLocationPacket$<init>(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerLocationPacket$<init>(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerLocationFloor">playerLocationFloor</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerLocationPacket$<init>(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerPositionX">playerPositionX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.packets.PlayerLocationPacket$<init>(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerPositionY">playerPositionY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span></code>
+<p>Given the correct parameters, sets the parameters as the payload for this packet.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="player-i-d.html">playerID</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerID</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The ID of the player moving.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="player-location-floor.html">playerLocationFloor</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerLocationFloor</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The current floor the player is on.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="player-position-x.html">playerPositionX</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerPositionX</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The x-position of the player.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="player-position-y.html">playerPositionY</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">playerPositionY</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The y-position of the player.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

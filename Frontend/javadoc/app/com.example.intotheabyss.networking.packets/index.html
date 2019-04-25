@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>com.example.intotheabyss.networking.packets - app</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">app</a>&nbsp;/&nbsp;<a href="./index.html">com.example.intotheabyss.networking.packets</a><br/>
+<br/>
+<h2>Package com.example.intotheabyss.networking.packets</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-connection-package/index.html">ConnectionPackage</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">ConnectionPackage</span></code>
+<p>The Connection Packet that gets sent when Kryonet establishes a connection.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-map-packet/index.html">MapPacket</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">MapPacket</span></code>
+<p>DEPRECIATED
+The Map Packet that sends the 2D array representing the dungeon to the client.
+However this has since been depreciated as VolleyNetwork now gets the Map.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-map-request-packet/index.html">MapRequestPacket</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">MapRequestPacket</span></code>
+<p>DEPRECIATED
+This is designed to be used in conjunction of MapPacket and would act as a call/response. The client would send
+the MapRequestPacket and the server would respond with a MapPacket.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-move-floor-packet/index.html">MoveFloorPacket</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">MoveFloorPacket</span></code>
+<p>A packet designed to let the interface know when a player has moved from one floor to the next.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-player-location-packet/index.html">PlayerLocationPacket</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">PlayerLocationPacket</span></code>
+<p>The packet that gets sent to the server whenever the user's player moves. The client then sends the information to
+the packet to notify other concurrent players and update monster logic.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-player-packet/index.html">PlayerPacket</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">PlayerPacket</span></code>
+<p>The PlayerPacket is designed as the response to a ConnectionPacket upon the establishment of a connection to the
+server. This contains all the information of the User's player that's ID was provided in the ConnectionPacket.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

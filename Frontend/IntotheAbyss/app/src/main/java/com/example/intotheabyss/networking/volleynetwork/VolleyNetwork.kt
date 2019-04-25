@@ -14,6 +14,16 @@ import com.example.intotheabyss.game.player.Player
 import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
+/**
+ * This class is designed to implement VolleyNetworkInterface and to query the server using Volley. These conenctions
+ * are often used for files that are of larger size than what Kryonet can support and are also necessary for the client
+ * and server to recieve an ACK back based on the GET and PUT methods.
+ * @constructor Constructs the VolleyNetwork object to query the server using HTTP/JSON requests over HTTP
+ * @param context The context of the running android application.
+ * @param gameState The GameState instance IntoTheAbyss is currently using.
+ *
+ * @author Benjamin Vogel
+ */
 class VolleyNetwork(private var context: Context, private var gameState: GameState):
     VolleyNetworkInterface {
     private var requestQueue: RequestQueue? = null
@@ -24,6 +34,14 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
 
     //TODO: CHANGE URL TO MATCH NEW URL FOR ID AND NAME
     // TODO: CHANGE TESTS TO WORK WITH NEW VOLLEYNETWORK INTERFACE
+    /**
+     * Retrieves the User's player data through a JSONObjectRequest.
+     *
+     * Upon a response, sets the myPlayer object in GameState to the information that this method receives.
+     *
+     * @param playerID The ID of the user to retrieve their data from the server.
+     * @param playerName The display name of the user who's data should be retrieved from the server.
+     */
     override fun retrievePlayerData(playerID: String, playerName: String) {
         // Add the playerName to the url
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
@@ -50,6 +68,15 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
         requestQueue?.add(jsonObjectRequest)
     }
 
+    /**
+     * Sends a JSONObjectRequest to get the 2D array of the dungeon layout of the given level.
+     *
+     * Upon a response, parse the grid with a utility method, place the stairs in the grid, and place the Player
+     * object in GameState at the spawn location of the level.
+     *
+     * @param level The level number the User will be moving to.
+     * @param network The Kryonet instance to invoke kryonet methods (MoveFloorPacket).
+     */
     override fun retrieveNewDungeonLevel(level: Int, network: Network) {
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(

@@ -1,0 +1,27 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>UpdateVerification.verifyGameState - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.networking.updateverification</a>&nbsp;/&nbsp;<a href="index.html">UpdateVerification</a>&nbsp;/&nbsp;<a href="./verify-game-state.html">verifyGameState</a><br/>
+<br/>
+<h1>verifyGameState</h1>
+<a name="com.example.intotheabyss.networking.updateverification.UpdateVerification$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)"></a>
+<code><span class="keyword">fun </span><span class="identifier">verifyGameState</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.updateverification.UpdateVerification$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)/gameState">gameState</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-state/index.html"><span class="identifier">GameState</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.updateverification.UpdateVerification$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.updateverification.UpdateVerification$verifyGameState(com.example.intotheabyss.game.GameState, com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface)/volleyNetworkInterface">volleyNetworkInterface</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking.volleynetwork/-volley-network-interface/index.html"><span class="identifier">VolleyNetworkInterface</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../-update-verification-type/index.html"><span class="identifier">UpdateVerificationType</span></a></code>
+<p>Overrides <a href="../-update-verification-interface/verify-game-state.html">UpdateVerificationInterface.verifyGameState</a></p>
+<p>Given a GameState object, UpdateVerification will run GameState's values against its own. If there is a
+difference in any of the values, call the corresponding network methods to notify the server. UpdateVerification
+will then update it's own values to keep current with GameState.</p>
+<h3>Parameters</h3>
+<p><a name="gameState"></a>
+<code>gameState</code> - The GameState object UpdateVerification should run against.</p>
+<p><a name="network"></a>
+<code>network</code> - The Kryonet network instance to call updates the the server if needed.</p>
+<p><a name="volleyNetworkInterface"></a>
+<code>volleyNetworkInterface</code> - The VolleyNetwork instance to call for a new floor if needed.</p>
+<p><strong>Return</strong><br/>
+An UpdateVerificationType that lets the user know if anything was updated.</p>
+</BODY>
+</HTML>

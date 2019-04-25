@@ -1,0 +1,48 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>com.example.intotheabyss.networking - app</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">app</a>&nbsp;/&nbsp;<a href="./index.html">com.example.intotheabyss.networking</a><br/>
+<br/>
+<h2>Package com.example.intotheabyss.networking</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-network/index.html">Network</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Network</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Listener</span></code>
+<p>This class is the implementation of the Kryonet library, which is our websocket implementation.
+The class, on invocation of connect(), creates listeners that grab packets from the server asynchronously and modify
+GameState to reflect the changes made by the server.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-network-runnable/index.html">NetworkRunnable</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">NetworkRunnable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html"><span class="identifier">Runnable</span></a></code>
+<p>A Network Thread that instantiates the Network and VolleyNetwork classes and creates/runs the UpdateThread.
+This is created because Android does not want any networking on the main thread</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-update-runnable/index.html">UpdateRunnable</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">UpdateRunnable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html"><span class="identifier">Runnable</span></a></code>
+<p>An Update Thread that runs through a loop and calls UpdateVerification methods to make sure the server has the most
+up-to-date information from the client.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,63 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DrawPlayer - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.game.drawplayer</a>&nbsp;/&nbsp;<a href="./index.html">DrawPlayer</a><br/>
+<br/>
+<h1>DrawPlayer</h1>
+<code><span class="keyword">class </span><span class="identifier">DrawPlayer</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-draw-player-interface/index.html"><span class="identifier">DrawPlayerInterface</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">DrawPlayer</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$<init>(com.example.intotheabyss.game.GameView, android.graphics.Bitmap)/gView">gView</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-view/index.html"><span class="identifier">GameView</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$<init>(com.example.intotheabyss.game.GameView, android.graphics.Bitmap)/pImage">pImage</span><span class="symbol">:</span>&nbsp;<span class="identifier">Bitmap</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="draw-player.html">drawPlayer</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawPlayer</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/dX">dX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/dY">dY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/context">context</span><span class="symbol">:</span>&nbsp;<span class="identifier">Context</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<span class="identifier">Canvas</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/player">player</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game.player/-player/index.html"><span class="identifier">Player</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/gAction">gAction</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$drawPlayer(kotlin.Int, kotlin.Int, android.content.Context, android.graphics.Canvas, com.example.intotheabyss.game.player.Player, kotlin.Int, kotlin.Boolean)/isPlayer">isPlayer</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Function to draw a player to the canvas.
+Will call functions to update sprite for player.
+Does proper checks and then draws player to canvas.
+Draws player info if isPlayer is true.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="set-player-image.html">setPlayerImage</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setPlayerImage</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$setPlayerImage(kotlin.Int, kotlin.Int, android.content.Context, kotlin.Int, com.example.intotheabyss.game.player.Player)/dX">dX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$setPlayerImage(kotlin.Int, kotlin.Int, android.content.Context, kotlin.Int, com.example.intotheabyss.game.player.Player)/dY">dY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$setPlayerImage(kotlin.Int, kotlin.Int, android.content.Context, kotlin.Int, com.example.intotheabyss.game.player.Player)/context">context</span><span class="symbol">:</span>&nbsp;<span class="identifier">Context</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$setPlayerImage(kotlin.Int, kotlin.Int, android.content.Context, kotlin.Int, com.example.intotheabyss.game.player.Player)/gAction">gAction</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$setPlayerImage(kotlin.Int, kotlin.Int, android.content.Context, kotlin.Int, com.example.intotheabyss.game.player.Player)/player">player</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game.player/-player/index.html"><span class="identifier">Player</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Bitmap</span></code>
+<p>Function to set the image to be used for the player.
+Will return the proper Bitmap to represent the player (or monster) object</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="update-boundaries.html">updateBoundaries</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">updateBoundaries</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.drawplayer.DrawPlayer$updateBoundaries(com.example.intotheabyss.game.player.Player)/player">player</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game.player/-player/index.html"><span class="identifier">Player</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Point</span></code>
+<p>Function to update the "boundaries" of the dungeon.
+As player moves, we want to track around with them.
+This method finds the frame of reference to offset things.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
