@@ -25,11 +25,9 @@ public class NetworkHandler {
 	private static int portUDP = 44445;
 
 	private Client client;
-	private World world;
 
 	public NetworkHandler(World worldP) {
 		client = new Client(16384, 65536);
-		world = worldP;
 	}
 
 	public void registerPackets() {
@@ -51,6 +49,7 @@ public class NetworkHandler {
 
 	public void setupListener() {
 		client.addListener(new Listener() {
+			@SuppressWarnings("unused")
 			public void connect(Connection connetion) {
 				System.out.println("Connected");
 			}

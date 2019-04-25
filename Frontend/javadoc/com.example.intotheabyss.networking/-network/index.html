@@ -1,0 +1,78 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Network - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.example.intotheabyss.networking</a>&nbsp;/&nbsp;<a href="./index.html">Network</a><br/>
+<br/>
+<h1>Network</h1>
+<code><span class="keyword">class </span><span class="identifier">Network</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Listener</span></code>
+<p>This class is the implementation of the Kryonet library, which is our websocket implementation.
+The class, on invocation of connect(), creates listeners that grab packets from the server asynchronously and modify
+GameState to reflect the changes made by the server.</p>
+<p>This class also sends packets to the server via TCP/UDP connections to the server. This allows the server to have the
+most up-to-date information from all players in order to make game logic decision and AI determinations.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">Network</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.Network$<init>(com.example.intotheabyss.game.GameState)/gameState">gameState</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-state/index.html"><span class="identifier">GameState</span></a><span class="symbol">)</span></code>
+<p>Builds an instance of Network class. This should only be called once.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="connect.html">connect</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">connect</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Establishes a connection to the server.
+Upon establishment of connection, spin up listeners for asynchronous data transfer to/from server.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="received.html">received</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">received</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.Network$received(com.esotericsoftware.kryonet.Connection, kotlin.Any)/c">c</span><span class="symbol">:</span>&nbsp;<span class="identifier">Connection</span><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.Network$received(com.esotericsoftware.kryonet.Connection, kotlin.Any)/o">o</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method is what Kryonet listeners use upon receiving a packet from the server.
+This method attempts to determine which type the packet it is and then handles the packet based on what type
+the packet is.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="update-level.html">updateLevel</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">updateLevel</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.Network$updateLevel(kotlin.String, kotlin.Int)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.Network$updateLevel(kotlin.String, kotlin.Int)/floor">floor</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Constructs a MoveFloorPacket and sends it to the server via TCP.
+This is done to notify the server that the player has moved to a new floor.
+This is called after VolleyNetwork gets and builds a new floor.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="update-position.html">updatePosition</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">updatePosition</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.Network$updatePosition(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/playerID">playerID</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.Network$updatePosition(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/floor">floor</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.Network$updatePosition(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/posX">posX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.Network$updatePosition(kotlin.String, kotlin.Int, kotlin.Int, kotlin.Int)/posY">posY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Constructs a PlayerLocationPacket and sends it to the server via TCP.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,96 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GameControllerHelper - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.game.gamecontroller</a>&nbsp;/&nbsp;<a href="./index.html">GameControllerHelper</a><br/>
+<br/>
+<h1>GameControllerHelper</h1>
+<code><span class="keyword">class </span><span class="identifier">GameControllerHelper</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-game-controller-helper-interface/index.html"><span class="identifier">GameControllerHelperInterface</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">GameControllerHelper</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$<init>(com.example.intotheabyss.game.GameView)/g">g</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-view/index.html"><span class="identifier">GameView</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="check-action-range.html">checkActionRange</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">checkActionRange</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkActionRange(kotlin.Float, kotlin.Float, kotlin.Int)/x">x</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkActionRange(kotlin.Float, kotlin.Float, kotlin.Int)/y">y</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkActionRange(kotlin.Float, kotlin.Float, kotlin.Int)/action">action</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Check if the action button was pressed. Checks if input coordinates fall in range
+of the action button. Also checks that the action status of the input wasn't ACTION_UP</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="check-movement-dir.html">checkMovementDir</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">checkMovementDir</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkMovementDir(kotlin.Float, kotlin.Float)/curX">curX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkMovementDir(kotlin.Float, kotlin.Float)/curY">curY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Point</span></code>
+<p>Method to check if the player is moving</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="check-player-list-button.html">checkPlayerListButton</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">checkPlayerListButton</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkPlayerListButton(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/x">x</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkPlayerListButton(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/y">y</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html"><span class="identifier">Float</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkPlayerListButton(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/action">action</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$checkPlayerListButton(kotlin.Float, kotlin.Float, kotlin.Int, kotlin.Boolean)/boolean">boolean</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Function to check if the playerListButton has been pressed.
+Returns if or if not it has been.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="draw-action.html">drawAction</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawAction</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$drawAction(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<span class="identifier">Canvas</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to draw the action button</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="draw-exit-button.html">drawExitButton</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawExitButton</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$drawExitButton(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<span class="identifier">Canvas</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to draw the exitPlayerListBoard button.
+Only draws button if playerListBoard is currently active.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="draw-movement.html">drawMovement</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawMovement</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$drawMovement(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<span class="identifier">Canvas</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to draw the player movement keys</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="draw-player-board-button.html">drawPlayerBoardButton</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drawPlayerBoardButton</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.game.gamecontroller.GameControllerHelper$drawPlayerBoardButton(android.graphics.Canvas)/canvas">canvas</span><span class="symbol">:</span>&nbsp;<span class="identifier">Canvas</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Method to draw the player list functionality</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

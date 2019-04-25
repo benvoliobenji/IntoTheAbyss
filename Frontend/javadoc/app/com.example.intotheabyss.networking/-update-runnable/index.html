@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>UpdateRunnable - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.networking</a>&nbsp;/&nbsp;<a href="./index.html">UpdateRunnable</a><br/>
+<br/>
+<h1>UpdateRunnable</h1>
+<code><span class="keyword">class </span><span class="identifier">UpdateRunnable</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html"><span class="identifier">Runnable</span></a></code>
+<p>An Update Thread that runs through a loop and calls UpdateVerification methods to make sure the server has the most
+up-to-date information from the client.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">UpdateRunnable</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.UpdateRunnable$<init>(com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface, com.example.intotheabyss.game.GameState)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../-network/index.html"><span class="identifier">Network</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.UpdateRunnable$<init>(com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface, com.example.intotheabyss.game.GameState)/volleyNetworkInterface">volleyNetworkInterface</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking.volleynetwork/-volley-network-interface/index.html"><span class="identifier">VolleyNetworkInterface</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.UpdateRunnable$<init>(com.example.intotheabyss.networking.Network, com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface, com.example.intotheabyss.game.GameState)/gameState">gameState</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.game/-game-state/index.html"><span class="identifier">GameState</span></a><span class="symbol">)</span></code>
+<p>Creates a new Update Thread thread.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="update-type.html">updateType</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">updateType</span><span class="symbol">: </span><a href="../../com.example.intotheabyss.networking.updateverification/-update-verification-type/index.html"><span class="identifier">UpdateVerificationType</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update-verification.html">updateVerification</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">updateVerification</span><span class="symbol">: </span><a href="../../com.example.intotheabyss.networking.updateverification/-update-verification-interface/index.html"><span class="identifier">UpdateVerificationInterface</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="run.html">run</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">run</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Runs the UpdateThread.
+While running, as long as there is no exceptions or interruption, call verifyGameState()
+from UpdateVerificationInterface to verify GameState and notify the server.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

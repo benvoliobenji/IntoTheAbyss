@@ -1,0 +1,23 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>VolleyNetwork.retrieveNewDungeonLevel - app</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.example.intotheabyss.networking.volleynetwork</a>&nbsp;/&nbsp;<a href="index.html">VolleyNetwork</a>&nbsp;/&nbsp;<a href="./retrieve-new-dungeon-level.html">retrieveNewDungeonLevel</a><br/>
+<br/>
+<h1>retrieveNewDungeonLevel</h1>
+<a name="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrieveNewDungeonLevel(kotlin.Int, com.example.intotheabyss.networking.Network)"></a>
+<code><span class="keyword">fun </span><span class="identifier">retrieveNewDungeonLevel</span><span class="symbol">(</span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrieveNewDungeonLevel(kotlin.Int, com.example.intotheabyss.networking.Network)/level">level</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.example.intotheabyss.networking.volleynetwork.VolleyNetwork$retrieveNewDungeonLevel(kotlin.Int, com.example.intotheabyss.networking.Network)/network">network</span><span class="symbol">:</span>&nbsp;<a href="../../com.example.intotheabyss.networking/-network/index.html"><span class="identifier">Network</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Overrides <a href="../-volley-network-interface/retrieve-new-dungeon-level.html">VolleyNetworkInterface.retrieveNewDungeonLevel</a></p>
+<p>Sends a JSONObjectRequest to get the 2D array of the dungeon layout of the given level.</p>
+<p>Upon a response, parse the grid with a utility method, place the stairs in the grid, and place the Player
+object in GameState at the spawn location of the level.</p>
+<h3>Parameters</h3>
+<p><a name="level"></a>
+<code>level</code> - The level number the User will be moving to.</p>
+<p><a name="network"></a>
+<code>network</code> - The Kryonet instance to invoke kryonet methods (MoveFloorPacket).</p>
+</BODY>
+</HTML>

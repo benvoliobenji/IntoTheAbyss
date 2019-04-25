@@ -1,8 +1,38 @@
+buildscript {
+    ext {
+        dokkaVersion = '0.9.18'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$dokkaVersion"
+    }
+}
+repositories {
+    jcenter()
+}
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'org.jetbrains.dokka-android'
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '5.1.1'
+}
+
+task dokka(overwrite: true, type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+
+    skipEmptyPackages = true
+    skipDeprecated = false
+}
 
 android {
     compileSdkVersion 28
@@ -22,6 +52,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    dokka {
+        outputFormat = 'html'
+        outputDirectory = "$buildDir/javadoc"
+        skipEmptyPackages = true
+    }
 }
 
 dependencies {
@@ -35,6 +71,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
     testImplementation 'junit:junit:4.12'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-inline:2.8.47'

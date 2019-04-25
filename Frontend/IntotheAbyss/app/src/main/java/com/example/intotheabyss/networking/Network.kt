@@ -22,12 +22,28 @@ import com.example.intotheabyss.utils.TileTypes
 import com.google.gson.Gson
 import org.json.JSONObject
 
+/**
+ * This class is the implementation of the Kryonet library, which is our websocket implementation.
+ * The class, on invocation of connect(), creates listeners that grab packets from the server asynchronously and modify
+ * GameState to reflect the changes made by the server.
+ *
+ * This class also sends packets to the server via TCP/UDP connections to the server. This allows the server to have the
+ * most up-to-date information from all players in order to make game logic decision and AI determinations.
+ *
+ * @constructor Builds an instance of Network class. This should only be called once.
+ * @param gameState The instance of client's GameState.
+ * @author Benjamin Vogel
+ */
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
     private val ip: String = "http://cs309-ad-4.misc.iastate.edu:8080"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
+    /**
+     * Establishes a connection to the server.
+     * Upon establishment of connection, spin up listeners for asynchronous data transfer to/from server.
+     */
     fun connect() {
         // For logging if need be
         kryolog.TRACE()
@@ -68,6 +84,15 @@ class Network(private var gameState: GameState): Listener() {
         }
     }
 
+
+    /**
+     * This method is what Kryonet listeners use upon receiving a packet from the server.
+     * This method attempts to determine which type the packet it is and then handles the packet based on what type
+     * the packet is.
+     *
+     * @param c The connection between the Client and Server.
+     * @param o The packet data that was received from the server.
+     */
     override fun received(c: Connection, o: Any) {
         if (o is ConnectionPackage) {
             Log.i("Networking", o.playerID)
@@ -108,6 +133,13 @@ class Network(private var gameState: GameState): Listener() {
         // Will verify the instance of each object and then call functions based on the object type
     }
 
+    /**
+     * Constructs a PlayerLocationPacket and sends it to the server via TCP.
+     * @param playerID The ID of the player that has moved.
+     * @param floor The floor that the player is currently on.
+     * @param posX The current x-coordinate of the player.
+     * @param posY The current y-coordinate of the player.
+     */
     fun updatePosition(playerID: String, oldFloor: Int, floor: Int, posX: Int, posY: Int) {
         val gson = Gson()
         val movement = Move(Pair(posX, posY), floor)

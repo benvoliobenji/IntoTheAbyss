@@ -17,21 +17,42 @@ import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
 
+/**
+ * The Class NetworkHandler.
+ */
 public class NetworkHandler {
+
+	/** The player repository. */
 	private PlayerRepository playerRepository;
 
+	/** The port TCP. */
 	private static int portTCP = 44444;
+
+	/** The port UDP. */
 	private static int portUDP = 44445;
 
+	/** The server. */
 	private Server server;
+
+	/** The request handler. */
 	private RequestHandler requestHandler;
 
+	/**
+	 * Instantiates a new network handler.
+	 *
+	 * @param worldP     the world P
+	 * @param playerRepo the player repo
+	 * @param levelRepo  the level repo
+	 */
 	public NetworkHandler(World worldP, PlayerRepository playerRepo, LevelRepository levelRepo) {
 		server = new Server(16384, 65536);
 		playerRepository = playerRepo;
 		requestHandler = new RequestHandler(playerRepository, levelRepo, server, worldP);
 	}
 
+	/**
+	 * Register packets for kryonet.
+	 */
 	public void registerPackets() {
 		Kryo kryo = server.getKryo();
 		kryo.register(ConnectionPacket.class);
@@ -49,8 +70,12 @@ public class NetworkHandler {
 		kryo.register(ActionTypes.class);
 	}
 
+	/**
+	 * Setup listener for kryonet.
+	 */
 	public void setupListener() {
 		server.addListener(new Listener() {
+			@SuppressWarnings("unused")
 			public void connect(Connection connection) {
 				System.out.println("Connected");
 			}
@@ -59,12 +84,16 @@ public class NetworkHandler {
 				requestHandler.handleRequests(connection, object);
 			}
 
+			@SuppressWarnings("unused")
 			public void disconnect(Connection connetion) {
 				System.out.println("disconnected");
 			}
 		});
 	}
 
+	/**
+	 * Start network.
+	 */
 	public void startNetwork() {
 		try {
 			server.bind(portTCP, portUDP);

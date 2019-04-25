@@ -4,23 +4,35 @@ import android.content.Context
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
-import java.io.File
-import kotlin.random.Random
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
+/**
+ * A Network Thread that instantiates the Network and VolleyNetwork classes and creates/runs the UpdateThread.
+ * This is created because Android does not want any networking on the main thread
+ *
+ * @constructor Create an instance of the Network Thread.
+ * @param gameState The GameState object the client has created.
+ * @param context The context the android application is currently running.
+ * @author Benjamin Vogel
+ */
 class NetworkRunnable(private val gameState: GameState, private val context: Context): Runnable {
     private var updateThread = Thread()
 
+    /**
+     * Runs the NetworkThread as a new thread.
+     *
+     * Creates new instances of VolleyNetworkInterface and Network, connect to the server, retrieve the user's data
+     * from the server, and then create and run the Update Thread.
+     */
     override fun run() {
         val volleyNetworkInterface: VolleyNetworkInterface = VolleyNetwork(context, gameState)
-        val playerFile = File(context.filesDir, "PlayerID")
-        if (playerFile.exists()) {
-            val playerID = playerFile.readText()
-            volleyNetworkInterface.retrievePlayerData(playerID)
-        } else {
-            // Temporary name until we get the Google Account API linked
-            val playerName = Random.nextInt(0, 1000000).toString()
-            volleyNetworkInterface.createNewPlayer(playerName)
-        }
+
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        val displayName = account?.displayName
+        val personID = account?.id
+
+        // Add/Retrieve data from server
+        volleyNetworkInterface.retrievePlayerData(personID!!, displayName!!)
 
         val network = Network(gameState)
         network.connect()
