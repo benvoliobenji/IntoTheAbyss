@@ -2,33 +2,32 @@ package app.tiles;
 
 import app.utils.TileTypes;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface TileInterface.
  */
 public interface TileInterface {
-	
+
 	/**
-	 * Checks if is passable.
+	 * Checks if is passable, meaning it can be moved through by a Entity.
 	 *
 	 * @return true, if is passable
 	 */
 	public abstract boolean isPassable();
-	
+
 	/**
-	 * Can hold.
+	 * Can hold an Item.
 	 *
 	 * @return true, if successful
 	 */
 	public abstract boolean canHold();
-	
+
 	/**
-	 * Gets the type.
+	 * Gets the type as a TileTypes enum.
 	 *
 	 * @return the type
 	 */
 	public abstract TileTypes getType();
-	
+
 	/**
 	 * To string.
 	 *

@@ -2,15 +2,15 @@ package network.packets;
 
 import app.entity.player.Player;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class PlayerPacket.
+ * Class used for sending data to a test utility. Try using the api for more
+ * expected behavior.
  */
 public class PlayerPacket {
-	
+
 	/** The username. */
 	private String id, username;
-	
+
 	/** The health. */
 	private int playerLocationFloor, playerPositionX, playerPositionY, health;
 

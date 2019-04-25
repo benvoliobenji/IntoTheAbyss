@@ -6,17 +6,16 @@ import org.springframework.data.repository.CrudRepository;
 
 import app.entity.player.Player;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface PlayerRepository.
  */
 public interface PlayerRepository extends CrudRepository<Player, String> {
-	
+
 	/**
 	 * Gets the player by username.
 	 *
 	 * @param username the username
-	 * @return the player by username
+	 * @return list<Player>
 	 */
 	List<Player> getPlayerByUsername(String username);
 
@@ -24,7 +23,7 @@ public interface PlayerRepository extends CrudRepository<Player, String> {
 	 * Gets the player by player ID.
 	 *
 	 * @param playerPassedID the player passed ID
-	 * @return the player by player ID
+	 * @return Player
 	 */
 	Player getPlayerByPlayerID(String playerPassedID);
 }

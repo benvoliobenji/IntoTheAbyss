@@ -13,23 +13,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import app.db.LevelRepository;
 import app.room.Room;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class LevelController.
+ * Controls the API for the /levels part of our API
  */
 @Controller
 @RequestMapping(path = "/levels")
 public class LevelController {
-	
+
 	/** The level repository. */
 	@Autowired
 	private LevelRepository levelRepository;
 
 	/**
-	 * Gets the level.
+	 * Gets the level by id, and will create level with given ID if not found.
 	 *
-	 * @param id the id
-	 * @return the level
+	 * @param id The levels ID
+	 * @return Level found with ID
 	 */
 	@GetMapping(path = "/get")
 	public @ResponseBody Level getLevel(@RequestParam Integer id) {
@@ -44,7 +43,7 @@ public class LevelController {
 	}
 
 	/**
-	 * Gets the levels.
+	 * Returns a list of all levels
 	 *
 	 * @return the levels
 	 */
@@ -54,7 +53,7 @@ public class LevelController {
 	}
 
 	/**
-	 * Clear levels.
+	 * Deletes all levels, and sends a success message.
 	 *
 	 * @return the string
 	 */
@@ -65,7 +64,7 @@ public class LevelController {
 	}
 
 	/**
-	 * Count levels.
+	 * Returns the number of levels in the DB
 	 *
 	 * @return the long
 	 */

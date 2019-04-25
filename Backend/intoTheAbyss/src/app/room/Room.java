@@ -6,37 +6,36 @@ import java.util.Random;
 import app.tiles.Tile;
 import app.utils.TileTypes;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Room.
  */
 public class Room implements RoomInterface {
-	
+
 	/** The Constant MAPWIDTH. */
 	private static final int MAPWIDTH = 100;
-	
+
 	/** The Constant MAPHEIGHT. */
 	private static final int MAPHEIGHT = 25;
-	
+
 	/** The min width. */
 	private static int minWidth = 10;
-	
+
 	/** The min height. */
 	private static int minHeight = 6;
 
 	/** The corner. */
 	private Point corner;
-	
+
 	/** The y length. */
 	private int xLength, yLength;
-	
+
 	/** The rand. */
 	private Random rand;
 
 	/**
 	 * Instantiates a new room.
 	 *
-	 * @param rand the rand
+	 * @param rand Random to be used to gen room.
 	 */
 	public Room(Random rand) {
 		corner = new Point();
@@ -51,14 +50,18 @@ public class Room implements RoomInterface {
 		corner.x = rand.nextInt(MAPWIDTH - xLength - 1) + 1;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.room.RoomInterface#getCorner()
 	 */
 	public Point getCorner() {
 		return corner;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.room.RoomInterface#getCenter()
 	 */
 	public Point getCenter() {
@@ -68,21 +71,27 @@ public class Room implements RoomInterface {
 		return p;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.room.RoomInterface#getxLength()
 	 */
 	public int getxLength() {
 		return xLength;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.room.RoomInterface#getyLength()
 	 */
 	public int getyLength() {
 		return yLength;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.room.RoomInterface#getRandomPointInRoom()
 	 */
 	public Point getRandomPointInRoom() {
@@ -92,8 +101,11 @@ public class Room implements RoomInterface {
 		return p;
 	}
 
-	/* (non-Javadoc)
-	 * @see app.room.RoomInterface#genValidRoom(java.util.Random, app.tiles.Tile[][])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see app.room.RoomInterface#genValidRoom(java.util.Random,
+	 * app.tiles.Tile[][])
 	 */
 	public RoomInterface genValidRoom(Random rand, Tile[][] grid) {
 		boolean loop = false;

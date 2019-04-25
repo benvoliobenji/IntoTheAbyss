@@ -1,30 +1,29 @@
 package network.packets;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MapRequestPacket.
+ * MapRequestPacket essentially stores a floorNum.
  */
 public class MapRequestPacket {
-	
+
 	/** The floor num. */
 	public int floorNum;
-	
+
 	/**
 	 * Instantiates a new map request packet.
 	 */
 	public MapRequestPacket() {
-		
+
 	}
-	
+
 	/**
 	 * Instantiates a new map request packet.
 	 *
 	 * @param floor the floor
 	 */
-	public MapRequestPacket(int floor){
+	public MapRequestPacket(int floor) {
 		floorNum = floor;
 	}
-	
+
 	/**
 	 * Gets the floor num.
 	 *
@@ -33,7 +32,7 @@ public class MapRequestPacket {
 	public int getFloorNum() {
 		return floorNum;
 	}
-	
+
 	/**
 	 * Sets the floor num.
 	 *

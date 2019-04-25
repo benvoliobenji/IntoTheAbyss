@@ -17,33 +17,32 @@ import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class NetworkHandler.
  */
 public class NetworkHandler {
-	
+
 	/** The player repository. */
 	private PlayerRepository playerRepository;
 
 	/** The port TCP. */
 	private static int portTCP = 44444;
-	
+
 	/** The port UDP. */
 	private static int portUDP = 44445;
 
 	/** The server. */
 	private Server server;
-	
+
 	/** The request handler. */
 	private RequestHandler requestHandler;
 
 	/**
 	 * Instantiates a new network handler.
 	 *
-	 * @param worldP the world P
+	 * @param worldP     the world P
 	 * @param playerRepo the player repo
-	 * @param levelRepo the level repo
+	 * @param levelRepo  the level repo
 	 */
 	public NetworkHandler(World worldP, PlayerRepository playerRepo, LevelRepository levelRepo) {
 		server = new Server(16384, 65536);
@@ -52,7 +51,7 @@ public class NetworkHandler {
 	}
 
 	/**
-	 * Register packets.
+	 * Register packets for kryonet.
 	 */
 	public void registerPackets() {
 		Kryo kryo = server.getKryo();
@@ -72,7 +71,7 @@ public class NetworkHandler {
 	}
 
 	/**
-	 * Setup listener.
+	 * Setup listener for kryonet.
 	 */
 	public void setupListener() {
 		server.addListener(new Listener() {

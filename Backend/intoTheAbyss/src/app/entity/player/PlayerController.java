@@ -13,20 +13,19 @@ import com.esotericsoftware.jsonbeans.Json;
 
 import app.db.PlayerRepository;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PlayerController.
  */
 @Controller
 @RequestMapping(path = "/players")
 public class PlayerController {
-	
+
 	/** The player repository. */
 	@Autowired
 	private PlayerRepository playerRepository;
 
 	/**
-	 * Adds the player.
+	 * Adds the player with default values on floor one.
 	 *
 	 * @param username the username
 	 * @return the player
@@ -48,7 +47,7 @@ public class PlayerController {
 	}
 
 	/**
-	 * Gets the player.
+	 * Gets the player by ID
 	 *
 	 * @param playerUUIDPassed the player UUID passed
 	 * @return the player

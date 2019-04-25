@@ -8,20 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import app.db.GroupRepository;
 import app.entity.player.Player;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GroupController.
+ * This is the controller for for the groups api
  */
 @Controller
 @RequestMapping(path = "/group")
 public class GroupController {
-	
+
 	/** The group repository. */
 	@Autowired
-	GroupRepository groupRepository;
+	private GroupRepository groupRepository;
 
 	/**
-	 * Gets the group members.
+	 * Gets the group members by player.
 	 *
 	 * @param player the player
 	 * @return the group members

@@ -2,15 +2,14 @@ package network.actions;
 
 import java.awt.Point;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Move.
  */
 public class Move {
-	
+
 	/** The location. */
 	private Point location;
-	
+
 	/** The floor moved to. */
 	private int floorMovedTo;
 
@@ -24,9 +23,9 @@ public class Move {
 	}
 
 	/**
-	 * Sets the location.
+	 * Sets the location to p.
 	 *
-	 * @param p the new location
+	 * @param p the location to move actor of the Action
 	 */
 	public void setLocation(Point p) {
 		location = p;
@@ -42,8 +41,9 @@ public class Move {
 	}
 
 	/**
-	 * Sets the floor moved to.
-	 *
+	 * Sets the floor moved to. This is the same as the floor the action happened on
+	 * if you are not moving to a new floor.
+	 * 
 	 * @param floorMovedTo the new floor moved to
 	 */
 	public void setFloorMovedTo(int floorMovedTo) {

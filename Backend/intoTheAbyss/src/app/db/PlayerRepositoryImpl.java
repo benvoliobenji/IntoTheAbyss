@@ -10,18 +10,16 @@ import org.springframework.stereotype.Repository;
 
 import app.entity.player.Player;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class PlayerRepositoryImpl.
- */
 @Repository
 public abstract class PlayerRepositoryImpl implements PlayerRepository {
-	
+
 	/** The entity manager. */
 	@PersistenceContext
-	EntityManager entityManager;
+	private EntityManager entityManager;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.db.PlayerRepository#getPlayerByUsername(java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
@@ -32,7 +30,9 @@ public abstract class PlayerRepositoryImpl implements PlayerRepository {
 		return query.getResultList();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.db.PlayerRepository#getPlayerByPlayerID(java.lang.String)
 	 */
 	@Override

@@ -2,7 +2,6 @@ package app.entity.player;
 
 import app.entity.Entity;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface PlayerInterface.
  */

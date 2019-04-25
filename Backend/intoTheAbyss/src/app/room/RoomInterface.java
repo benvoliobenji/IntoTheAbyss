@@ -5,23 +5,22 @@ import java.util.Random;
 
 import app.tiles.Tile;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface RoomInterface.
+ * The Interface for a room.
  */
 public interface RoomInterface {
-	
+
 	/**
-	 * Gets the corner.
+	 * Gets the top left corner of the room as a Point
 	 *
-	 * @return the corner
+	 * @return Point representing the top left corner
 	 */
 	public Point getCorner();
 
 	/**
-	 * Gets the center.
+	 * Gets the center of the room.
 	 *
-	 * @return the center
+	 * @return Point at the center of the room
 	 */
 	public Point getCenter();
 
@@ -47,11 +46,11 @@ public interface RoomInterface {
 	public Point getRandomPointInRoom();
 
 	/**
-	 * Gen valid room.
+	 * Gen valid room. meaning it doesn't overlap another room in the grid.
 	 *
-	 * @param rand the rand
-	 * @param grid the grid
-	 * @return the room interface
+	 * @param rand Random to use when generating
+	 * @param grid Tile[][] that is used to manage
+	 * @return RoomInterface of a valid room
 	 */
 	public RoomInterface genValidRoom(Random rand, Tile[][] grid);
 }

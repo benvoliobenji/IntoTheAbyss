@@ -13,24 +13,23 @@ import org.hibernate.annotations.GenericGenerator;
 
 import app.entity.player.Player;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Group.
+ * The group type stores id and list of players.
  */
 @Entity
 @Table(name = "\"Table\"")
 public class Group {
-	
+
 	/** The group ID. */
 	@Id
 	@Column(length = 50)
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String groupID;
-	
+
 	/** The leader. */
 	private String leader;
-	
+
 	/** The players. */
 	@OneToMany(mappedBy = "group")
 	private List<Player> players;
@@ -81,7 +80,7 @@ public class Group {
 	}
 
 	/**
-	 * Sets the players.
+	 * Sets the players in group via list of players.
 	 *
 	 * @param players the new players
 	 */
