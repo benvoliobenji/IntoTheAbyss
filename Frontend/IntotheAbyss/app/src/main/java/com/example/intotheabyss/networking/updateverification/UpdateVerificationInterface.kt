@@ -11,4 +11,5 @@ import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 interface UpdateVerificationInterface {
     fun verifyGameState(gameState: GameState, network: Network,
                         volleyNetworkInterface: VolleyNetworkInterface): UpdateVerificationType
+    fun cleanUpEntities(gameState: GameState)
 }

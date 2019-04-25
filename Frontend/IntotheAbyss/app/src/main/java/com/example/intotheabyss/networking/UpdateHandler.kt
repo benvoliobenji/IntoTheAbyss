@@ -19,7 +19,7 @@ import java.lang.Thread.sleep
 class UpdateRunnable(private val network: Network, private val volleyNetworkInterface: VolleyNetworkInterface,
                      private val gameState: GameState): Runnable {
     val updateVerification: UpdateVerificationInterface =
-        UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y, gameState.myPlayer.floorNumber)
+        UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y, gameState.myPlayer.floor)
     var updateType: UpdateVerificationType = UpdateVerificationType.NONE
 
 
@@ -27,6 +27,8 @@ class UpdateRunnable(private val network: Network, private val volleyNetworkInte
      * Runs the UpdateThread.
      * While running, as long as there is no exceptions or interruption, call verifyGameState()
      * from UpdateVerificationInterface to verify GameState and notify the server.
+     *
+     * Also calls cleanUpEntities() to make sure the client isn't drawing dead Entities.
      */
     override fun run() {
         try {
@@ -34,6 +36,7 @@ class UpdateRunnable(private val network: Network, private val volleyNetworkInte
             while (true) {
                 sleep(10)
                 updateType = updateVerification.verifyGameState(gameState, network, volleyNetworkInterface)
+                updateVerification.cleanUpEntities(gameState)
             }
         } catch (e: InterruptedException) {
             e.printStackTrace()

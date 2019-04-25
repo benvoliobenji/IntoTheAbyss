@@ -3,6 +3,9 @@ package com.example.intotheabyss.game
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.player.Player
+import com.example.intotheabyss.game.event.Event
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * GameState acts as the barrier between the front end game logic and the back end networking logic. Both ends utilize
@@ -23,4 +26,5 @@ class GameState {
     var level = arrayOf<Array<Tile>>()
     var loading: Boolean = true
     var entitiesInLevel: HashMap<String, Entity> = hashMapOf()
+    var eventQueue: Queue<Event> = LinkedList<Event>()
 }

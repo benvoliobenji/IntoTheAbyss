@@ -11,9 +11,11 @@ import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.entity.Entity
+import com.example.intotheabyss.game.entity.entityaction.Attack
 import com.example.intotheabyss.game.entity.entityaction.EntityAction
 import com.example.intotheabyss.game.entity.entityaction.EntityActionType
 import com.example.intotheabyss.game.entity.entityaction.Move
+import com.example.intotheabyss.game.entity.monster.Monster
 import com.example.intotheabyss.networking.packets.*
 import com.example.intotheabyss.game.entity.player.Player
 import java.io.IOException
@@ -116,6 +118,9 @@ class Network(private var gameState: GameState): Listener() {
 
                     EntityActionType.ATTACK -> handleAttackAction(action)
 
+                    // What happens if the player is in a group already?
+                    // Does the front end support invites yet?
+                    // How does the back end handle these events?
                     EntityActionType.JOIN -> {
                         // TODO: ADD LOGIC FOR JOIN
                     }
@@ -136,6 +141,7 @@ class Network(private var gameState: GameState): Listener() {
     /**
      * Constructs a PlayerLocationPacket and sends it to the server via TCP.
      * @param playerID The ID of the player that has moved.
+     * @param oldFloor The floor the player was previously on.
      * @param floor The floor that the player is currently on.
      * @param posX The current x-coordinate of the player.
      * @param posY The current y-coordinate of the player.
@@ -148,9 +154,27 @@ class Network(private var gameState: GameState): Listener() {
         client.sendTCP(positionPacket)
     }
 
-    // TODO: ASK ABOUT HOW MONSTERS GET ADDED/HOW TO HANDLE THEIR IDS
-    // Go back to two hash maps?
-    fun handleAddAction(action: EntityAction) {
+    /**
+     * Constructs an EntityActionPacket with the payload of an Attack and sends it to the server via TCP.
+     * @param attackedID The person attacking.
+     * @param attackedID The person being attacked.
+     * @param damage The amount of damage dealt.
+     */
+    fun attackPlayer(attackerID: String, attackedID: String, damage: Int) {
+        val gson = Gson()
+        var attacker = gameState.entitiesInLevel[attackerID]
+        val attack = Attack(attackedID, damage)
+        val jsonPacket = gson.toJson(attack)
+        val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, attacker!!.floor, jsonPacket)
+        client.sendTCP(attackPacket)
+    }
+
+    /**
+     * Handles the ADD action of an EntityAction.
+     *
+     * @param action The EntityAction packet that was sent over Kryonet.
+     */
+    private fun handleAddAction(action: EntityAction) {
         var json = JSONObject(action.payload)
         if (action.performerID == gameState.myPlayer.ID) {
             gameState.myPlayer.ID = json.getString("playerID")
@@ -162,8 +186,58 @@ class Network(private var gameState: GameState): Listener() {
         } else {
             // Regardless if it's in the hash map or not, it will be modified or added the same way
             var gson = Gson()
-            var entity = gson.fromJson<Entity>(json.toString(), Entity::class.java)
-            gameState.entitiesInLevel[action.performerID] = entity
+
+            // If it has a username, then it is a Player, else it is a Monster
+            if (json.optString("username") != "") {
+                var newPlayer = gson.fromJson<Player>(json.toString(), Player::class.java)
+                gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+            } else {
+                var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
+                gameState.entitiesInLevel[newMonster.ID] = newMonster
+            }
         }
+    }
+
+    /**
+     * Handles the movement logic for the entities on the floor.
+     *
+     * @param action The EntityActionPacket received from Kryonet
+     */
+    private fun handleMoveAction(action: EntityAction) {
+        var json = JSONObject(action.payload)
+        var gson = Gson()
+        var entityUnderMovement = gameState.entitiesInLevel[action.performerID]
+        var moveAction = gson.fromJson<Move>(json.toString(), Move::class.java)
+
+        // Verify that the entity is still on this floor
+        if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
+            entityUnderMovement!!.x = moveAction.location.first
+            entityUnderMovement.y = moveAction.location.second
+            entityUnderMovement.floor = moveAction.floorMovedTo
+
+            gameState.entitiesInLevel[action.performerID] = entityUnderMovement
+        } else {
+            gameState.entitiesInLevel.remove(action.performerID)
+        }
+    }
+
+    /**
+     * Handles the attack action logic for the entities on the floor.
+     *
+     * @param action The EntityActionPacket recieved from Kryonet
+     */
+    private fun handleAttackAction(action: EntityAction) {
+        var json = JSONObject(action.payload)
+        var gson = Gson()
+        var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
+        var entityAttacked = gameState.entitiesInLevel[attackAction.attackID]
+        entityAttacked!!.health -= attackAction.dmg
+
+        // Remove the entity from the level if their health is less than 0
+        if(entityAttacked!!.health <= 0) {
+            gameState.entitiesInLevel.remove(entityAttacked.ID)
+        }
+
+        gameState.entitiesInLevel[attackAction.attackID] = entityAttacked
     }
 }

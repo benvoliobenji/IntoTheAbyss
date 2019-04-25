@@ -15,9 +15,9 @@ import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
 /**
- * This class is designed to implement VolleyNetworkInterface and to query the server using Volley. These conenctions
+ * This class is designed to implement VolleyNetworkInterface and to query the server using Volley. These connections
  * are often used for files that are of larger size than what Kryonet can support and are also necessary for the client
- * and server to recieve an ACK back based on the GET and PUT methods.
+ * and server to receive an ACK back based on the GET and PUT methods.
  * @constructor Constructs the VolleyNetwork object to query the server using HTTP/JSON requests over HTTP
  * @param context The context of the running android application.
  * @param gameState The GameState instance IntoTheAbyss is currently using.
@@ -104,12 +104,12 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 gameState.myPlayer.y = startY
 
                 // Empty entities in the level to make sure that nothing gets carried over
-                gameState.entitiesInLevel = hashMapOf()
+                gameState.entitiesInLevel.clear()
 
                 // Add party members if player is in party
                 if(gameState.myPlayer.party.isNotEmpty()) {
-                    for (key in gameState.myPlayer.party.keys) {
-                        gameState.entitiesInLevel[key] = gameState.myPlayer.party[key]!!
+                    for (player in gameState.myPlayer.party) {
+                        gameState.entitiesInLevel[player.ID] = player
                     }
                 }
 
