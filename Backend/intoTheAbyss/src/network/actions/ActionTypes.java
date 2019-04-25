@@ -1,5 +1,22 @@
 package network.actions;
 
+/**
+ * The Enum for ActionTypes.
+ */
 public enum ActionTypes {
-	ADD, MOVE, ATTACK, JOIN, REQUEST, KICK, REMOVE;
+
+	/** The add. */
+	ADD,
+	/** The move. */
+	MOVE,
+	/** The attack. */
+	ATTACK,
+	/** The join. */
+	JOIN,
+	/** The request. */
+	REQUEST,
+	/** The kick. */
+	KICK,
+	/** The remove. */
+	REMOVE;
 }

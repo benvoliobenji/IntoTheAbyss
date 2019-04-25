@@ -11,10 +11,7 @@ buildscript {
 		//classpath("se.transmode.gradle:gradle-docker:${gradleDockerVersion}")
 	}
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> e0e5338f2a0acab688dbe92dd4f523d8e152383a
 plugins {
     id "com.adarshr.test-logger" version "1.6.0"
 }
@@ -28,10 +25,6 @@ apply plugin: 'io.spring.dependency-management'
 
 version = '0.0.1'
 sourceCompatibility = '1.8'
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '4.8.1'
-}
 
 repositories {
 	mavenCentral()

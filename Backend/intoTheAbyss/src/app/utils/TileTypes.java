@@ -1,5 +1,15 @@
 package app.utils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum TileTypes.
+ */
 public enum TileTypes {
-	FLOOR, WALL, STAIR
+	
+	/** The floor. */
+	FLOOR, 
+ /** The wall. */
+ WALL, 
+ /** The stair. */
+ STAIR
 }

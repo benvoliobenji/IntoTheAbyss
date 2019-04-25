@@ -13,38 +13,78 @@ import org.hibernate.annotations.GenericGenerator;
 
 import app.entity.player.Player;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Group.
+ */
 @Entity
 @Table(name = "\"Table\"")
 public class Group {
+	
+	/** The group ID. */
 	@Id
 	@Column(length = 50)
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String groupID;
+	
+	/** The leader. */
 	private String leader;
+	
+	/** The players. */
 	@OneToMany(mappedBy = "group")
 	private List<Player> players;
 
+	/**
+	 * Gets the group ID.
+	 *
+	 * @return the group ID
+	 */
 	public String getGroupID() {
 		return groupID;
 	}
 
+	/**
+	 * Sets the group ID.
+	 *
+	 * @param groupID the new group ID
+	 */
 	public void setGroupID(String groupID) {
 		this.groupID = groupID;
 	}
 
+	/**
+	 * Gets the leader.
+	 *
+	 * @return the leader
+	 */
 	public String getLeader() {
 		return leader;
 	}
 
+	/**
+	 * Sets the leader.
+	 *
+	 * @param leader the new leader
+	 */
 	public void setLeader(String leader) {
 		this.leader = leader;
 	}
 
+	/**
+	 * Gets the players.
+	 *
+	 * @return the players
+	 */
 	public List<Player> getPlayers() {
 		return players;
 	}
 
+	/**
+	 * Sets the players.
+	 *
+	 * @param players the new players
+	 */
 	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}

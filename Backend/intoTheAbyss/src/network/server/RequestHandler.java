@@ -20,20 +20,40 @@ import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
 
+/**
+ * The Class RequestHandler handles all request types. As of now the supported
+ * request types are ConnectionPacket, and ActionPacket.
+ */
+
 /*
- * TODO Document this with good comments explaining the processing.
- * TODO Fix the to all method calls such that they don't send to the sender
- * TODO Fix storage of connections such that we are able to keep them by floor this may
- * be part of a larger fix.
- * TODO Check for consistent data across DB, server, and client.
+ * TODO Document this with good comments explaining the processing. TODO Fix the
+ * to all method calls such that they don't send to the sender TODO Fix storage
+ * of connections such that we are able to keep them by floor this may be part
+ * of a larger fix. TODO Check for consistent data across DB, server, and
+ * client.
  */
 public class RequestHandler {
 
+	/** The player repository. */
 	private PlayerRepository playerRepository;
+
+	/** The level repository. */
 	private LevelRepository levelRepository;
+
+	/** The Kryonet server. */
 	private Server server;
+
+	/** The world. */
 	private World world;
 
+	/**
+	 * Instantiates a new request handler.
+	 *
+	 * @param playerRepo the player repository
+	 * @param levelRepo  the level repository
+	 * @param server     the server and instance of Kryonet server
+	 * @param gWorld     the g world instance used to track state
+	 */
 	public RequestHandler(PlayerRepository playerRepo, LevelRepository levelRepo, Server server, World gWorld) {
 		playerRepository = playerRepo;
 		levelRepository = levelRepo;
@@ -41,6 +61,12 @@ public class RequestHandler {
 		world = gWorld;
 	}
 
+	/**
+	 * Handle requests by filtering to appropriate handle method.
+	 *
+	 * @param connection the connection
+	 * @param object     the object
+	 */
 	public void handleRequests(Connection connection, Object object) {
 		if (object instanceof ConnectionPacket) {
 			handleConnectionRequest(connection, object);
@@ -52,6 +78,13 @@ public class RequestHandler {
 			handleActionPacket(connection, object);
 	}
 
+	/**
+	 * Handles ActionPacket types. Does so by sorting the type based on the
+	 * ActionType enum.
+	 *
+	 * @param connection the connection
+	 * @param object     the object
+	 */
 	public void handleActionPacket(Connection connection, Object object) {
 		// Action action = ((ActionPacket) object).getAction();
 		Action action = (Action) object;
@@ -77,6 +110,13 @@ public class RequestHandler {
 
 	}
 
+	/**
+	 * Handles connection request by adding entity(currently only player). To the
+	 * world and sends a add packet to all clients.
+	 *
+	 * @param connection the connection from Kryonet
+	 * @param object     the object that is a instance of ConnectionRequest
+	 */
 	public void handleConnectionRequest(Connection connection, Object object) {
 		ConnectionPacket request = (ConnectionPacket) object;
 		Player p = playerRepository.getPlayerByPlayerID(request.getID());
@@ -92,6 +132,12 @@ public class RequestHandler {
 		}
 	}
 
+	/**
+	 * Handles move action by taking an Action with a Move type payload.
+	 *
+	 * @param action the action
+	 * @param json   the json
+	 */
 	public void handleMoveAction(Action action, Json json) {
 		Move move = json.fromJson(Move.class, action.getPayload());
 		Player moved = (Player) world.getLevel(action.getFloor()).getPlayer(action.getPerformerID());
@@ -119,6 +165,13 @@ public class RequestHandler {
 		}
 	}
 
+	/**
+	 * This updates the DB entry for the Entity(as of now it only works for player)
+	 * listed by ID in the payload.
+	 *
+	 * @param action the action the instance of an Action with a Attack Payload.
+	 * @param json   the json
+	 */
 	// TODO convert to use entities allowing for monsters.
 	private void handleAttackAction(Action action, Json json) {
 		Attack atk = json.fromJson(Attack.class, action.getPayload());
@@ -127,8 +180,12 @@ public class RequestHandler {
 		attacked = playerRepository.save(attacked);
 	}
 
-	/*
-	 * Believed to be needed only for testing with the test utility I made.
+	/**
+	 * Handle player request actions used to create a player without using the api.
+	 * Used exclusively for testing.
+	 *
+	 * @param connection the connection
+	 * @param object     the object
 	 */
 	public void handlePlayerRequest(Connection connection, Object object) {
 		String id = ((PlayerPacket) object).getID();
@@ -138,6 +195,13 @@ public class RequestHandler {
 		}
 	}
 
+	/**
+	 * This method handles map requests. This is going to lose support soon, and is
+	 * really only here for testing
+	 *
+	 * @param connection the connection received from Kryonet
+	 * @param object     the object that is an instance of MapRequestPacket
+	 */
 	public void handleMapRequest(Connection connection, Object object) {
 		int floor = ((MapRequestPacket) object).getFloorNum();
 		Level requestedLevel = (Level) world.getLevel(floor);

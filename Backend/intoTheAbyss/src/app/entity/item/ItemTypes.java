@@ -1,5 +1,19 @@
 package app.entity.item;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum ItemTypes.
+ */
 public enum ItemTypes {
-	HELMET, GLOVES, WEAPON, BOOTS, CONSUMABLE;
+	
+	/** The helmet. */
+	HELMET, 
+ /** The gloves. */
+ GLOVES, 
+ /** The weapon. */
+ WEAPON, 
+ /** The boots. */
+ BOOTS, 
+ /** The consumable. */
+ CONSUMABLE;
 }

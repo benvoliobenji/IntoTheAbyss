@@ -10,11 +10,20 @@ import org.springframework.stereotype.Repository;
 
 import app.entity.player.Player;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PlayerRepositoryImpl.
+ */
 @Repository
 public abstract class PlayerRepositoryImpl implements PlayerRepository {
+	
+	/** The entity manager. */
 	@PersistenceContext
 	EntityManager entityManager;
 
+	/* (non-Javadoc)
+	 * @see app.db.PlayerRepository#getPlayerByUsername(java.lang.String)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Player> getPlayerByUsername(String username) {
@@ -23,6 +32,9 @@ public abstract class PlayerRepositoryImpl implements PlayerRepository {
 		return query.getResultList();
 	}
 
+	/* (non-Javadoc)
+	 * @see app.db.PlayerRepository#getPlayerByPlayerID(java.lang.String)
+	 */
 	@Override
 	public Player getPlayerByPlayerID(String playerPassedID) {
 		UUID uuid = UUID.fromString(playerPassedID);
