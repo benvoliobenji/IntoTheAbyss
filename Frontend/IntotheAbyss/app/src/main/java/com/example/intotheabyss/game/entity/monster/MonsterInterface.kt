@@ -1,4 +1,4 @@
-package com.example.intotheabyss.game.monster
+package com.example.intotheabyss.game.entity.monster
 
 /**
  * A default MonsterInterface for methods to be called to monsters.

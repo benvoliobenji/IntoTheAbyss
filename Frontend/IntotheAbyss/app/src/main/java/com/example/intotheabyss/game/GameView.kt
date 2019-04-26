@@ -9,6 +9,10 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.game.entity.player.Player
+import android.content.res.Resources
+import android.graphics.*
+import android.view.MotionEvent
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.gamecontroller.GameController
@@ -165,9 +169,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun checkNewLevel() {
         if (gAction > 0) {
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
-                player!!.floorNumber++
+                player!!.floor++
                 gameState!!.loading = true //Indicate that we want a new level
-                println("Attempting to descend level. Currently at ${player!!.floorNumber}")
+                println("Attempting to descend level. Currently at ${player!!.floor}")
 //                gAction = 0
             }
         }

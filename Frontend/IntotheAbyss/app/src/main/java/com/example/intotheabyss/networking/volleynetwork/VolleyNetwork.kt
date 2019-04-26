@@ -10,14 +10,14 @@ import com.android.volley.toolbox.Volley
 import com.example.intotheabyss.dungeonassets.Stair
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.Network
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
 /**
- * This class is designed to implement VolleyNetworkInterface and to query the server using Volley. These conenctions
+ * This class is designed to implement VolleyNetworkInterface and to query the server using Volley. These connections
  * are often used for files that are of larger size than what Kryonet can support and are also necessary for the client
- * and server to recieve an ACK back based on the GET and PUT methods.
+ * and server to receive an ACK back based on the GET and PUT methods.
  * @constructor Constructs the VolleyNetwork object to query the server using HTTP/JSON requests over HTTP
  * @param context The context of the running android application.
  * @param gameState The GameState instance IntoTheAbyss is currently using.
@@ -103,7 +103,15 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 gameState.myPlayer.x = startX
                 gameState.myPlayer.y = startY
 
-                network.updateLevel(gameState.myPlayer.playerID, gameState.myPlayer.floorNumber)
+                // Empty entities in the level to make sure that nothing gets carried over
+                gameState.entitiesInLevel.clear()
+
+                // Add party members if player is in party
+                if(gameState.myPlayer.party.isNotEmpty()) {
+                    for (player in gameState.myPlayer.party) {
+                        gameState.entitiesInLevel[player.ID] = player
+                    }
+                }
 
                 gameState.loading = false
                 Log.i("DungeonLevel", spawn.toString())

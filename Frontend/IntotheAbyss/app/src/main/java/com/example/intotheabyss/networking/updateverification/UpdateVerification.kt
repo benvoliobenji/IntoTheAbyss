@@ -1,6 +1,8 @@
 package com.example.intotheabyss.networking.updateverification
 
 import com.example.intotheabyss.game.GameState
+import com.example.intotheabyss.game.event.AttackEvent
+import com.example.intotheabyss.game.event.EventType
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 
@@ -28,18 +30,58 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
      */
     override fun verifyGameState(gameState: GameState, network: Network,
                                  volleyNetworkInterface: VolleyNetworkInterface): UpdateVerificationType {
+
+        // Handle if the player has moved
         if ((posX != gameState.myPlayer.x) or (posY != gameState.myPlayer.y)) {
             posX = gameState.myPlayer.x
             posY = gameState.myPlayer.y
-            network.updatePosition(gameState.myPlayer.playerID, floorNum, posX, posY)
+            network.updatePosition(gameState.myPlayer.ID, floorNum - 1, floorNum, posX, posY)
+
             return UpdateVerificationType.POSITION
         }
 
-        if (floorNum != gameState.myPlayer.floorNumber) {
-            floorNum = gameState.myPlayer.floorNumber
+        // Handle if the player has moved floors
+        if (floorNum != gameState.myPlayer.floor) {
+            floorNum = gameState.myPlayer.floor
             volleyNetworkInterface.retrieveNewDungeonLevel(floorNum, network)
             return UpdateVerificationType.LEVEL
         }
+
+        // Handle if there is something in the eventQueue
+        if (gameState.eventQueue.isNotEmpty()) {
+            var event = gameState.eventQueue.peek()
+            when(event.type) {
+                EventType.ATTACK -> {
+                    var attack: AttackEvent = gameState.eventQueue.remove() as AttackEvent
+                    network.attackPlayer(attack.performerID, attack.performedID, attack.damage)
+                }
+                EventType.KICK -> {
+                    // TODO: ADD LOGIC FOR KICKING PLAYER
+                }
+                EventType.REQUEST -> {
+                    // TODO: ADD LOGIC FOR REQUESTING INVITES
+                }
+                EventType.JOIN -> {
+                    // TODO: ADD LOGIC FOR JOINING
+                }
+            }
+            return UpdateVerificationType.EVENT
+        }
         return UpdateVerificationType.NONE
+    }
+
+    /**
+     * Iterates through the entities in the current level, and removes them from the hash map if their health is at
+     * or below 0.
+     * @param gameState The GameState object the client is currently using.
+     */
+    override fun cleanUpEntities(gameState: GameState) {
+        for(key in gameState.entitiesInLevel.keys) {
+            val entity = gameState.entitiesInLevel[key]
+
+            if (entity!!.health <= 0) {
+                gameState.entitiesInLevel.remove(key)
+            }
+        }
     }
 }

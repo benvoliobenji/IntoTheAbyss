@@ -10,11 +10,19 @@ import com.esotericsoftware.minlog.Log as kryolog
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.game.entity.Entity
+import com.example.intotheabyss.game.entity.entityaction.Attack
+import com.example.intotheabyss.game.entity.entityaction.EntityAction
+import com.example.intotheabyss.game.entity.entityaction.EntityActionType
+import com.example.intotheabyss.game.entity.entityaction.Move
+import com.example.intotheabyss.game.entity.monster.Monster
 import com.example.intotheabyss.networking.packets.*
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
+import com.google.gson.Gson
+import org.json.JSONObject
 
 /**
  * This class is the implementation of the Kryonet library, which is our websocket implementation.
@@ -59,21 +67,19 @@ class Network(private var gameState: GameState): Listener() {
             register(Stair::class.java)
 
             register(PlayerPacket::class.java)
-            register(MoveFloorPacket::class.java)
-
-            // Player location registration
-            register(PlayerLocationPacket::class.java)
+            register(EntityAction::class.java)
+            register(EntityActionType::class.java)
         }
 
 
         //Add the class registration when we get to this part
         client.start()
         client.addListener(this)
-        try{
+        try {
             // Attempt to connect within a 5000 ms window before timing out
             client.connect(5000, ip, tcpPort, udpPort)
-            Log.d("Networking","Sending Floor Request")
-            client.sendTCP(ConnectionPackage(gameState.myPlayer.playerID))
+            Log.d("Networking", "Sending Floor Request")
+            client.sendTCP(ConnectionPackage(gameState.myPlayer.ID))
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -99,6 +105,35 @@ class Network(private var gameState: GameState): Listener() {
             var thisPlayer = Player(o.playerID, o.playerName, o.health, o.floorNum, o.posX, o.posY)
             gameState.myPlayer = thisPlayer
         }
+        if (o is EntityAction) {
+            var action = EntityAction(o.performerID, o.actionType, o.floor, o.payload)
+
+            // Make sure we only process events based on our floor
+            if (action.floor == gameState.myPlayer.floor) {
+
+                when(action.actionType){
+                    EntityActionType.ADD -> handleAddAction(action)
+
+                    EntityActionType.MOVE -> handleMoveAction(action)
+
+                    EntityActionType.ATTACK -> handleAttackAction(action)
+
+                    // What happens if the player is in a group already?
+                    // Does the front end support invites yet?
+                    // How does the back end handle these events?
+                    EntityActionType.JOIN -> {
+                        // TODO: ADD LOGIC FOR JOIN
+                    }
+                    EntityActionType.REQUEST -> {
+                        //TODO: ADD LOGIC FOR REQUEST
+                    }
+                     EntityActionType.KICK -> {
+                        // TODO: ADD LOGIC FOR KICK
+                    }
+                    else -> Log.i("EntityAction", "Unknown EntityActionType" + o.actionType)
+                }
+            }
+        }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
     }
@@ -106,24 +141,103 @@ class Network(private var gameState: GameState): Listener() {
     /**
      * Constructs a PlayerLocationPacket and sends it to the server via TCP.
      * @param playerID The ID of the player that has moved.
+     * @param oldFloor The floor the player was previously on.
      * @param floor The floor that the player is currently on.
      * @param posX The current x-coordinate of the player.
      * @param posY The current y-coordinate of the player.
      */
-    fun updatePosition(playerID: String, floor: Int, posX: Int, posY: Int) {
-        val positionPacket = PlayerLocationPacket(playerID, floor, posX, posY)
+    fun updatePosition(playerID: String, oldFloor: Int, floor: Int, posX: Int, posY: Int) {
+        val gson = Gson()
+        val movement = Move(Pair(posX, posY), floor)
+        val jsonPacket = gson.toJson(movement)
+        val positionPacket = EntityAction(playerID, EntityActionType.MOVE, oldFloor, jsonPacket)
         client.sendTCP(positionPacket)
     }
 
     /**
-     * Constructs a MoveFloorPacket and sends it to the server via TCP.
-     * This is done to notify the server that the player has moved to a new floor.
-     * This is called after VolleyNetwork gets and builds a new floor.
-     * @param playerID The ID of the player that has moved floors.
-     * @param floor The floor that the player has moved to.
+     * Constructs an EntityActionPacket with the payload of an Attack and sends it to the server via TCP.
+     * @param attackedID The person attacking.
+     * @param attackedID The person being attacked.
+     * @param damage The amount of damage dealt.
      */
-    fun updateLevel(playerID: String, floor: Int) {
-        val floorPacket = MoveFloorPacket(playerID, floor)
-        client.sendTCP(floorPacket)
+    fun attackPlayer(attackerID: String, attackedID: String, damage: Int) {
+        val gson = Gson()
+        var attacker = gameState.entitiesInLevel[attackerID]
+        val attack = Attack(attackedID, damage)
+        val jsonPacket = gson.toJson(attack)
+        val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, attacker!!.floor, jsonPacket)
+        client.sendTCP(attackPacket)
+    }
+
+    /**
+     * Handles the ADD action of an EntityAction.
+     *
+     * @param action The EntityAction packet that was sent over Kryonet.
+     */
+    private fun handleAddAction(action: EntityAction) {
+        var json = JSONObject(action.payload)
+        if (action.performerID == gameState.myPlayer.ID) {
+            gameState.myPlayer.ID = json.getString("playerID")
+            gameState.myPlayer.playerName = json.getString("username")
+            gameState.myPlayer.x = json.getInt("posX")
+            gameState.myPlayer.y = json.getInt("posY")
+            gameState.myPlayer.floor = json.getInt("floor")
+            gameState.myPlayer.health = json.getInt("health")
+        } else {
+            // Regardless if it's in the hash map or not, it will be modified or added the same way
+            var gson = Gson()
+
+            // If it has a username, then it is a Player, else it is a Monster
+            if (json.optString("username") != "") {
+                var newPlayer = gson.fromJson<Player>(json.toString(), Player::class.java)
+                gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+            } else {
+                var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
+                gameState.entitiesInLevel[newMonster.ID] = newMonster
+            }
+        }
+    }
+
+    /**
+     * Handles the movement logic for the entities on the floor.
+     *
+     * @param action The EntityActionPacket received from Kryonet
+     */
+    private fun handleMoveAction(action: EntityAction) {
+        var json = JSONObject(action.payload)
+        var gson = Gson()
+        var entityUnderMovement = gameState.entitiesInLevel[action.performerID]
+        var moveAction = gson.fromJson<Move>(json.toString(), Move::class.java)
+
+        // Verify that the entity is still on this floor
+        if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
+            entityUnderMovement!!.x = moveAction.location.first
+            entityUnderMovement.y = moveAction.location.second
+            entityUnderMovement.floor = moveAction.floorMovedTo
+
+            gameState.entitiesInLevel[action.performerID] = entityUnderMovement
+        } else {
+            gameState.entitiesInLevel.remove(action.performerID)
+        }
+    }
+
+    /**
+     * Handles the attack action logic for the entities on the floor.
+     *
+     * @param action The EntityActionPacket recieved from Kryonet
+     */
+    private fun handleAttackAction(action: EntityAction) {
+        var json = JSONObject(action.payload)
+        var gson = Gson()
+        var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
+        var entityAttacked = gameState.entitiesInLevel[attackAction.attackID]
+        entityAttacked!!.health -= attackAction.dmg
+
+        // Remove the entity from the level if their health is less than 0
+        if(entityAttacked!!.health <= 0) {
+            gameState.entitiesInLevel.remove(entityAttacked.ID)
+        }
+
+        gameState.entitiesInLevel[attackAction.attackID] = entityAttacked
     }
 }

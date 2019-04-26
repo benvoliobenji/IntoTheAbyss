@@ -3,7 +3,7 @@ package com.example.intotheabyss.game.drawplayer
 import android.content.Context
 import android.graphics.*
 import com.example.intotheabyss.game.GameView
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.player.Player
 
 var gameView: GameView? = null
 private var playerImage: Bitmap? = null
