@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.view.MotionEvent
 import com.example.intotheabyss.game.GameView
 import com.example.intotheabyss.game.entity.Entity
+import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.game.entity.player.Role
 
@@ -37,11 +38,19 @@ class PlayerBoard(private val gameView: GameView,
         friendPaint.alpha = 90
     }
 
-    override fun drawPlayerBoard(canvas: Canvas, playerList: HashMap<String, Player>) {
+    override fun drawPlayerBoard(canvas: Canvas, entityList: HashMap<String, Entity>) {
         rectArray.clear()
         groupRectArray.clear()
         keyArray.clear()
         groupKeyArray.clear()
+
+        var playerList: HashMap<String, Player> = hashMapOf()
+
+        for (entity in entityList.values) {
+            if (entity.type == EntityType.PLAYER) {
+                playerList[entity.ID] = entity as Player
+            }
+        }
 
         var i = 0
         for (p in playerList.keys) {
@@ -78,7 +87,15 @@ class PlayerBoard(private val gameView: GameView,
         groupKeyArray.add(p)
     }
 
-    override fun getPlayerBoardAction(playerList: HashMap<String, Entity>, x: Float, y: Float, action: MotionEvent) {
+    override fun getPlayerBoardAction(entityList: HashMap<String, Entity>, x: Float, y: Float, action: MotionEvent) {
+        var playerList: HashMap<String, Player> = hashMapOf()
+
+        for (entities in entityList.values) {
+            if (entities.type == EntityType.PLAYER) {
+                playerList[entities.ID] = entities as Player
+            }
+        }
+
         for (r in rectArray)    {
             if ((lastX != x) and (lastY != y)) {
                 if ((isInRect(x, y, r)) and (!removed)) {
@@ -86,7 +103,7 @@ class PlayerBoard(private val gameView: GameView,
                     val s = keyArray[i]
 
                     var newMember = playerList[s]!!
-                    if (newMember.)
+                   // if (newMember.)
 
 //                    gameView.gameState!!.playersInLevel.remove(s)
                     addToGroup(playerList[s]!!, s)

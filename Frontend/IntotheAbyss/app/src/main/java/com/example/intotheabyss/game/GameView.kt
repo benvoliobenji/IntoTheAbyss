@@ -14,6 +14,7 @@ import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.entity.Entity
+import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.gamecontroller.PlayerBoard
@@ -323,43 +324,50 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             var i = 0
 
             for (key in gameState!!.entitiesInLevel.keys) {
-                val otherPlayer = gameState!!.entitiesInLevel[key]
-                if (!pList) {
-                    if (isVisible(gameState!!.myPlayer, otherPlayer!!) and (gameState!!.myPlayer != otherPlayer)) {
-                        drawPlayerInterface.drawPlayer(
-                            0,
-                            0,
-                            context,
-                            canvas,
-                            otherPlayer,
-                            otherPlayer.action,
-                            false
-                        )
-                    }
-                } else {
-                    val rect = Rect(25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(), (3 + i) * bSize.toInt())
-                    canvas.drawRect(rect, playerBoardPaint)
-                    canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f, rect.exactCenterY(), playerTextPaint)
-                    if (gameState!!.entitiesInLevel.isNotEmpty()) {
-                        var i = 0
-                        for (player in gameState!!.entitiesInLevel) {
-                            val otherPlayer = player.value
-                            if (isVisible(
-                                    gameState!!.myPlayer,
-                                    otherPlayer
-                                ) and (gameState!!.myPlayer != otherPlayer)
-                            ) {
-                                drawPlayerInterface.drawPlayer(
-                                    0,
-                                    0,
-                                    context,
-                                    canvas,
-                                    otherPlayer,
-                                    otherPlayer.action,
-                                    false
-                                )
+                val otherEntity = gameState!!.entitiesInLevel[key]
+
+                if (otherEntity!!.type == EntityType.PLAYER) {
+                    var otherPlayer = otherEntity as Player
+
+                    if (!pList) {
+                        if (isVisible(gameState!!.myPlayer, otherPlayer) and (gameState!!.myPlayer != otherPlayer)) {
+                            drawPlayerInterface.drawPlayer(
+                                0,
+                                0,
+                                context,
+                                canvas,
+                                otherPlayer,
+                                otherPlayer.action,
+                                false
+                            )
+                        }
+                    } else {
+                        val rect = Rect(25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(),
+                            (3 + i) * bSize.toInt())
+                        canvas.drawRect(rect, playerBoardPaint)
+                        canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
+                            rect.exactCenterY(), playerTextPaint)
+                        if (gameState!!.entitiesInLevel.isNotEmpty()) {
+                            var i = 0
+                            for (player in gameState!!.entitiesInLevel) {
+                                val otherPlayer = player.value
+                                if (isVisible(
+                                        gameState!!.myPlayer,
+                                        otherPlayer
+                                    ) and (gameState!!.myPlayer != otherPlayer)
+                                ) {
+                                    drawPlayerInterface.drawPlayer(
+                                        0,
+                                        0,
+                                        context,
+                                        canvas,
+                                        otherPlayer,
+                                        otherPlayer.action,
+                                        false
+                                    )
+                                }
+                                i++
                             }
-                            i++
                         }
                     }
                 }

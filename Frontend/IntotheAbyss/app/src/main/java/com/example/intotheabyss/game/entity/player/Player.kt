@@ -3,6 +3,7 @@ package com.example.intotheabyss.game.entity.player
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import com.example.intotheabyss.game.entity.Entity
+import com.example.intotheabyss.game.entity.EntityType
 import java.lang.Exception
 
 /**
@@ -15,11 +16,11 @@ import java.lang.Exception
  */
 class Player: PlayerInterface, Entity {
     var playerName: String = ""
-    var party: MutableList<Player> = mutableListOf<Player>()
+    var party: MutableList<Player> = mutableListOf()
     var role: Role = Role.PLAYER
     private var image: Bitmap? = null
 
-    constructor(): super("", 1, 1, 0, 10) {
+    constructor(): super("", 1, 1, 0, 10, 0, EntityType.PLAYER) {
         playerName = ""
         this.party.clear()
         this.role = Role.PLAYER
@@ -35,7 +36,7 @@ class Player: PlayerInterface, Entity {
      * @param yPos The current y-position the player is at.
      */
     constructor(playerName: String, playerID: String, floorNumber: Int, xPos: Int, yPos: Int):
-            super(playerID, xPos, yPos, floorNumber, 10) {
+            super(playerID, xPos, yPos, floorNumber, 10, 0, EntityType.PLAYER) {
         this.playerName = playerName
         this.party.clear()
         this.role = Role.PLAYER
@@ -51,7 +52,7 @@ class Player: PlayerInterface, Entity {
      * @param yPos The current y-position the player is at.
      */
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int):
-            super(playerID, xPos, yPos, floorNumber, health) {
+            super(playerID, xPos, yPos, floorNumber, health, 0, EntityType.PLAYER) {
         this.playerName = playerName
         this.party.clear()
         this.role = Role.PLAYER
@@ -69,9 +70,10 @@ class Player: PlayerInterface, Entity {
      * @param role The role of the Player.
      */
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int,
-                yPos: Int, party: List<Player>, role: Role): super(playerID, xPos, yPos, floorNumber, health) {
+                yPos: Int, party: MutableList<Player>, role: Role): super(playerID, xPos, yPos, floorNumber,
+                health, 0, EntityType.PLAYER) {
         this.playerName = playerName
-        this.party.clear()
+        this.party = party
         this.role = role
     }
 
@@ -79,7 +81,8 @@ class Player: PlayerInterface, Entity {
      * Another constructor that allows for the user to create a Player object from another Player object.
      * @param player Another Player object.
      */
-    constructor(player: Player) : super(player.ID, player.x, player.y, player.floor, player.health) {
+    constructor(player: Player) : super(player.ID, player.x, player.y, player.floor,
+                player.health, 0, EntityType.PLAYER) {
         this.playerName = player.playerName
         this.party = player.party
         this.role = player.role
