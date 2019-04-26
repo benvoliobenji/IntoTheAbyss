@@ -1,14 +1,12 @@
 package com.example.intotheabyss.activities
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.R
 
 import com.example.intotheabyss.game.GameView
-import com.example.intotheabyss.game.drawplayer.gameView
 
 import com.example.intotheabyss.networking.NetworkRunnable
 import kotlinx.android.synthetic.main.activity_dungeon.*
@@ -48,14 +46,5 @@ class DungeonActivity : AppCompatActivity() {
             networkThread.start()
         }
 
-    }
-
-    override fun onUserInteraction() {
-        super.onUserInteraction()
-        if (gameView!!.dead)    {
-            val intent = Intent(this, DeathActivity::class.java)
-            intent.putExtra("level", gameState.level)
-            startActivity(intent)
-        }
     }
 }

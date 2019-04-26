@@ -7,7 +7,6 @@ import android.graphics.Rect
 import android.util.Log
 import android.view.MotionEvent
 import com.example.intotheabyss.GameEvent.Add
-import com.example.intotheabyss.GameEvent.Kick
 import com.example.intotheabyss.GameEvent.Remove
 import com.example.intotheabyss.game.GameView
 import com.example.intotheabyss.game.drawplayer.gameView
@@ -38,7 +37,6 @@ class PlayerBoard(private val gameView: GameView,
 
         playerBoardPaint.color = Color.WHITE
         playerBoardPaint.alpha = 90
-        playerBoardPaint.textSize = 30f
 
         friendPaint.color = Color.GREEN
         friendPaint.alpha = 90
@@ -82,12 +80,6 @@ class PlayerBoard(private val gameView: GameView,
         canvas.drawRect(rect, playerBoardPaint)
         canvas.drawText(player!!.playerName, 25f, rect.exactCenterY(), playerTextPaint)
 
-        if (gameView.player!!.isModerator)  {
-            val xRect = Rect(rect.right, rect.top, rect.right+bSize.toInt(), rect.bottom)
-//            xRect = Rect(5,5,5,5,)
-            canvas.drawRect(xRect, angryPaint)
-        }
-
         rectArray.add(rect)
     }
 
@@ -102,24 +94,14 @@ class PlayerBoard(private val gameView: GameView,
         groupKeyArray.add(p)
     }
 
-    /**
-     * Method to check all the possible inputs. Calls a variety of other methods to assist
-     */
     override fun getPlayerBoardAction(playerList: HashMap<String, Player>, x: Float, y: Float, action: MotionEvent) {
         for (r in rectArray)    {
-            val i = rectArray.indexOf(r)
-            val s = keyArray[i]
-
             if ((lastX != x) and (lastY != y)) {
-                if (gameView.player!!.isModerator)  {
-                    val rect = Rect(r.right, r.top, r.right+bSize.toInt(), r.bottom)
-                    if (isInRect(x, y, rect))   {
-                        kickPlayer(playerList[s]!!, s)
-                        lastX = x
-                        lastY =y
-                    }
-                }
                 if ((isInRect(x, y, r)) and (!removed)) {
+                    val i = rectArray.indexOf(r)
+                    val s = keyArray[i]
+
+//                    gameView.gameState!!.playersInLevel.remove(s)
                     addToGroup(playerList[s]!!, s)
                     removed = true
                     lastX = x
@@ -133,9 +115,6 @@ class PlayerBoard(private val gameView: GameView,
         removed = false
     }
 
-    /**
-     * Method to check if player is trying to remove another player from group
-     */
     override fun getPlayerGroupAction(x: Float, y: Float, action: MotionEvent) {
         for (r in groupRectArray)   {
             if ((lastX != x) and (lastY != y))  {
@@ -146,13 +125,6 @@ class PlayerBoard(private val gameView: GameView,
         }
     }
 
-    /**
-     * Method to add a player to your group
-     * Checks that the other player isn't already in a group
-     *
-     * @param player The player being added to group
-     * @param key The key value associated with player
-     */
     private fun addToGroup(player: Player, key: String): Boolean    {
         if (player.group.isEmpty())  {
             if (gameView.player!!.group.size < 1)   {
@@ -167,12 +139,6 @@ class PlayerBoard(private val gameView: GameView,
         return false
     }
 
-    /**
-     * Method to remove a player from the group
-     * Only possible if player is groupLeader
-     *
-     * @param key The key value associated with the player in group.
-     */
     private fun removeFromGroup(key: String)    {
         if (gameView.player!!.isGroupLeader) {
             val rem = Remove(gameView.player!!.group[key]!!)
@@ -184,45 +150,16 @@ class PlayerBoard(private val gameView: GameView,
         }
     }
 
-    /**
-     * Method to check if player presses leaveGroup button
-     *
-     * @param x The x-coor of input
-     * @param y The y-coor of input
-     */
     private fun checkLeaveGroup(x: Float, y: Float): Boolean    {
         return isInRect(x, y, leaveGroupRect!!)
     }
 
-    /**
-     * Method to let player leave a group
-     */
     private fun leaveGroup()    {
         val rem = Remove(gameView.player!!)
         gameView.gameState!!.eventQueue.add(rem)
         gameView.player!!.group.clear()
     }
 
-    /**
-     * Function to kick player from game.
-     * Only accessible to moderators.
-     *
-     * @param player The player to be kicked
-     * @param s The key value of the player being kicked.
-     */
-    private fun kickPlayer(player: Player, s: String)    {
-        val k = Kick(player)
-        gameView.gameState!!.eventQueue.add(k)
-        gameView.gameState!!.playersInLevel.remove(s)
-    }
-
-    /**
-     * Method to check if an input is inside a rect.
-     *
-     * @param x The x-coordinate of the input
-     * @param y The y-coordinate of the input
-     * @param rect The rect we are checking
-     */
     private fun isInRect(x: Float, y: Float, rect: Rect): Boolean   {
         val l = rect.left.toFloat()
         val r = rect.right.toFloat()

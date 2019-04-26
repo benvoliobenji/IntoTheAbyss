@@ -23,7 +23,6 @@ import com.example.intotheabyss.utils.TileTypes
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     var debug = true //set to true to get a generic level, false to get a level from DB
-    var dead = false //var used to show if player is dead/not
 
     private val thread: GameThread
     var gameState: GameState? = null
@@ -77,6 +76,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is kinda like a constructor. Just code that needs to be ran on startup. A lot of initialization of stuff, etc
      */
     init {
+
         // Don't really know what this does
         holder.addCallback(this)
 
@@ -162,10 +162,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         minX = p.x
         minY = p.y
 
-        if (player!!.health < 1)    {
-            dead = true
-        }
-
         if (pList) {
             playerBoard!!.getPlayerBoardAction(gameState!!.playersInLevel, event.x, event.y, event)
             playerBoard!!.getPlayerGroupAction(event.x, event.y, event)
@@ -174,8 +170,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         /////
         //TODO: Remove this code later.
         if ((gameState != null) and (gameState!!.playersInLevel.size < 1)) {
-            player!!.isModerator = true
-
             var testPlayer = Player("test", "pid", 10, 0, 15, 15)
             val playerList = gameState!!.playersInLevel
             playerList["test"] = testPlayer
@@ -188,11 +182,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
             testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
             playerList["test4"] = testPlayer
-        }
-
-        //TODO: Absolutely need to remove this also
-        if (player!!.x == 13)   {
-            dead = true
         }
     }
 
