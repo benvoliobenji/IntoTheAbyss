@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         // Google Sign-In
         var signInButton = findViewById<Button>(R.id.playButton)
         var gso: GoogleSignInOptions = GoogleSignInOptions.Builder(
-            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).requestEmail().build()
+            GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         signInButton.setOnClickListener {signIn()}
