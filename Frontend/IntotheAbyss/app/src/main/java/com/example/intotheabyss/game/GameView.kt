@@ -192,10 +192,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
 
         drawOtherPlayers(canvas)
-
-        val paint = Paint()
-        paint.color = Color.RED
-        paint.textSize = 100f
     }
 
     /**
