@@ -6,12 +6,16 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.Log
 import android.view.MotionEvent
+import com.example.intotheabyss.GameEvent.Add
+import com.example.intotheabyss.GameEvent.Remove
 import com.example.intotheabyss.game.GameView
+import com.example.intotheabyss.game.drawplayer.gameView
 import com.example.intotheabyss.game.player.Player
 
 private var playerTextPaint = Paint()
 private var playerBoardPaint = Paint()
 private var friendPaint = Paint()
+private var angryPaint = Paint()    //All the paint used for angry things like kicking people and leaving groups
 
 private var rectArray = ArrayList<Rect>()
 private var keyArray = ArrayList<String>()
@@ -21,6 +25,8 @@ private var groupKeyArray = ArrayList<String>()
 private var removed = false
 private var lastX = 0f
 private var lastY = 0f
+
+private var leaveGroupRect: Rect? = null
 
 class PlayerBoard(private val gameView: GameView,
                   private val bSize: Float) : PlayerBoardInterface    {
@@ -34,6 +40,12 @@ class PlayerBoard(private val gameView: GameView,
 
         friendPaint.color = Color.GREEN
         friendPaint.alpha = 90
+
+        angryPaint.color = Color.RED
+        angryPaint.alpha = 90
+
+        leaveGroupRect = Rect((gameView.sWidth - 25 - 2*bSize).toInt(), (gameView.sHeight - 10 - bSize).toInt(),
+            gameView.sWidth - 25, gameView.sHeight - 10)
     }
 
     override fun drawPlayerBoard(canvas: Canvas, playerList: HashMap<String, Player>) {
@@ -55,6 +67,11 @@ class PlayerBoard(private val gameView: GameView,
         for (g in gameView.player!!.group)  {
             groupList(g.value, canvas, i, g.key)
             i++
+        }
+
+        if (gameView.player!!.group.size > 0)   {
+            canvas.drawRect(leaveGroupRect, angryPaint)
+            canvas.drawText("Leave Group", leaveGroupRect!!.left.toFloat(), leaveGroupRect!!.centerY().toFloat(), playerBoardPaint)
         }
     }
 
@@ -90,6 +107,9 @@ class PlayerBoard(private val gameView: GameView,
                     lastX = x
                     lastY =y
                 }
+                if (checkLeaveGroup(x, y))  {
+                    leaveGroup()
+                }
             }
         }
         removed = false
@@ -110,6 +130,9 @@ class PlayerBoard(private val gameView: GameView,
             if (gameView.player!!.group.size < 1)   {
                 gameView.player!!.isGroupLeader = true
             }
+            val mP = gameView.player!!
+            val add = Add(mP, player)
+            gameView.gameState!!.eventQueue.add(add)
             gameView.player!!.group[key] = player
         }
 
@@ -118,11 +141,23 @@ class PlayerBoard(private val gameView: GameView,
 
     private fun removeFromGroup(key: String)    {
         if (gameView.player!!.isGroupLeader) {
+            val rem = Remove(gameView.player!!.group[key]!!)
+            gameView.gameState!!.eventQueue.add(rem)
             gameView.player!!.group.remove(key)
         }
         if (gameView.player!!.group.size < 1)   {
             gameView.player!!.isGroupLeader = false
         }
+    }
+
+    private fun checkLeaveGroup(x: Float, y: Float): Boolean    {
+        return isInRect(x, y, leaveGroupRect!!)
+    }
+
+    private fun leaveGroup()    {
+        val rem = Remove(gameView.player!!)
+        gameView.gameState!!.eventQueue.add(rem)
+        gameView.player!!.group.clear()
     }
 
     private fun isInRect(x: Float, y: Float, rect: Rect): Boolean   {
