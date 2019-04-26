@@ -3,10 +3,7 @@ package com.example.intotheabyss.game.entity.player
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import com.example.intotheabyss.game.entity.Entity
-
 import java.lang.Exception
-
-import kotlin.random.Random
 
 /**
  * The Player class implements the PlayerInterface and creates and object that will represent the User and the other
@@ -105,7 +102,7 @@ class Player: PlayerInterface, Entity {
      */
     override fun draw(canvas: Canvas, x: Int, y: Int) {
         try {
-            canvas.drawBitmap(image, x.toFloat(), y.toFloat(), null)
+            canvas.drawBitmap(image!!, x.toFloat(), y.toFloat(), null)
         } catch (e: Exception) {
             print(e.printStackTrace())
         }

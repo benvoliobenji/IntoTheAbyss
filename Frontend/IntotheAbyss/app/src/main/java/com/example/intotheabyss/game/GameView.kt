@@ -1,6 +1,7 @@
 package com.example.intotheabyss.game
 
 import android.content.Context
+import android.content.Entity
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
@@ -10,16 +11,12 @@ import android.view.SurfaceView
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.entity.player.Player
-import android.content.res.Resources
-import android.graphics.*
-import android.view.MotionEvent
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
-import com.example.intotheabyss.game.player.Player
 import com.example.intotheabyss.utils.TileTypes
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
@@ -291,7 +288,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         /////
         //TODO: Remove this code later.
         var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-        val playerList = gameState!!.playersInLevel
+        val playerList = gameState!!.entitiesInLevel
         playerList["test"] = testPlayer
 
         testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
@@ -304,19 +301,19 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         playerList["test4"] = testPlayer
 
 
-        if (gameState!!.playersInLevel.isNotEmpty()) {
+        if (gameState!!.entitiesInLevel.isNotEmpty()) {
             var i = 0
 
-            for (key in gameState!!.playersInLevel.keys) {
-                val otherPlayer = gameState!!.playersInLevel[key]
+            for (key in gameState!!.entitiesInLevel.keys) {
+                val otherPlayer = gameState!!.entitiesInLevel[key]
                 if (!pList) {
                     if (isVisible(gameState!!.myPlayer, otherPlayer!!) and (gameState!!.myPlayer != otherPlayer)) {
-                        drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.actionStatus, false)
+                        drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.action, false)
                     }
                 } else  {
                     val rect = Rect(25, ((2+i)*bSize).toInt(), 25 + 3*bSize.toInt(), (3+i)*bSize.toInt())
                     canvas.drawRect(rect, playerBoardPaint)
-                    canvas.drawText(gameState!!.playersInLevel[key]!!.playerName, 25f, rect.exactCenterY(), playerTextPaint)
+                    canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f, rect.exactCenterY(), playerTextPaint)
                 }
                 i++
             }
@@ -330,7 +327,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     *@Return true if a straight line can be drawn from p1 -> p2 without intersecting a wall.
     *@Return false otherwise.
      */
-    private fun isVisible(p1: Player, p2: Player) : Boolean {
+    private fun isVisible(p1: Player, p2: com.example.intotheabyss.game.entity.Entity) : Boolean {
         var xDif = (p2.x - p1.x).toDouble()
         var yDif = (p2.y - p1.y).toDouble()
         val distAway = Math.sqrt(xDif*xDif+yDif*yDif)

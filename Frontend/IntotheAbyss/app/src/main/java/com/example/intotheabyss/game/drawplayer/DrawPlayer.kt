@@ -3,6 +3,7 @@ package com.example.intotheabyss.game.drawplayer
 import android.content.Context
 import android.graphics.*
 import com.example.intotheabyss.game.GameView
+import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.player.Player
 
 var gameView: GameView? = null
@@ -39,7 +40,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param gAction The action status of the player we are drawing. 0 if no action, 1 if action
      * @param isPlayer Is this player the owner of the phone? False if not, true if so.
      */
-    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: Player, gAction: Int, isPlayer: Boolean)  {
+    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: com.example.intotheabyss.game.entity.Entity, gAction: Int, isPlayer: Boolean)  {
         val x = player.x
         val y = player.y
 
@@ -49,7 +50,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         paint.textSize = 30.toFloat()
 
         drawAction(gAction)
-        val image = setPlayerImage(dX, dY, context, player.actionStatus, player)
+        val image = setPlayerImage(dX, dY, context, player.action, player)
         setAnimState(image)
 
 
@@ -83,16 +84,16 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param gAction Whether or not the player is performing an action
      * @param player The player that will be drawn
      */
-    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Player): Bitmap {
+    override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Entity): Bitmap {
         var isMonster = false
-        if ((!player.playerID.isBlank()) && (player.playerID.length>2)) {
-            if ((player.playerID[0] == 'M') && player.playerID[1] == 'M') {
+        if ((!player.ID.isBlank()) && (player.ID.length>2)) {
+            if ((player.ID[0] == 'M') && player.ID[1] == 'M') {
                 isMonster = true
             }
         }
 
         var image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
-        if (player.actionStatus == 1)   {
+        if (player.action == 1)   {
             animState = 0
         }
 
@@ -192,7 +193,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param player The player to draw the health of.
      * @param canvas The canvas object to draw to
      */
-    private fun drawHealth(player: Player, canvas: Canvas) {
+    private fun drawHealth(player: Entity, canvas: Canvas) {
         val paint = Paint()
         paint.color = Color.RED
         paint.style = Paint.Style.FILL_AND_STROKE
@@ -207,13 +208,13 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param player The player in question
      * @param canvas The canvas we will be drawing to.
      */
-    private fun drawUserName(player: Player, canvas: Canvas) {
+    private fun drawUserName(player: Entity, canvas: Canvas) {
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
 
-        canvas.drawText(player.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
+        canvas.drawText(player.ID, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
 
     /**
