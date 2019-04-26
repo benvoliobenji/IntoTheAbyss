@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import app.entity.GameEntity;
 import app.entity.player.PlayerInterface;
 import app.room.RoomInterface;
 import app.tiles.Floor;
@@ -27,7 +28,7 @@ public class Level implements LevelInterface {
 	private Integer level;
 	private Random rand;
 	private Hashtable<String, PlayerInterface> players;
-	private Hashtable<String, app.entity.Entity> entities;
+	private Hashtable<String, GameEntity> gameEntities;
 	@Transient
 	private Tile[][] grid;
 	@Transient
@@ -41,7 +42,7 @@ public class Level implements LevelInterface {
 	public Level() {
 		rand = new Random();
 		players = new Hashtable<String, PlayerInterface>();
-		entities = new Hashtable<String, app.entity.Entity>();
+		gameEntities = new Hashtable<String, GameEntity>();
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		fillGridForDefaultMap();
 	}
@@ -54,7 +55,7 @@ public class Level implements LevelInterface {
 	 */
 	public Level(Integer level, RoomInterface room) {
 		players = new Hashtable<String, PlayerInterface>();
-		entities = new Hashtable<String, app.entity.Entity>();
+		gameEntities = new Hashtable<String, GameEntity>();
 		this.level = level;
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		rand = new Random();
@@ -160,10 +161,20 @@ public class Level implements LevelInterface {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see app.level.LevelInterface#replacePlayer(java.lang.String,
+	 * app.entity.player.PlayerInterface)
+	 */
+	public GameEntity getEntity(String ID) {
+		return gameEntities.get(ID);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see app.level.LevelInterface#addEntity(app.entity.Entity)
 	 */
-	public void addEntity(app.entity.Entity e) {
-		entities.put(e.getID(), e);
+	public void addEntity(app.entity.GameEntity e) {
+		gameEntities.put(e.getID(), e);
 	}
 
 	/*
@@ -172,7 +183,7 @@ public class Level implements LevelInterface {
 	 * @see app.level.LevelInterface#removeEntity(java.lang.String)
 	 */
 	public void removeEntity(String entityID) {
-		entities.remove(entityID);
+		gameEntities.remove(entityID);
 	}
 
 	/*

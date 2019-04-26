@@ -1,11 +1,12 @@
 package app.entity.player;
 
-import app.entity.Entity;
+import app.entity.GameEntity;
+import app.group.Group;
 
 /**
  * The Interface PlayerInterface.
  */
-public interface PlayerInterface extends Entity {
+public interface PlayerInterface extends GameEntity {
 
 	/**
 	 * Gets the username.
@@ -34,8 +35,18 @@ public interface PlayerInterface extends Entity {
 	 * @param health the new health
 	 */
 	public void setHealth(Integer health);
-//	
-//	public Group getGroup();
-//	
-//	public void setGroup(Group group);
+
+	/**
+	 * Sets the group.
+	 *
+	 * @param group the new group
+	 */
+	public void setGroup(Group group);
+
+	/**
+	 * Gets the group.
+	 *
+	 * @return the group
+	 */
+	public Group getGroup();
 }

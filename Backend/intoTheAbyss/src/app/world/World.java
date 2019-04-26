@@ -65,6 +65,7 @@ public class World implements WorldInterface {
 		levels.put(level.getLevel(), level);
 	}
 
+	// TODO change to accept entities
 	/**
 	 * Moves a player from one level to another.
 	 *

@@ -3,7 +3,7 @@ package app.level;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import app.entity.Entity;
+import app.entity.GameEntity;
 import app.entity.player.PlayerInterface;
 import app.tiles.Tile;
 
@@ -40,6 +40,14 @@ public interface LevelInterface {
 	 * @return the player requested
 	 */
 	public PlayerInterface getPlayer(String ID);
+
+	/**
+	 * Gets the Entity as a Entitiy by ID
+	 *
+	 * @param ID the id
+	 * @return the Entity requested
+	 */
+	public app.entity.GameEntity getEntity(String ID);
 
 	/**
 	 * Gets the grid.
@@ -88,7 +96,7 @@ public interface LevelInterface {
 	 *
 	 * @param e the e
 	 */
-	public void addEntity(Entity e);
+	public void addEntity(GameEntity e);
 
 	/**
 	 * Removes the entity from the level by ID.

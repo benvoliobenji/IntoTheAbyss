@@ -3,7 +3,7 @@ package app.entity;
 /**
  * Interface for items, monsters, npcs, and players
  */
-public interface Entity {
+public interface GameEntity {
 
 	/**
 	 * Prints a string representation of the given entity.
