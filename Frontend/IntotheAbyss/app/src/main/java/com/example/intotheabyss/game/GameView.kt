@@ -1,11 +1,13 @@
 package com.example.intotheabyss.game
 
 import android.content.Context
+<<<<<<< HEAD
 import android.content.Entity
 import android.content.res.Resources
+=======
+>>>>>>> bf200b900d8dcbee22f7ad79bd6b55c8e8c35348
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.intotheabyss.dungeonassets.Tile
