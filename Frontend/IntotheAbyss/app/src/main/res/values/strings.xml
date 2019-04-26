@@ -80,4 +80,5 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="connection_status">Connection Failed or Not Updated</string>
+    <string name="title_activity_death">DeathActivity</string>
 </resources>

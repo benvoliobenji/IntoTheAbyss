@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.intotheabyss">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -9,20 +11,25 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar"
-            android:usesCleartextTraffic="true"
-    >
-            <!--android:theme="@style/AppTheme"-->
-
+            android:usesCleartextTraffic="true">
+        <activity
+                android:name=".activities.DeathActivity"
+                android:label="@string/title_activity_death"
+                android:parentActivityName=".activities.MainActivity"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.example.intotheabyss.activities.MainActivity"/>
+        </activity>
+        <!-- android:theme="@style/AppTheme" -->
         <activity
                 android:name=".activities.SettingsActivity"
                 android:label="@string/title_activity_settings">
         </activity>
         <activity
                 android:name=".activities.DungeonActivity"
-                android:screenOrientation="landscape"
-        >
+                android:screenOrientation="landscape">
         </activity>
-
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,7 +38,5 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
