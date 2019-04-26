@@ -15,13 +15,13 @@ import java.lang.Exception
  */
 class Player: PlayerInterface, Entity {
     var playerName: String = ""
-    var party: List<Player> = listOf()
+    var party: MutableList<Player> = mutableListOf<Player>()
     var role: Role = Role.PLAYER
     private var image: Bitmap? = null
 
     constructor(): super("", 1, 1, 0, 10) {
         playerName = ""
-        this.party = listOf()
+        this.party.clear()
         this.role = Role.PLAYER
         this.image = null
     }
@@ -37,7 +37,7 @@ class Player: PlayerInterface, Entity {
     constructor(playerName: String, playerID: String, floorNumber: Int, xPos: Int, yPos: Int):
             super(playerID, xPos, yPos, floorNumber, 10) {
         this.playerName = playerName
-        this.party = listOf()
+        this.party.clear()
         this.role = Role.PLAYER
     }
 
@@ -53,7 +53,7 @@ class Player: PlayerInterface, Entity {
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int):
             super(playerID, xPos, yPos, floorNumber, health) {
         this.playerName = playerName
-        this.party = listOf()
+        this.party.clear()
         this.role = Role.PLAYER
     }
 
@@ -71,7 +71,7 @@ class Player: PlayerInterface, Entity {
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int,
                 yPos: Int, party: List<Player>, role: Role): super(playerID, xPos, yPos, floorNumber, health) {
         this.playerName = playerName
-        this.party = party
+        this.party.clear()
         this.role = role
     }
 

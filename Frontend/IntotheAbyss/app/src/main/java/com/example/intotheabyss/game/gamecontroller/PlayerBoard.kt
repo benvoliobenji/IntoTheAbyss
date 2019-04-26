@@ -4,10 +4,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.util.Log
 import android.view.MotionEvent
 import com.example.intotheabyss.game.GameView
-import com.example.intotheabyss.game.player.Player
+import com.example.intotheabyss.game.entity.Entity
+import com.example.intotheabyss.game.entity.player.Player
+import com.example.intotheabyss.game.entity.player.Role
 
 private var playerTextPaint = Paint()
 private var playerBoardPaint = Paint()
@@ -52,8 +53,8 @@ class PlayerBoard(private val gameView: GameView,
         }
 
         i = 0
-        for (g in gameView.player!!.group)  {
-            groupList(g.value, canvas, i, g.key)
+        for (g in gameView.player!!.party)  {
+            groupList(g, canvas, i, g.ID)
             i++
         }
     }
@@ -61,7 +62,7 @@ class PlayerBoard(private val gameView: GameView,
     private fun playerList(player: Player, canvas: Canvas, i: Int)  {
         val rect = Rect(25, ((2+i)*bSize).toInt(), 25 + 5*bSize.toInt(), (3+i)*bSize.toInt())
         canvas.drawRect(rect, playerBoardPaint)
-        canvas.drawText(player!!.playerName, 25f, rect.exactCenterY(), playerTextPaint)
+        canvas.drawText(player.playerName, 25f, rect.exactCenterY(), playerTextPaint)
 
         rectArray.add(rect)
     }
@@ -71,18 +72,21 @@ class PlayerBoard(private val gameView: GameView,
         val offset = right - 25 - 5*bSize.toInt()
         val rect = Rect(offset, ((2+i)*bSize).toInt(), right - 25, (3+i)*bSize.toInt())
         canvas.drawRect(rect, friendPaint)
-        canvas.drawText(player!!.playerName, offset.toFloat(), rect.exactCenterY(), playerTextPaint)
+        canvas.drawText(player.playerName, offset.toFloat(), rect.exactCenterY(), playerTextPaint)
 
         groupRectArray.add(rect)
         groupKeyArray.add(p)
     }
 
-    override fun getPlayerBoardAction(playerList: HashMap<String, Player>, x: Float, y: Float, action: MotionEvent) {
+    override fun getPlayerBoardAction(playerList: HashMap<String, Entity>, x: Float, y: Float, action: MotionEvent) {
         for (r in rectArray)    {
             if ((lastX != x) and (lastY != y)) {
                 if ((isInRect(x, y, r)) and (!removed)) {
                     val i = rectArray.indexOf(r)
                     val s = keyArray[i]
+
+                    var newMember = playerList[s]!!
+                    if (newMember.)
 
 //                    gameView.gameState!!.playersInLevel.remove(s)
                     addToGroup(playerList[s]!!, s)
@@ -106,22 +110,22 @@ class PlayerBoard(private val gameView: GameView,
     }
 
     private fun addToGroup(player: Player, key: String): Boolean    {
-        if (player.group.isEmpty())  {
-            if (gameView.player!!.group.size < 1)   {
-                gameView.player!!.isGroupLeader = true
+        if (player.party.isEmpty())  {
+            if (gameView.player!!.party.isEmpty() and (gameView.player!!.role != Role.ADMIN))   {
+                gameView.player!!.role = Role.GROUP_LEADER
             }
-            gameView.player!!.group[key] = player
+            gameView.player!!.party.add(player)
         }
 
         return false
     }
 
     private fun removeFromGroup(key: String)    {
-        if (gameView.player!!.isGroupLeader) {
-            gameView.player!!.group.remove(key)
+        if (gameView.player!!.role == Role.GROUP_LEADER) {
+            gameView.player!!.party.remove(gameView.gameState!!.entitiesInLevel[key])
         }
-        if (gameView.player!!.group.size < 1)   {
-            gameView.player!!.isGroupLeader = false
+        if ((gameView.player!!.party.isEmpty()) and (gameView.player!!.role != Role.ADMIN))   {
+            gameView.player!!.role = Role.PLAYER
         }
     }
 
