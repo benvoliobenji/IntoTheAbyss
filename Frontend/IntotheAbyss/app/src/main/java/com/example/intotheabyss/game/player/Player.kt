@@ -16,6 +16,9 @@ class Player: PlayerInterface {
     var y: Int = 1
     private var image: Bitmap? = null
     var actionStatus = 0
+    var group: HashMap<String, Player> = hashMapOf()
+    var isModerator = false
+    var isGroupLeader = false
 
     constructor() {
         this.playerName = ""
@@ -25,6 +28,8 @@ class Player: PlayerInterface {
         this.x = 1
         this.y = 1
         this.image = null
+
+        group.clear()
     }
 
     constructor(playerName: String, playerID: String, floorNumber: Int, xPos: Int, yPos: Int) {
@@ -34,6 +39,8 @@ class Player: PlayerInterface {
         this.floorNumber = floorNumber
         this.x = xPos
         this.y = yPos
+
+        group.clear()
     }
 
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int) {
@@ -43,6 +50,8 @@ class Player: PlayerInterface {
         this.floorNumber = floorNumber
         this.x = xPos
         this.y = yPos
+
+        group.clear()
     }
 
     override fun setImage(im: Bitmap) {

@@ -25,7 +25,7 @@ class DungeonActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dungeon)
         var gameView = findViewById<GameView>(R.id.gView)
 
-        gameView.setGameState(gameState)
+        gameView.gameState = gameState
         gameView.debug = debug
 
         if (debug) {
