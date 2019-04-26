@@ -17,6 +17,8 @@ import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
+import com.example.intotheabyss.game.gamecontroller.PlayerBoard
+import com.example.intotheabyss.game.gamecontroller.PlayerBoardInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
 import com.example.intotheabyss.utils.TileTypes
@@ -26,11 +28,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var debug = true //set to true to get a generic level, false to get a level from DB
 
     private val thread: GameThread
-    private var gameState: GameState? = null
+    var gameState: GameState? = null
 
     private var gameControllerInterface: GameControllerInterface
     private var drawPlayerInterface: DrawPlayerInterface
     private val levelHandlerInterface: LevelHandlerInterface = LevelHandler()
+    private var playerBoard: PlayerBoardInterface? = null
+
     var gAction = 0         //GameController sets to 0 if no action, something else if there is
     var event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, 0f, 0f, 0)
 
@@ -90,6 +94,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         playerBoardPaint.color = Color.WHITE
         playerBoardPaint.alpha = 90
 
+        playerBoard = PlayerBoard(this, bSize)
         try {
             player = gameState!!.myPlayer
         } catch (e: java.lang.Exception) {
@@ -159,6 +164,28 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
         minX = p.x
         minY = p.y
+
+        if (pList) {
+            playerBoard!!.getPlayerBoardAction(gameState!!.playersInLevel, event.x, event.y, event)
+            playerBoard!!.getPlayerGroupAction(event.x, event.y, event)
+        }
+
+        /////
+        //TODO: Remove this code later.
+        if ((gameState != null) and (gameState!!.playersInLevel.size < 1)) {
+            var testPlayer = Player("test", "pid", 10, 0, 15, 15)
+            val playerList = gameState!!.playersInLevel
+            playerList["test"] = testPlayer
+
+            testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
+            playerList["test2"] = testPlayer
+
+            testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
+            playerList["test3"] = testPlayer
+
+            testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
+            playerList["test4"] = testPlayer
+        }
     }
 
     /**
@@ -189,16 +216,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             gameControllerInterface.drawController(canvas)
             drawOtherPlayers(canvas)
         } else  {
-
             canvas.drawColor(Color.BLACK)
+            playerBoard!!.drawPlayerBoard(canvas, gameState!!.playersInLevel)
             gameControllerInterface.drawExitButton(canvas)
         }
-
-        drawOtherPlayers(canvas)
-
-        val paint = Paint()
-        paint.color = Color.RED
-        paint.textSize = 100f
     }
 
     /**
@@ -215,15 +236,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
 //        Removing the super call seems dangerous, but it fixed my problems so idk
 //        return super.dispatchTouchEvent(event)
-    }
-
-
-    /**
-     * Method to set the gameState for this object to reference
-     * @param gState The gameState variable to set gameState equal to
-     */
-     fun setGameState(gState: GameState)  {
-        gameState = gState
     }
 
     /**
@@ -255,11 +267,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             validLevel = true
         }
 
-
-
         //image variable - will maybe be updated to be more efficient later
         var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
-
 
         //Loop through all tiles to be displayed, and a few others to minimize lag
         for (i in minX..minX+dimWidth) {
@@ -286,7 +295,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      *@param canvas The canvas object to draw to
      */
     private fun drawOtherPlayers(canvas: Canvas) {
-
         /////
         //TODO: Remove this code later.
         var testPlayer = Player("test", "pid", 10, 0, 15, 15)
@@ -316,6 +324,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     val rect = Rect(25, ((2+i)*bSize).toInt(), 25 + 3*bSize.toInt(), (3+i)*bSize.toInt())
                     canvas.drawRect(rect, playerBoardPaint)
                     canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f, rect.exactCenterY(), playerTextPaint)
+=======
+        if (gameState!!.playersInLevel.isNotEmpty()) {
+            var i = 0
+            for (player in gameState!!.playersInLevel) {
+                val otherPlayer = player.value
+                if (isVisible(gameState!!.myPlayer, otherPlayer!!) and (gameState!!.myPlayer != otherPlayer)) {
+                    drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.actionStatus, false)
+>>>>>>> 26-leaderboard
                 }
                 i++
             }
