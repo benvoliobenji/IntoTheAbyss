@@ -36,7 +36,7 @@ public abstract class PlayerRepositoryImpl implements PlayerRepository {
 	 * @see app.db.PlayerRepository#getPlayerByPlayerID(java.lang.String)
 	 */
 	@Override
-	public Player getPlayerByPlayerID(String playerPassedID) {
+	public Player getPlayerByID(String playerPassedID) {
 		UUID uuid = UUID.fromString(playerPassedID);
 		System.out.print(uuid.toString());
 		return entityManager.find(Player.class, uuid.toString());

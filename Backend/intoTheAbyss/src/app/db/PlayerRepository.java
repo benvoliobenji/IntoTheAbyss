@@ -25,5 +25,5 @@ public interface PlayerRepository extends CrudRepository<Player, String> {
 	 * @param playerPassedID the player passed ID
 	 * @return Player
 	 */
-	Player getPlayerByPlayerID(String playerPassedID);
+	Player getPlayerByID(String playerPassedID);
 }
