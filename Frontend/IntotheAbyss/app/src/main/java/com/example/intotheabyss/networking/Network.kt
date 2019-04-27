@@ -327,10 +327,16 @@ class Network(private var gameState: GameState): Listener() {
         var json = JSONObject(action.payload)
         var gson = Gson()
         var kickAction = gson.fromJson<Kick>(json.toString(), Kick::class.java)
+        var kickingPlayer = Player()
 
-        var kickingPlayer = gameState.entitiesInLevel[action.performerID] as Player
+        kickingPlayer = if (action.performerID == gameState.myPlayer.ID) {
+            gameState.myPlayer
+        } else {
+            gameState.entitiesInLevel[action.performerID] as Player
+        }
 
         if (kickingPlayer.role == Role.GROUP_LEADER && gameState.myPlayer.ID == kickAction.kickedID) {
+            gameState.myPlayer.role = Role.PLAYER
             kickingPlayer.party.remove(gameState.myPlayer)
 
             for (player in kickingPlayer.party) {
