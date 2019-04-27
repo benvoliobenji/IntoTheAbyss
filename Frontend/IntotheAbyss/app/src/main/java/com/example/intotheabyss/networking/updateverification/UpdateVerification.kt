@@ -1,8 +1,10 @@
 package com.example.intotheabyss.networking.updateverification
 
+import android.util.Log
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.game.event.AttackEvent
 import com.example.intotheabyss.game.event.EventType
+import com.example.intotheabyss.game.event.RequestEvent
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 
@@ -59,11 +61,10 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
                     // TODO: ADD LOGIC FOR KICKING PLAYER
                 }
                 EventType.REQUEST -> {
-                    // TODO: ADD LOGIC FOR REQUESTING INVITES
+                    val attack: RequestEvent = gameState.eventQueue.remove() as RequestEvent
+                    network.requestPlayer(attack)
                 }
-                EventType.JOIN -> {
-                    // TODO: ADD LOGIC FOR JOINING
-                }
+                else -> Log.i("EventType", "Unknown EventType" + event.type)
             }
             return UpdateVerificationType.EVENT
         }

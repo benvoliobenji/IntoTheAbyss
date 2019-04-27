@@ -10,14 +10,13 @@ import com.esotericsoftware.minlog.Log as kryolog
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
-import com.example.intotheabyss.game.entity.Entity
-import com.example.intotheabyss.game.entity.entityaction.Attack
-import com.example.intotheabyss.game.entity.entityaction.EntityAction
-import com.example.intotheabyss.game.entity.entityaction.EntityActionType
-import com.example.intotheabyss.game.entity.entityaction.Move
+import com.example.intotheabyss.game.entity.EntityType
+import com.example.intotheabyss.game.entity.entityaction.*
 import com.example.intotheabyss.game.entity.monster.Monster
 import com.example.intotheabyss.networking.packets.*
 import com.example.intotheabyss.game.entity.player.Player
+import com.example.intotheabyss.game.entity.player.Role
+import com.example.intotheabyss.game.event.RequestEvent
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
@@ -118,18 +117,10 @@ class Network(private var gameState: GameState): Listener() {
 
                     EntityActionType.ATTACK -> handleAttackAction(action)
 
-                    // What happens if the player is in a group already?
-                    // Does the front end support invites yet?
-                    // How does the back end handle these events?
-                    EntityActionType.JOIN -> {
-                        // TODO: ADD LOGIC FOR JOIN
-                    }
-                    EntityActionType.REQUEST -> {
-                        //TODO: ADD LOGIC FOR REQUEST
-                    }
-                     EntityActionType.KICK -> {
-                        // TODO: ADD LOGIC FOR KICK
-                    }
+                    EntityActionType.JOIN -> handleJoinAction(action)
+
+                    EntityActionType.KICK -> handleKickAction(action)
+
                     else -> Log.i("EntityAction", "Unknown EntityActionType" + o.actionType)
                 }
             }
@@ -167,6 +158,14 @@ class Network(private var gameState: GameState): Listener() {
         val jsonPacket = gson.toJson(attack)
         val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, attacker!!.floor, jsonPacket)
         client.sendTCP(attackPacket)
+    }
+
+    fun requestPlayer(request: RequestEvent) {
+        val gson = Gson()
+        val requester = gameState.entitiesInLevel[request.performerID]
+        val requestJSON = gson.toJson(request.performedID)
+        val requestPacket = EntityAction(request.performerID, EntityActionType.REQUEST, requester!!.floor, requestJSON)
+        client.sendTCP(requestPacket)
     }
 
     /**
@@ -224,7 +223,7 @@ class Network(private var gameState: GameState): Listener() {
     /**
      * Handles the attack action logic for the entities on the floor.
      *
-     * @param action The EntityActionPacket recieved from Kryonet
+     * @param action The EntityActionPacket received from Kryonet
      */
     private fun handleAttackAction(action: EntityAction) {
         var json = JSONObject(action.payload)
@@ -235,9 +234,123 @@ class Network(private var gameState: GameState): Listener() {
 
         // Remove the entity from the level if their health is less than 0
         if(entityAttacked!!.health <= 0) {
+            if (entityAttacked.type == EntityType.PLAYER) {
+                var playerAttacked = entityAttacked as Player
+
+                if (playerAttacked.role == Role.GROUP_LEADER) {
+                    for (player in playerAttacked.party) {
+                        player.party.removeAll(playerAttacked.party)
+                    }
+
+                    playerAttacked.party.removeAll(playerAttacked.party)
+                } else {
+                    for (player in playerAttacked.party) {
+                        player.party.remove(playerAttacked)
+                    }
+                }
+            }
             gameState.entitiesInLevel.remove(entityAttacked.ID)
+        } else {
+            gameState.entitiesInLevel[attackAction.attackID] = entityAttacked
+        }
+    }
+
+    private fun handleJoinAction(action: EntityAction) {
+        var json =JSONObject(action.payload)
+        var gson = Gson()
+        var joinAction: Join = gson.fromJson<Join>(json.toString(), Join::class.java)
+        var joinedPlayer = gameState.entitiesInLevel[joinAction.joinedPlayerID] as Player
+
+        when {
+            gameState.myPlayer.ID == action.performerID -> {
+                gameState.myPlayer.role = Role.GROUP_LEADER
+
+                joinedPlayer.party = gameState.myPlayer.party
+
+                for (player in gameState.myPlayer.party) {
+                    player.party.add(joinedPlayer)
+                }
+
+                gameState.myPlayer.party.add(joinedPlayer)
+            }
+
+            gameState.myPlayer.party.contains(gameState.entitiesInLevel[action.performerID] as Player) -> {
+                joinedPlayer.party = gameState.myPlayer.party
+
+                for (player in gameState.myPlayer.party) {
+                    player.party.add(joinedPlayer)
+                }
+
+                gameState.myPlayer.party.add(joinedPlayer)
+            }
+
+            gameState.myPlayer.ID == joinAction.joinedPlayerID -> {
+                var leaderPlayer = gameState.entitiesInLevel[action.performerID] as Player
+
+                for (player in leaderPlayer.party) {
+                    player.party.add(gameState.myPlayer)
+                }
+
+                leaderPlayer.role = Role.GROUP_LEADER
+                gameState.myPlayer.party = leaderPlayer.party
+                leaderPlayer.party.add(gameState.myPlayer)
+            }
+
+            else -> {
+                var leaderPlayer = gameState.entitiesInLevel[action.performerID] as Player
+                for (players in leaderPlayer.party) {
+                    players.party.add(joinedPlayer)
+                }
+                joinedPlayer.party = leaderPlayer.party
+                leaderPlayer.party.add(joinedPlayer)
+            }
+        }
+    }
+
+    private fun handleKickAction(action: EntityAction) {
+        var json = JSONObject(action.payload)
+        var gson = Gson()
+        var kickAction = gson.fromJson<Kick>(json.toString(), Kick::class.java)
+
+        var kickingPlayer = gameState.entitiesInLevel[action.performerID] as Player
+
+        if (kickingPlayer.role == Role.GROUP_LEADER && gameState.myPlayer.ID == kickAction.kickedID) {
+            kickingPlayer.party.remove(gameState.myPlayer)
+
+            for (player in kickingPlayer.party) {
+                player.party.remove(gameState.myPlayer)
+            }
+
+            gameState.myPlayer.party.removeAll(gameState.myPlayer.party)
+        } else if (kickingPlayer.role == Role.GROUP_LEADER && gameState.myPlayer.ID == kickingPlayer.ID) {
+            val kickedPlayer = gameState.entitiesInLevel[kickAction.kickedID] as Player
+
+            gameState.myPlayer.party.remove(kickedPlayer)
+
+            for (player in gameState.myPlayer.party) {
+                player.party.remove(kickedPlayer)
+            }
+
+            kickedPlayer.party.removeAll(kickedPlayer.party)
+        } else if (kickingPlayer.role == Role.GROUP_LEADER) {
+            val kickedPlayer = gameState.entitiesInLevel[kickAction.kickedID] as Player
+
+            kickingPlayer.party.remove(kickedPlayer)
+
+            for (player in kickingPlayer.party) {
+                player.party.remove(kickedPlayer)
+            }
+
+            kickedPlayer.party.removeAll(kickingPlayer.party)
+        } else {
+            val kickedPlayer = gameState.entitiesInLevel[kickAction.kickedID] as Player
+
+            for (player in kickedPlayer.party) {
+                player.party.remove(kickedPlayer)
+            }
+            
+            gameState.entitiesInLevel.remove(kickAction.kickedID)
         }
 
-        gameState.entitiesInLevel[attackAction.attackID] = entityAttacked
     }
 }
