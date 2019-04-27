@@ -16,6 +16,8 @@ import com.example.intotheabyss.game.entity.monster.Monster
 import com.example.intotheabyss.networking.packets.*
 import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.game.entity.player.Role
+import com.example.intotheabyss.game.event.AttackEvent
+import com.example.intotheabyss.game.event.KickEvent
 import com.example.intotheabyss.game.event.RequestEvent
 import java.io.IOException
 
@@ -68,6 +70,8 @@ class Network(private var gameState: GameState): Listener() {
             register(PlayerPacket::class.java)
             register(EntityAction::class.java)
             register(EntityActionType::class.java)
+
+            register(DisconnectPacket::class.java)
         }
 
 
@@ -153,19 +157,28 @@ class Network(private var gameState: GameState): Listener() {
      */
     fun attackPlayer(attackerID: String, attackedID: String, damage: Int) {
         val gson = Gson()
-        var attacker = gameState.entitiesInLevel[attackerID]
         val attack = Attack(attackedID, damage)
         val jsonPacket = gson.toJson(attack)
-        val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, attacker!!.floor, jsonPacket)
+        val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, gameState.myPlayer.floor, jsonPacket)
         client.sendTCP(attackPacket)
     }
 
     fun requestPlayer(request: RequestEvent) {
-        val gson = Gson()
-        val requester = gameState.entitiesInLevel[request.performerID]
-        val requestJSON = gson.toJson(request.performedID)
-        val requestPacket = EntityAction(request.performerID, EntityActionType.REQUEST, requester!!.floor, requestJSON)
+        val requestPacket = EntityAction(request.performerID, EntityActionType.REQUEST,
+            gameState.myPlayer.floor, request.performedID)
         client.sendTCP(requestPacket)
+    }
+
+    fun kickPlayer(kick: KickEvent) {
+        val kickPacket = EntityAction(kick.performerID, EntityActionType.KICK, gameState.myPlayer.floor,
+            kick.performedID)
+        client.sendTCP(kickPacket)
+    }
+
+    fun disconnect() {
+        val disconnectPacket = DisconnectPacket(gameState.myPlayer.ID)
+        client.sendTCP(disconnectPacket)
+        client.close()
     }
 
     /**
@@ -231,6 +244,9 @@ class Network(private var gameState: GameState): Listener() {
         var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
         var entityAttacked = gameState.entitiesInLevel[attackAction.attackID]
         entityAttacked!!.health -= attackAction.dmg
+
+        var attackEvent = AttackEvent(entityAttacked!!.ID, action.performerID, attackAction.dmg)
+        gameState.eventQueueDisplay.add(attackEvent)
 
         // Remove the entity from the level if their health is less than 0
         if(entityAttacked!!.health <= 0) {
@@ -348,7 +364,7 @@ class Network(private var gameState: GameState): Listener() {
             for (player in kickedPlayer.party) {
                 player.party.remove(kickedPlayer)
             }
-            
+
             gameState.entitiesInLevel.remove(kickAction.kickedID)
         }
 

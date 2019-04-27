@@ -8,5 +8,6 @@ enum class EventType {
     ATTACK,
     JOIN,
     REQUEST,
-    KICK
+    KICK,
+    DISCONNECT
 }
