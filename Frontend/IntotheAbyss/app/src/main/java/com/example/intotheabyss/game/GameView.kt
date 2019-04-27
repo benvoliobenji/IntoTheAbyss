@@ -15,6 +15,7 @@ import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.EntityType
+import com.example.intotheabyss.game.entity.player.Role
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.gamecontroller.PlayerBoard
@@ -165,6 +166,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
 
         gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
         val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
         minX = p.x
@@ -172,7 +174,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         if (pList) {
             playerBoard!!.getPlayerBoardAction(gameState!!.entitiesInLevel, event.x, event.y, event)
-            playerBoard!!.getPlayerGroupAction(event.x, event.y, event)
+            playerBoard!!.getPlayerGroupAction(event.x, event.y)
         }
 
         /////
@@ -180,16 +182,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
             var testPlayer = Player("test", "pid", 10, 0, 15, 15)
             val playerList = gameState!!.entitiesInLevel
-            playerList["test"] = testPlayer
+            playerList["pid"] = testPlayer
 
             testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
-            playerList["test2"] = testPlayer
+            playerList["MMMMMM"] = testPlayer
 
             testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
-            playerList["test3"] = testPlayer
+            playerList["pid3"] = testPlayer
 
             testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
-            playerList["test4"] = testPlayer
+            playerList["pid4"] = testPlayer
         }
     }
 
@@ -304,21 +306,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      *@param canvas The canvas object to draw to
      */
     private fun drawOtherPlayers(canvas: Canvas) {
-        /////
-        //TODO: Remove this code later.
-        var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-        val playerList = gameState!!.entitiesInLevel
-        playerList["test"] = testPlayer
-
-        testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
-        playerList["test2"] = testPlayer
-
-        testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
-        playerList["test3"] = testPlayer
-
-        testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
-        playerList["test4"] = testPlayer
-
 
         if (gameState!!.entitiesInLevel.isNotEmpty()) {
             var i = 0
