@@ -1,8 +1,8 @@
 package com.example.intotheabyss.networking.updateverification
 
+import android.util.Log
 import com.example.intotheabyss.game.GameState
-import com.example.intotheabyss.game.event.AttackEvent
-import com.example.intotheabyss.game.event.EventType
+import com.example.intotheabyss.game.event.*
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 
@@ -56,14 +56,23 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
                     network.attackPlayer(attack.performerID, attack.performedID, attack.damage)
                 }
                 EventType.KICK -> {
-                    // TODO: ADD LOGIC FOR KICKING PLAYER
+                    val kick: KickEvent = gameState.eventQueue.remove() as KickEvent
+                    network.kickPlayer(kick)
                 }
                 EventType.REQUEST -> {
-                    // TODO: ADD LOGIC FOR REQUESTING INVITES
+                    val request: RequestEvent = gameState.eventQueue.remove() as RequestEvent
+                    network.requestPlayer(request)
                 }
-                EventType.JOIN -> {
-                    // TODO: ADD LOGIC FOR JOINING
+                EventType.REMOVE -> {
+                    gameState.eventQueue.remove() as RemoveEvent
+                    val removeEvent = KickEvent(gameState.myPlayer.ID, gameState.myPlayer.ID)
+                    network.kickPlayer(removeEvent)
                 }
+                EventType.DISCONNECT -> {
+                    network.disconnect()
+                    gameState.eventQueue.remove()
+                }
+                else -> Log.i("EventType", "Unknown EventType" + event.type)
             }
             return UpdateVerificationType.EVENT
         }
