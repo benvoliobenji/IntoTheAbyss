@@ -12,7 +12,7 @@ import kotlin.collections.HashMap
  * listeners which will constantly check and modify GameState based on what the server is telling the client or vice-
  * versa.
  *
- * GameState only holds values/objects/hashmaps and does not contain any methods to manipulate data.
+ * GameState only holds values/objects/hash maps and does not contain any methods to manipulate data.
  *
  * Doing this allows for a greater degree of modularity as the game logic has no knowledge or access to manipulate the
  * networking, and the networking should have no knowledge of the game logic itself. By doing this we could theoretically
@@ -27,4 +27,5 @@ class GameState {
     var loading: Boolean = true
     var entitiesInLevel: HashMap<String, Entity> = hashMapOf()
     var eventQueue: Queue<Event> = LinkedList<Event>()
+    var eventQueueDisplay: Queue<Event> = LinkedList<Event>()
 }

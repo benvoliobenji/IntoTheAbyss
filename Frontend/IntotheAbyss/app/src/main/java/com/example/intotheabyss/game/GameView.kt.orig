@@ -1,9 +1,11 @@
 package com.example.intotheabyss.game
+
 import android.content.Context
-import android.view.MotionEvent
-
-
+<<<<<<< HEAD
+import android.content.Entity
 import android.content.res.Resources
+=======
+>>>>>>> bf200b900d8dcbee22f7ad79bd6b55c8e8c35348
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.SurfaceHolder
@@ -13,8 +15,6 @@ import com.example.intotheabyss.dungeonassets.Wall
 import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
-import com.example.intotheabyss.game.entity.Entity
-import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.gamecontroller.PlayerBoard
@@ -51,8 +51,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     //Variables for displaying player
     var player: Player? = null
     var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
-    var dY: Int =
-        0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
+    var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
     var playerIdle = true   //True if player not moving, false if player is moving
 
     //Vars for creating default levels
@@ -61,14 +60,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var validLevel = false
 
     //Bitmaps
-    private var floorImage: Bitmap =
-        BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
-    private var wallImage: Bitmap =
-        BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
-    private val stairsImage: Bitmap =
-        BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
-    private var playerImage: Bitmap =
-        BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
+    private var floorImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.floor)
+    private var wallImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.wall)
+    private val stairsImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.stairs)
+    private var playerImage: Bitmap = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
 
     //Variables for following player
     var minX: Int = 0
@@ -133,7 +128,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if (player == null) {
             try {
                 player = gameState!!.myPlayer
-            } catch (e: java.lang.Exception) {
+            } catch (e: java.lang.Exception)    {
                 e.printStackTrace()
             }
         }
@@ -171,15 +166,15 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         minY = p.y
 
         if (pList) {
-            playerBoard!!.getPlayerBoardAction(gameState!!.entitiesInLevel, event.x, event.y, event)
+            playerBoard!!.getPlayerBoardAction(gameState!!.playersInLevel, event.x, event.y, event)
             playerBoard!!.getPlayerGroupAction(event.x, event.y, event)
         }
 
         /////
         //TODO: Remove this code later.
-        if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
+        if ((gameState != null) and (gameState!!.playersInLevel.size < 1)) {
             var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-            val playerList = gameState!!.entitiesInLevel
+            val playerList = gameState!!.playersInLevel
             playerList["test"] = testPlayer
 
             testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
@@ -220,9 +215,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction, true)
             gameControllerInterface.drawController(canvas)
             drawOtherPlayers(canvas)
-        } else {
+        } else  {
             canvas.drawColor(Color.BLACK)
-            playerBoard!!.drawPlayerBoard(canvas, gameState!!.entitiesInLevel)
+            playerBoard!!.drawPlayerBoard(canvas, gameState!!.playersInLevel)
             gameControllerInterface.drawExitButton(canvas)
         }
     }
@@ -265,7 +260,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if (lvlArray.isNullOrEmpty()) {
             if (gameState!!.level.isNotEmpty()) {
                 lvlArray = gameState!!.level
-            } else {
+            }
+            else {
                 setLevel()
             }
             validLevel = true
@@ -275,27 +271,22 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
 
         //Loop through all tiles to be displayed, and a few others to minimize lag
-        for (i in minX..minX + dimWidth) {
+        for (i in minX..minX+dimWidth) {
             if ((i > -1) and (i < lvlSize.x))
-                for (j in minY..minY + dimHeight) {
-                    if ((j > -1) and (j < lvlSize.y)) {
-                        //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
-                        if (lvlArray[j][i].type == TileTypes.FLOOR) {  //Set image to floorImage
-                            image = floorImage
-                        } else if (lvlArray[j][i].type == TileTypes.WALL) {
-                            image = wallImage                                   //Set image to wallImage
-                        } else if (lvlArray[j][i].type == TileTypes.STAIR) {
-                            image = stairsImage
-                        }
-                        //Try to print the damn thing
-                        canvas.drawBitmap(
-                            image,
-                            (((i - minX) * tileSize)).toFloat(),
-                            (((j - minY) * tileSize) + 1).toFloat(),
-                            null
-                        )
+            for (j in minY..minY+dimHeight) {
+                if ((j > -1) and (j < lvlSize.y)) {
+                    //Try to get the filetype, and then print image - should only fail if undefined tile (aka not on map)
+                    if (lvlArray[j][i].type == TileTypes.FLOOR) {  //Set image to floorImage
+                        image = floorImage
+                    } else if (lvlArray[j][i].type == TileTypes.WALL) {
+                        image = wallImage                                   //Set image to wallImage
+                    } else if (lvlArray[j][i].type == TileTypes.STAIR) {
+                        image = stairsImage
                     }
+                    //Try to print the damn thing
+                    canvas.drawBitmap(image, (((i-minX) * tileSize)).toFloat(), (((j-minY) * tileSize)+1).toFloat(), null)
                 }
+            }
         }
     }
 
@@ -304,6 +295,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      *@param canvas The canvas object to draw to
      */
     private fun drawOtherPlayers(canvas: Canvas) {
+<<<<<<< HEAD
+
         /////
         //TODO: Remove this code later.
         var testPlayer = Player("test", "pid", 10, 0, 15, 15)
@@ -324,68 +317,40 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             var i = 0
 
             for (key in gameState!!.entitiesInLevel.keys) {
-                val otherEntity = gameState!!.entitiesInLevel[key]
-
-                if (otherEntity!!.type == EntityType.PLAYER) {
-                    var otherPlayer = otherEntity as Player
-
-                    if (!pList) {
-                        if (isVisible(gameState!!.myPlayer, otherPlayer) and (gameState!!.myPlayer != otherPlayer)) {
-                            drawPlayerInterface.drawPlayer(
-                                0,
-                                0,
-                                context,
-                                canvas,
-                                otherPlayer,
-                                otherPlayer.action,
-                                false
-                            )
-                        }
-                    } else {
-                        val rect = Rect(25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(),
-                            (3 + i) * bSize.toInt())
-                        canvas.drawRect(rect, playerBoardPaint)
-                        canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
-                            rect.exactCenterY(), playerTextPaint)
-                        if (gameState!!.entitiesInLevel.isNotEmpty()) {
-                            var i = 0
-                            for (player in gameState!!.entitiesInLevel) {
-                                val otherPlayer = player.value
-                                if (isVisible(
-                                        gameState!!.myPlayer,
-                                        otherPlayer
-                                    ) and (gameState!!.myPlayer != otherPlayer)
-                                ) {
-                                    drawPlayerInterface.drawPlayer(
-                                        0,
-                                        0,
-                                        context,
-                                        canvas,
-                                        otherPlayer,
-                                        otherPlayer.action,
-                                        false
-                                    )
-                                }
-                                i++
-                            }
-                        }
+                val otherPlayer = gameState!!.entitiesInLevel[key]
+                if (!pList) {
+                    if (isVisible(gameState!!.myPlayer, otherPlayer!!) and (gameState!!.myPlayer != otherPlayer)) {
+                        drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.action, false)
                     }
+                } else  {
+                    val rect = Rect(25, ((2+i)*bSize).toInt(), 25 + 3*bSize.toInt(), (3+i)*bSize.toInt())
+                    canvas.drawRect(rect, playerBoardPaint)
+                    canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f, rect.exactCenterY(), playerTextPaint)
+=======
+        if (gameState!!.playersInLevel.isNotEmpty()) {
+            var i = 0
+            for (player in gameState!!.playersInLevel) {
+                val otherPlayer = player.value
+                if (isVisible(gameState!!.myPlayer, otherPlayer!!) and (gameState!!.myPlayer != otherPlayer)) {
+                    drawPlayerInterface.drawPlayer(0, 0, context, canvas, otherPlayer, otherPlayer.actionStatus, false)
+>>>>>>> 26-leaderboard
                 }
+                i++
             }
         }
     }
 
     /**
     Function to determine if one player is visible from the other.
-     *@Param p1 - the originating player to start from
-     *@Param p2 - Next player. Checking to see if in LOS of p1
-     *@Return true if a straight line can be drawn from p1 -> p2 without intersecting a wall.
-     *@Return false otherwise.
+    *@Param p1 - the originating player to start from
+    *@Param p2 - Next player. Checking to see if in LOS of p1
+    *@Return true if a straight line can be drawn from p1 -> p2 without intersecting a wall.
+    *@Return false otherwise.
      */
-    private fun isVisible(p1: Player, p2: Entity): Boolean {
+    private fun isVisible(p1: Player, p2: com.example.intotheabyss.game.entity.Entity) : Boolean {
         var xDif = (p2.x - p1.x).toDouble()
         var yDif = (p2.y - p1.y).toDouble()
-        val distAway = Math.sqrt(xDif * xDif + yDif * yDif)
+        val distAway = Math.sqrt(xDif*xDif+yDif*yDif)
 
         var x = p1.x.toDouble()
         var y = p1.y.toDouble()
@@ -401,9 +366,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             change++    //Increase distance traveled by 1 unit
 
             //Check if collision with wall
-            if ((lvlArray[x.toInt()][y.toInt()].type == TileTypes.WALL) || (lvlArray[x.toInt() + 1][y.toInt()].type == TileTypes.WALL) ||
-                (lvlArray[x.toInt()][y.toInt() + 1].type == TileTypes.WALL) || (lvlArray[x.toInt() + 1][y.toInt()].type == TileTypes.WALL)
-            ) {
+            if ((lvlArray[x.toInt()][y.toInt()].type == TileTypes.WALL) || (lvlArray[x.toInt()+1][y.toInt()].type == TileTypes.WALL) ||
+                (lvlArray[x.toInt()][y.toInt()+1].type == TileTypes.WALL) || (lvlArray[x.toInt()+1][y.toInt()].type == TileTypes.WALL)) {
                 return false
             }
         }
