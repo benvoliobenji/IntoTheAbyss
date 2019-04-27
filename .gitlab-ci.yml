@@ -5,54 +5,34 @@ stages:
   - androidbuild
   - androidtest
 
-# Builiding, Testing, and Deploying the Server
-server-build:
-  image: javiersantos/android-ci:latest
-  stage: serverbuild
-  before_script:
-    - export GRADLE_USER_HOME='pwd'/.gradle
-    - chmod +x ./Backend/intoTheAbyss/gradlew
-  tags:
-    - back_end
-    - server_docker
-  script:
-    - cd Backend/intoTheAbyss
-    - ./gradlew build
-  artifacts:
-    paths:
-      - Spring/target/*.jar
-
 # Ideally we build the jar file here, but I don't know how to do that with gradle
 server-test:
-  image: javiersantos/android-ci:latest
+  # image: javiersantos/android-ci:latest
   stage: servertest
   before_script:
-    - export GRADLE_USER_HOME='pwd'/.gradle
     - chmod +x ./Backend/intoTheAbyss/gradlew
   tags:
-    - back_end
-    - server_docker
+    # - back_end
+    # - server_docker
+    - shell
   script:
     - cd Backend/intoTheAbyss
     - ./gradlew test
 
 autoDeploy:
-  image: javiersantos/android-ci:latest
   stage: autodeploy
+  only:
+    - master
   before_script:
-    - export GRADLE_USER_HOME='pwd'/.gradle
     - chmod +x ./Backend/intoTheAbyss/gradlew
   tags:
-    - back_end
-    - server_docker
+    - shell
   script:
     - cd Backend/intoTheAbyss
-    - ./gradlew bootRun
-    # - cd Spring
-    # - gradle bootJar
-    # - sudo mv target/*.jar /target/web-demo.jar
-    # - sudo systemctl stop system-web-demo
-    # - sudo systemctl start system-web-demo
+    - ./gradlew build
+    - sudo mv build/libs/*.jar /target/web-demo.jar
+    - sudo systemctl stop system-web-demo
+    - sudo systemctl start system-web-demo
 
 # Building and Testing Android files
 android-build:

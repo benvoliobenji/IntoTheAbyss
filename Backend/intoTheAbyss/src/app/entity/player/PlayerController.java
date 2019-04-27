@@ -55,7 +55,7 @@ public class PlayerController {
 	@GetMapping(path = "/getPlayer")
 	public @ResponseBody String getPlayer(@RequestParam String playerUUIDPassed) {
 		Json j = new Json();
-		String jsonStr = j.toJson(playerRepository.getPlayerByPlayerID(playerUUIDPassed));
+		String jsonStr = j.toJson(playerRepository.getPlayerByID(playerUUIDPassed));
 		return jsonStr;
 	}
 

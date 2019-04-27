@@ -119,7 +119,7 @@ public class RequestHandler {
 	 */
 	public void handleConnectionRequest(Connection connection, Object object) {
 		ConnectionPacket request = (ConnectionPacket) object;
-		Player p = playerRepository.getPlayerByPlayerID(request.getID());
+		Player p = playerRepository.getPlayerByID(request.getID());
 		if (p != null) {
 			world.getLevel(p.getFloor()).addPlayer(p);
 			Action action = new Action();
@@ -156,7 +156,7 @@ public class RequestHandler {
 					world.addLevel(newLevel.get());
 				}
 
-				Player p = playerRepository.getPlayerByPlayerID(action.getPerformerID());
+				Player p = playerRepository.getPlayerByID(action.getPerformerID());
 				world.switchFloors(p, action.getFloor(), move.getFloorMovedTo());
 				p = (Player) world.getLevel(move.getFloorMovedTo()).getPlayer(action.getPerformerID());
 				playerRepository.save(p);
