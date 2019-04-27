@@ -19,14 +19,14 @@ class UpdateHandlerTests {
         var mockVolleyNetwork = mock<VolleyNetwork>()
         var mockKryoNetwork = mock<Network>()
         var updateVerification = UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y,
-            gameState.myPlayer.floorNumber)
+            gameState.myPlayer.floor)
     }
 
     @Before
     fun prepareTest() {
         gameState = GameState()
         updateVerification = UpdateVerification(gameState.myPlayer.x, gameState.myPlayer.y,
-            gameState.myPlayer.floorNumber)
+            gameState.myPlayer.floor)
     }
 
     @Test
@@ -40,7 +40,7 @@ class UpdateHandlerTests {
 
         Assert.assertEquals(updateVerification.posX, gameState.myPlayer.x)
         Assert.assertEquals(updateVerification.posY, gameState.myPlayer.y)
-        Assert.assertEquals(updateVerification.floorNum, gameState.myPlayer.floorNumber)
+        Assert.assertEquals(updateVerification.floorNum, gameState.myPlayer.floor)
     }
 
     @Test
@@ -54,7 +54,7 @@ class UpdateHandlerTests {
 
         Assert.assertEquals(updateVerification.posX, gameState.myPlayer.x)
         Assert.assertEquals(updateVerification.posY, gameState.myPlayer.y)
-        Assert.assertEquals(updateVerification.floorNum, gameState.myPlayer.floorNumber)
+        Assert.assertEquals(updateVerification.floorNum, gameState.myPlayer.floor)
     }
 
     @Test
@@ -63,16 +63,16 @@ class UpdateHandlerTests {
         gameState.myPlayer.y = 55
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
 
-        verify(mockKryoNetwork, times(1)).updatePosition(gameState.myPlayer.playerID,
-            gameState.myPlayer.floorNumber, gameState.myPlayer.x, gameState.myPlayer.y)
+        verify(mockKryoNetwork, times(1)).updatePosition(gameState.myPlayer.ID,
+            gameState.myPlayer.floor - 1, gameState.myPlayer.floor, gameState.myPlayer.x, gameState.myPlayer.y)
     }
 
     @Test
     fun updateVerificationInvokesNewDungeonLevelOnFloorTransition() {
-        gameState.myPlayer.floorNumber = 1
+        gameState.myPlayer.floor = 1
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
 
-        verify(mockVolleyNetwork, times(1)).retrieveNewDungeonLevel(gameState.myPlayer.floorNumber,
+        verify(mockVolleyNetwork, times(1)).retrieveNewDungeonLevel(gameState.myPlayer.floor,
             mockKryoNetwork)
 
     }
