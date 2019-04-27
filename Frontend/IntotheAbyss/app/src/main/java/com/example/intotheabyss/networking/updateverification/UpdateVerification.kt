@@ -2,10 +2,7 @@ package com.example.intotheabyss.networking.updateverification
 
 import android.util.Log
 import com.example.intotheabyss.game.GameState
-import com.example.intotheabyss.game.event.AttackEvent
-import com.example.intotheabyss.game.event.EventType
-import com.example.intotheabyss.game.event.KickEvent
-import com.example.intotheabyss.game.event.RequestEvent
+import com.example.intotheabyss.game.event.*
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 
@@ -65,6 +62,11 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
                 EventType.REQUEST -> {
                     val request: RequestEvent = gameState.eventQueue.remove() as RequestEvent
                     network.requestPlayer(request)
+                }
+                EventType.REMOVE -> {
+                    gameState.eventQueue.remove() as RemoveEvent
+                    val removeEvent = KickEvent(gameState.myPlayer.ID, gameState.myPlayer.ID)
+                    network.kickPlayer(removeEvent)
                 }
                 EventType.DISCONNECT -> {
                     network.disconnect()
