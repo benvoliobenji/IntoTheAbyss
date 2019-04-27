@@ -39,6 +39,8 @@ server-test:
 autoDeploy:
   image: javiersantos/android-ci:latest
   stage: autodeploy
+  only:
+    - master
   before_script:
     - export GRADLE_USER_HOME='pwd'/.gradle
     - chmod +x ./Backend/intoTheAbyss/gradlew
