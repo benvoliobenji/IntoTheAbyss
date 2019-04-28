@@ -21,8 +21,8 @@ public class Player implements PlayerInterface {
 	/** The id. */
 	@Id
 	@Column(length = 50)
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	//@GeneratedValue(generator = "UUID")
+	//@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String ID;
 
 	/** The username. */
@@ -36,6 +36,8 @@ public class Player implements PlayerInterface {
 	/** The health. */
 	private Integer posX, posY, floor, health;
 
+	private Boolean isMod;
+
 	/**
 	 * Instantiates a new player.
 	 */
@@ -43,6 +45,20 @@ public class Player implements PlayerInterface {
 		floor = Integer.valueOf(0);
 		username = "";
 		health = Integer.valueOf(10);
+	}
+
+	/**
+	 * Instantiates a new player, by assigning a username, floor, posx, posy.
+	 *
+	 * @param id the Player's ID
+	 */
+	public Player(String id) {
+		ID = id;
+		username = "";
+		floor = 0;
+		health = 0;
+		posX = 1;
+		posY = 1;
 	}
 
 	/**
@@ -194,5 +210,13 @@ public class Player implements PlayerInterface {
 	 */
 	public Group getGroup() {
 		return group;
+	}
+
+	public Boolean getMod() {
+		return isMod;
+	}
+
+	public void setMod(Boolean mod) {
+		isMod = mod;
 	}
 }

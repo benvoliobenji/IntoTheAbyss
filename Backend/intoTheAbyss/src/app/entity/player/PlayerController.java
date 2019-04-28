@@ -1,6 +1,7 @@
 package app.entity.player;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,23 +28,30 @@ public class PlayerController {
 	/**
 	 * Adds the player with default values on floor one.
 	 *
-	 * @param username the username
+	 * @param id the id
 	 * @return the player
 	 */
 	@GetMapping(path = "/add")
-	public @ResponseBody Player addPlayer(@RequestParam String username) {
-		List<Player> players = playerRepository.getPlayerByUsername(username);
-		if (players.isEmpty()) {
-			Player player = new Player();
-			player.setFloor(0);
-			player.setUsername(username);
-			player.setHealth(10);
-			player.setPosX(1);
-			player.setPosY(1);
+	public @ResponseBody Player addPlayer(@RequestParam String id) {
+		Optional<Player> p = playerRepository.findById(id);
+		if (!p.isPresent()) {
+			Player player = new Player(id);
+			player.setMod(false);
 			playerRepository.save(player);
 			return player;
 		} else
-			return null;
+			return p.get();
+	}
+
+	@GetMapping(path="/addMod")
+	public @ResponseBody Player addMod(@RequestParam String id, @RequestParam String code) {
+		final String password = "testing";
+
+		Player p = addPlayer(id);
+		p.setMod(password.equals(code));
+		playerRepository.save(p);
+
+		return p;
 	}
 
 	/**
