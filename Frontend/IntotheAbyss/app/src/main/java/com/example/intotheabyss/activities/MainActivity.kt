@@ -68,13 +68,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-        if (account != null) {
-            var intent = Intent(this, DungeonActivity::class.java)
-            intent.putExtra("debug", debugToggle.isChecked)
-            startActivity(intent)
-        }
-        super.onStart()
-    }
+//    override fun onStart() {
+//        var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+//        if (account != null) {
+//            var intent = Intent(this, DungeonActivity::class.java)
+//            intent.putExtra("debug", debugToggle.isChecked)
+//            startActivity(intent)
+//        }
+//        super.onStart()
+//    }
 }
