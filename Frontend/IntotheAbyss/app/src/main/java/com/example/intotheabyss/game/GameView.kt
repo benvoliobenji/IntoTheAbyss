@@ -16,6 +16,7 @@ import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.entity.player.Role
+import com.example.intotheabyss.game.event.AttackEvent
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.gamecontroller.PlayerBoard
@@ -23,10 +24,13 @@ import com.example.intotheabyss.game.gamecontroller.PlayerBoardInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
 import com.example.intotheabyss.utils.TileTypes
+import kotlin.random.Random
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
     var debug = true //set to true to get a generic level, false to get a level from DB
+    private var dead = false
+    var deathActivity = false
 
     private val thread: GameThread
     var gameState: GameState? = null
@@ -158,40 +162,57 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is where we will update game variables. The calling thread will call this before the draw ;method
      */
     fun update() {
-        gameControllerInterface.updatePlayerLocation()
+        if (!dead) {
+            if (player!!.x == 13)   {
+                player!!.health--
+            }
+
+            gameControllerInterface.updatePlayerLocation()
 //        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
-        gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
-        checkNewLevel()
+            gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
+            checkNewLevel()
 
-        pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
+            pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
 
-        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+            gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
 
 //        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
-        val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
-        minX = p.x
-        minY = p.y
+            val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
+            minX = p.x
+            minY = p.y
 
-        if (pList) {
-            playerBoard!!.getPlayerBoardAction(gameState!!.entitiesInLevel, event.x, event.y, event)
-            playerBoard!!.getPlayerGroupAction(event.x, event.y)
-        }
+            if (pList) {
+                playerBoard!!.getPlayerBoardAction(gameState!!.entitiesInLevel, event.x, event.y, event)
+                playerBoard!!.getPlayerGroupAction(event.x, event.y)
+            }
 
-        /////
-        //TODO: Remove this code later.
-        if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
-            var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-            val playerList = gameState!!.entitiesInLevel
-            playerList["pid"] = testPlayer
+            if (player!!.health < 1) {
+                dead = true
 
-            testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
-            playerList["MMMMMM"] = testPlayer
+                //TODO: IAFH:LSIHGSLD:GJ Remove
+                deathActivity = true
+            }
 
-            testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
-            playerList["pid3"] = testPlayer
-
-            testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
-            playerList["pid4"] = testPlayer
+            /////
+//            //TODO: Remove this code later.
+//            if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
+//                var testPlayer = Player("test", "pid", 10, 0, 15, 15)
+//                val playerList = gameState!!.entitiesInLevel
+//                playerList["pid"] = testPlayer
+//
+//                testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
+//                playerList["MMMMMM"] = testPlayer
+//
+//                testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
+//                playerList["pid3"] = testPlayer
+//
+//                testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
+//                playerList["pid4"] = testPlayer
+//            }
+        }   else    {
+            if (gameState!!.eventQueue.isEmpty())   {
+                deathActivity = true
+            }
         }
     }
 
@@ -205,7 +226,27 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 player!!.floor++
                 gameState!!.loading = true //Indicate that we want a new level
                 println("Attempting to descend level. Currently at ${player!!.floor}")
-//                gAction = 0
+            }
+        }
+    }
+
+    /**
+     * Method to put attack event in gameState.eventQueue
+     *
+     * @param dx x direction player is facing
+     * @param dy y direction player is facing
+     */
+    fun checkAttack(dx: Int, dy: Int)   {
+        val atkX = player!!.x + dx
+        val atkY = player!!.y + dy
+
+        if (gameState!!.entitiesInLevel.isNotEmpty()) {
+            for (p in gameState!!.entitiesInLevel) {
+                if ((p.value.x == atkX) and (p.value.y == atkY)) {
+                    val dmg = Random.nextInt(1, 3)
+                    val atk = AttackEvent(player!!.ID, p.key, dmg)
+                    gameState!!.eventQueue.add(atk)
+                }
             }
         }
     }
@@ -215,17 +256,25 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * @param canvas The Canvas object that we will be drawing to
      */
     override fun draw(canvas: Canvas) {
-        if (!pList) {
-            super.draw(canvas)
-            drawBG(canvas)
+        if (!dead) {
+            if (!pList) {
+                super.draw(canvas)
+                drawBG(canvas)
 
-            drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction, true)
-            gameControllerInterface.drawController(canvas)
-            drawOtherPlayers(canvas)
-        } else {
+                drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction, true)
+                gameControllerInterface.drawController(canvas)
+                drawOtherPlayers(canvas)
+            } else {
+                canvas.drawColor(Color.BLACK)
+                playerBoard!!.drawPlayerBoard(canvas, gameState!!.entitiesInLevel)
+                gameControllerInterface.drawExitButton(canvas)
+            }
+        }   else    {
             canvas.drawColor(Color.BLACK)
-            playerBoard!!.drawPlayerBoard(canvas, gameState!!.entitiesInLevel)
-            gameControllerInterface.drawExitButton(canvas)
+            val deathPaint = Paint()
+            deathPaint.color = Color.RED
+            deathPaint.textSize = 50f
+            canvas.drawText("You died", sHeight.toFloat()/2, sWidth.toFloat()/2, deathPaint)
         }
     }
 
@@ -257,8 +306,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * @Param canvas - the canvas object to draw to
      */
     private fun drawBG(canvas: Canvas) {
+        lvlArray = gameState!!.level
         if (debug) {
-            setLevel()
+//            setLevel()
+            lvlArray = gameState!!.level
         } else {
             lvlArray = gameState!!.level
         }
@@ -268,7 +319,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             if (gameState!!.level.isNotEmpty()) {
                 lvlArray = gameState!!.level
             } else {
-                setLevel()
+//                setLevel()
             }
             validLevel = true
         }
@@ -288,6 +339,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             image = wallImage                                   //Set image to wallImage
                         } else if (lvlArray[j][i].type == TileTypes.STAIR) {
                             image = stairsImage
+                            println("$j,$i")
                         }
                         //Try to print the damn thing
                         canvas.drawBitmap(
@@ -299,6 +351,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     }
                 }
         }
+
+//        for (i in 0..99)    {
+//            for (j in 0..24)    {
+//                if (lvlArray[j][i].type == TileTypes.STAIR) {
+//                    println("Found at $j,$i")
+//                }
+//            }
+//        }
     }
 
     /**
@@ -335,9 +395,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                         canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
                             rect.exactCenterY(), playerTextPaint)
                         if (gameState!!.entitiesInLevel.isNotEmpty()) {
-                            var i = 0
+                            i = 0
                             for (player in gameState!!.entitiesInLevel) {
-                                val otherPlayer = player.value
+                                otherPlayer = player.value as Player
                                 if (isVisible(
                                         gameState!!.myPlayer,
                                         otherPlayer

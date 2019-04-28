@@ -94,6 +94,9 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 val stairY = stairs.getInt("y")
                 levelGrid[stairY][stairX] = Stair()
 
+                //TODO: DElete
+                println("$stairX,$stairY")
+
                 // Set the new level in gameState
                 gameState.level = levelGrid
 
