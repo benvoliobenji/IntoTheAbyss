@@ -18,5 +18,7 @@ public enum ActionTypes {
 	/** The kick. */
 	KICK,
 	/** The remove. */
-	REMOVE;
+	REMOVE,
+	/** The death. */
+	DEATH;
 }

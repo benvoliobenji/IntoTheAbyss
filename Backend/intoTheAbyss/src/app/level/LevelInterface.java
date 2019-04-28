@@ -1,10 +1,8 @@
 package app.level;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 import app.entity.GameEntity;
-import app.entity.player.PlayerInterface;
 import app.tiles.Tile;
 
 /**
@@ -30,24 +28,18 @@ public interface LevelInterface {
 	 * Gets the ArrayList of PlayerInterfaces.
 	 *
 	 * @return the players
+	 *
+	 *         public ArrayList<PlayerInterface> getPlayers();
 	 */
-	public ArrayList<PlayerInterface> getPlayers();
 
 	/**
 	 * Gets the player as a PlayerInterface by ID
 	 *
 	 * @param ID the id
 	 * @return the player requested
-	 */
-	public PlayerInterface getPlayer(String ID);
-
-	/**
-	 * Gets the Entity as a Entitiy by ID
 	 *
-	 * @param ID the id
-	 * @return the Entity requested
+	 *         public PlayerInterface getPlayer(String ID);
 	 */
-	public app.entity.GameEntity getEntity(String ID);
 
 	/**
 	 * Gets the grid.
@@ -88,8 +80,9 @@ public interface LevelInterface {
 	 * Adds the player.
 	 *
 	 * @param p PlayerInterface to add to level
+	 *
+	 *          public void addPlayer(PlayerInterface p);
 	 */
-	public void addPlayer(PlayerInterface p);
 
 	/**
 	 * Adds the entity to the level.
@@ -99,26 +92,39 @@ public interface LevelInterface {
 	public void addEntity(GameEntity e);
 
 	/**
+	 * Gets the Entity as a Entitiy by ID
+	 *
+	 * @param ID the id
+	 * @return the Entity requested
+	 */
+	public GameEntity getEntity(String ID);
+
+	/**
 	 * Removes the entity from the level by ID.
 	 *
 	 * @param entityID the entity ID
 	 */
-	public void removeEntity(String entityID);
+	public void removeEntity(String ID);
+
+	public void replaceEntity(String ID, GameEntity e);
 
 	/**
 	 * Removes the player.
 	 *
 	 * @param playerID the player ID
+	 *
+	 *                 public void removePlayer(String playerID);
 	 */
-	public void removePlayer(String playerID);
 
 	/**
 	 * Replace player with ID playerID with p
 	 *
 	 * @param playerID the player ID
 	 * @param p        the p
+	 *
+	 *                 public void replacePlayer(String playerID, PlayerInterface
+	 *                 p);
 	 */
-	public void replacePlayer(String playerID, PlayerInterface p);
 
 	/**
 	 * Fill grid for default map.

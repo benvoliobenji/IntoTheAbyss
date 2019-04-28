@@ -13,6 +13,7 @@ import app.world.World;
 import network.actions.Action;
 import network.actions.ActionTypes;
 import network.packets.ConnectionPacket;
+import network.packets.DisconnectPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
@@ -68,6 +69,7 @@ public class NetworkHandler {
 		kryo.register(PlayerPacket.class);
 		kryo.register(Action.class);
 		kryo.register(ActionTypes.class);
+		kryo.register(DisconnectPacket.class);
 	}
 
 	/**

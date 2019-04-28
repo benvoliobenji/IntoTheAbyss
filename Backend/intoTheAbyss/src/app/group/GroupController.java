@@ -1,5 +1,7 @@
 package app.group;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,20 @@ public class GroupController {
 	 * @return the group members
 	 */
 	@GetMapping(path = "/all")
-	public Iterable<Player> getGroupMembers(Player player) {
+	public List<String> getGroupMembers(Player player) {
 		return player.getGroup().getPlayers();
+
+	}
+
+	/**
+	 * Gets the group members by playerID.
+	 *
+	 * @param player the player
+	 * @return the group members
+	 */
+	@GetMapping(path = "/all")
+	public List<String> getGroupMembers(String ID) {
+		return groupRepository.findById(ID).get().getPlayers();
+
 	}
 }
