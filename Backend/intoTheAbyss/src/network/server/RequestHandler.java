@@ -16,6 +16,7 @@ import network.actions.ActionTypes;
 import network.actions.Attack;
 import network.actions.Move;
 import network.packets.ConnectionPacket;
+import network.packets.DisconnectPacket;
 import network.packets.MapPacket;
 import network.packets.MapRequestPacket;
 import network.packets.PlayerPacket;
@@ -70,6 +71,8 @@ public class RequestHandler {
 	public void handleRequests(Connection connection, Object object) {
 		if (object instanceof ConnectionPacket) {
 			handleConnectionRequest(connection, object);
+		} else if (object instanceof DisconnectPacket) {
+			handleDisconnectRequest(connection, object);
 		} else if (object instanceof MapRequestPacket) {
 			handleMapRequest(connection, object);
 		} else if (object instanceof PlayerPacket) {
@@ -121,7 +124,7 @@ public class RequestHandler {
 		ConnectionPacket request = (ConnectionPacket) object;
 		Player p = playerRepository.getPlayerByID(request.getID());
 		if (p != null) {
-			world.getLevel(p.getFloor()).addPlayer(p);
+			world.getLevel(p.getFloor()).addEntity(p);
 			Action action = new Action();
 			action.setActionType(ActionTypes.ADD);
 			action.setFloor(p.getFloor());
@@ -133,6 +136,26 @@ public class RequestHandler {
 	}
 
 	/**
+	 * Handles disconnect request by adding entity(currently only player). To the
+	 * world and sends a add packet to all clients.
+	 *
+	 * @param connection the connection from Kryonet
+	 * @param object     the object that is a instance of ConnectionRequest
+	 */
+	public void handleDisconnectRequest(Connection connection, Object object) {
+		DisconnectPacket request = (DisconnectPacket) object;
+		Player p = (Player) world.getLevel(request.getFloor()).getEntity(request.getID());
+		// TODO Send a leave event
+		Action action = new Action();
+		action.setActionType(ActionTypes.REMOVE);
+		action.setFloor(request.getFloor());
+		action.setPerformerID(request.getID());
+		server.sendToAllExceptTCP(connection.getID(), action);
+		System.out.println("User removed from world: " + p.toString());
+
+	}
+
+	/**
 	 * Handles move action by taking an Action with a Move type payload.
 	 *
 	 * @param action the action
@@ -140,13 +163,13 @@ public class RequestHandler {
 	 */
 	public void handleMoveAction(Action action, Json json) {
 		Move move = json.fromJson(Move.class, action.getPayload());
-		Player moved = (Player) world.getLevel(action.getFloor()).getPlayer(action.getPerformerID());
+		Player moved = (Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID());
 		if (moved != null) {
 			// If the move action was on the same floor they obviously didn't switch floors.
 			if (move.getFloorMovedTo() == action.getFloor()) {
 				moved.setPosX(move.getLocation().x);
 				moved.setPosY(move.getLocation().y);
-				world.getLevel(action.getFloor()).replacePlayer(moved.getID(), moved);
+				world.getLevel(action.getFloor()).replaceEntity(moved.getID(), moved);
 				playerRepository.save(moved);
 			} else {
 				// Get floor from DB, this should be there as clients request prior to sending
@@ -158,7 +181,7 @@ public class RequestHandler {
 
 				Player p = playerRepository.getPlayerByID(action.getPerformerID());
 				world.switchFloors(p, action.getFloor(), move.getFloorMovedTo());
-				p = (Player) world.getLevel(move.getFloorMovedTo()).getPlayer(action.getPerformerID());
+				p = (Player) world.getLevel(move.getFloorMovedTo()).getEntity(action.getPerformerID());
 				playerRepository.save(p);
 				System.out.println(p.toString());
 			}
@@ -172,10 +195,9 @@ public class RequestHandler {
 	 * @param action the action the instance of an Action with a Attack Payload.
 	 * @param json   the json
 	 */
-	// TODO convert to use entities allowing for monsters.
 	private void handleAttackAction(Action action, Json json) {
 		Attack atk = json.fromJson(Attack.class, action.getPayload());
-		Player attacked = (Player) world.getLevel(action.getFloor()).getPlayer(action.getPerformerID());
+		Player attacked = (Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID());
 		attacked.setHealth(attacked.getHealth() - atk.getDmg());
 		attacked = playerRepository.save(attacked);
 	}

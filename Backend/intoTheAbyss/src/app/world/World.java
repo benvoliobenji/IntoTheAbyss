@@ -74,8 +74,8 @@ public class World implements WorldInterface {
 	 * @param to     the level the player is to be moved to
 	 */
 	public void switchFloors(PlayerInterface player, int from, int to) {
-		levels.get(from).removePlayer(player.getID());
-		levels.get(to).addPlayer(player);
+		levels.get(from).removeEntity(player.getID());
+		levels.get(to).addEntity(player);
 		player.setFloor(Integer.valueOf(to));
 		player.setPosX(Integer.valueOf(levels.get(to).getSpawn().x));
 		player.setPosY(Integer.valueOf(levels.get(to).getSpawn().y));
