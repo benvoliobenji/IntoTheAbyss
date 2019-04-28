@@ -1,7 +1,5 @@
 package com.example.intotheabyss.game.event
 
-import com.example.intotheabyss.game.entity.entityaction.EntityActionType
-
 /**
  * A subclass of type Entity, which allows the network to kick players if the adminID is the correct Role.
  * @constructor Creates a KickEvent object.

@@ -162,10 +162,9 @@ class Network(private var gameState: GameState): Listener() {
      */
     fun attackPlayer(attackerID: String, attackedID: String, damage: Int) {
         val gson = Gson()
-        var attacker = gameState.entitiesInLevel[attackerID]
         val attack = Attack(attackedID, damage)
         val jsonPacket = gson.toJson(attack)
-        val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, attacker!!.floor, jsonPacket)
+        val attackPacket = EntityAction(attackerID, EntityActionType.ATTACK, gameState.myPlayer.floor, jsonPacket)
         client.sendTCP(attackPacket)
     }
 
