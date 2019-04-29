@@ -31,11 +31,12 @@ public class PlayerController {
 	 * @return the player
 	 */
 	@GetMapping(path = "/add")
-	public @ResponseBody Player addPlayer(@RequestParam String username) {
+	public @ResponseBody Player addPlayer(@RequestParam String username, @RequestParam String ID) {
 		List<Player> players = playerRepository.getPlayerByUsername(username);
 		if (players.isEmpty()) {
 			Player player = new Player();
 			player.setFloor(0);
+			player.setID(ID);
 			player.setUsername(username);
 			player.setHealth(10);
 			player.setPosX(1);
