@@ -35,7 +35,6 @@ public class Player implements PlayerInterface {
 
 	/** The health. */
 	private Integer posX, posY, floor, health;
-	private boolean isAdmin;
 
 	/**
 	 * Instantiates a new player.
