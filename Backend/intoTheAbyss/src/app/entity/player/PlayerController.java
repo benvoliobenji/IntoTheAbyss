@@ -1,6 +1,7 @@
 package app.entity.player;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.esotericsoftware.jsonbeans.Json;
 
 import app.db.PlayerRepository;
 
@@ -31,12 +30,11 @@ public class PlayerController {
 	 * @return the player
 	 */
 	@GetMapping(path = "/add")
-	public @ResponseBody Player addPlayer(@RequestParam String username, @RequestParam String ID) {
+	public @ResponseBody Player addPlayer(@RequestParam String username) {
 		List<Player> players = playerRepository.getPlayerByUsername(username);
 		if (players.isEmpty()) {
 			Player player = new Player();
 			player.setFloor(0);
-			player.setID(ID);
 			player.setUsername(username);
 			player.setHealth(10);
 			player.setPosX(1);
@@ -54,10 +52,25 @@ public class PlayerController {
 	 * @return the player
 	 */
 	@GetMapping(path = "/getPlayer")
-	public @ResponseBody String getPlayer(@RequestParam String playerUUIDPassed) {
-		Json j = new Json();
-		String jsonStr = j.toJson(playerRepository.getPlayerByID(playerUUIDPassed));
-		return jsonStr;
+	public @ResponseBody Player getPlayer(@RequestParam String playerUUIDPassed,
+			@RequestParam String playerNamePassed) {
+		Optional<Player> players = playerRepository.findById(playerUUIDPassed);
+		if (!players.isPresent()) {
+			Player player = new Player();
+			player.setFloor(0);
+			player.setID(playerUUIDPassed);
+			player.setUsername(playerNamePassed);
+			player.setHealth(10);
+			player.setPosX(1);
+			player.setPosY(1);
+			playerRepository.save(player);
+			return player;
+		} else
+			return players.get();
+		/*
+		 * Json j = new Json(); String jsonStr =
+		 * j.toJson(playerRepository.getPlayerByID(playerUUIDPassed)); return jsonStr;
+		 */
 	}
 
 	/**
