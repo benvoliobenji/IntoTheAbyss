@@ -1,5 +1,7 @@
 package network.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.esotericsoftware.jsonbeans.Json;
@@ -9,6 +11,7 @@ import com.esotericsoftware.kryonet.Server;
 import app.db.LevelRepository;
 import app.db.PlayerRepository;
 import app.entity.player.Player;
+import app.group.Group;
 import app.level.Level;
 import app.world.World;
 import network.actions.Action;
@@ -101,11 +104,15 @@ public class RequestHandler {
 			handleAttackAction(action, json);
 			server.sendToAllExceptUDP(connection.getID(), action);
 			break;
-		case JOIN:
-			break;
 		case REQUEST:
+			handleRequestAction(action, json, connection);
 			break;
 		case KICK:
+			handleKickAction(action, json, connection);
+			break;
+		case DEATH:
+			handleDeathAction(action, json);
+			server.sendToAllExceptTCP(connection.getID(), action);
 			break;
 		default:
 			System.out.println("Unrecognized Action type found.");
@@ -145,7 +152,19 @@ public class RequestHandler {
 	public void handleDisconnectRequest(Connection connection, Object object) {
 		DisconnectPacket request = (DisconnectPacket) object;
 		Player p = (Player) world.getLevel(request.getFloor()).getEntity(request.getID());
-		// TODO Send a leave event
+
+		if (p.getGroup().getLeader() == p.getID()) {
+			ArrayList<String> members = (ArrayList<String>) p.getGroup().getPlayers();
+			for (int i = 0; i < members.size(); i++) {
+				Action action = new Action();
+				action.setActionType(ActionTypes.KICK);
+				action.setFloor(request.getFloor());
+				action.setPerformerID(request.getID());
+				action.setPayload(members.get(i));
+				server.sendToAllExceptTCP(connection.getID(), action);
+			}
+		}
+
 		Action action = new Action();
 		action.setActionType(ActionTypes.REMOVE);
 		action.setFloor(request.getFloor());
@@ -201,6 +220,67 @@ public class RequestHandler {
 		attacked.setHealth(attacked.getHealth() - atk.getDmg());
 		attacked = playerRepository.save(attacked);
 	}
+
+	/*
+	 * Upon recieving updates the group for all members
+	 */
+	private void handleRequestAction(Action action, Json json, Connection connection) {
+		Player leader = (Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID());
+		if (leader.getGroup() == null) {
+			leader.setGroup(new Group());
+			leader.getGroup().addPlayer(action.getPayload());
+			leader.getGroup().addPlayer(leader.getID());
+		} else {
+			ArrayList<String> members = (ArrayList<String>) leader.getGroup().getPlayers();
+			for (int i = 0; i < members.size(); i++) {
+				Player member = (Player) world.getLevel(action.getFloor()).getEntity(members.get(i));
+				member.getGroup().addPlayer(action.getPayload());
+				world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
+				playerRepository.save(member);
+			}
+
+		}
+
+		Player joinee = (Player) world.getLevel(action.getFloor()).getEntity(action.getPayload());
+		joinee.setGroup(leader.getGroup());
+		world.getLevel(action.getFloor()).replaceEntity(joinee.getID(), joinee);
+		playerRepository.save(joinee);
+
+		Action joinAction = new Action();
+		action.setActionType(ActionTypes.JOIN);
+		action.setFloor(joinee.getFloor());
+		action.setPerformerID(joinee.getID());
+		action.setPayload(leader.getID());
+		server.sendToAllExceptTCP(connection.getID(), joinAction);
+	}
+
+	// Kick action is just the ID of the person to be kicked if it's from a admin.
+	private void handleKickAction(Action action, Json json, Connection connection) {
+		if (((Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID())).getIsAdmin()) {
+			Action updateClient = action;
+			updateClient.setActionType(ActionTypes.REMOVE);
+			updateClient.setPerformerID(action.getPayload());
+			playerRepository.deleteById(action.getPayload());
+			world.getLevel(action.getFloor()).removeEntity(action.getPayload());
+			server.sendToAllExceptUDP(connection.getID(), updateClient);
+		} else {
+			Player leader = (Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID());
+			List<String> members = leader.getGroup().getPlayers();
+			for (int i = 0; i < members.size(); i++) {
+				Player member = (Player) world.getLevel(action.getFloor()).getEntity(members.get(i));
+				member.removePlayerFromGroup(action.getPayload());
+				world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
+				playerRepository.save(member);
+			}
+			server.sendToAllExceptUDP(connection.getID(), action);
+		}
+	}
+
+	private void handleDeathAction(Action action, Json json) {
+		world.getLevel(action.getFloor()).removeEntity(action.getPerformerID());
+		playerRepository.deleteById(action.getPerformerID());
+	}
+	// --------------------------------------------
 
 	/**
 	 * Handle player request actions used to create a player without using the api.
