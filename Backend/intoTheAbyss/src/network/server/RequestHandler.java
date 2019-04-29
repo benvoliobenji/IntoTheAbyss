@@ -170,6 +170,7 @@ public class RequestHandler {
 		action.setFloor(request.getFloor());
 		action.setPerformerID(request.getID());
 		server.sendToAllExceptTCP(connection.getID(), action);
+		world.getLevel(request.getFloor()).removeEntity(p.getID());
 		System.out.println("User removed from world: " + p.toString());
 
 	}
@@ -236,7 +237,7 @@ public class RequestHandler {
 				Player member = (Player) world.getLevel(action.getFloor()).getEntity(members.get(i));
 				member.getGroup().addPlayer(action.getPayload());
 				world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
-				playerRepository.save(member);
+				// playerRepository.save(member);
 			}
 
 		}
@@ -244,7 +245,7 @@ public class RequestHandler {
 		Player joinee = (Player) world.getLevel(action.getFloor()).getEntity(action.getPayload());
 		joinee.setGroup(leader.getGroup());
 		world.getLevel(action.getFloor()).replaceEntity(joinee.getID(), joinee);
-		playerRepository.save(joinee);
+		// playerRepository.save(joinee);
 
 		Action joinAction = new Action();
 		action.setActionType(ActionTypes.JOIN);
@@ -270,7 +271,7 @@ public class RequestHandler {
 				Player member = (Player) world.getLevel(action.getFloor()).getEntity(members.get(i));
 				member.removePlayerFromGroup(action.getPayload());
 				world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
-				playerRepository.save(member);
+				// playerRepository.save(member);
 			}
 			server.sendToAllExceptUDP(connection.getID(), action);
 		}
