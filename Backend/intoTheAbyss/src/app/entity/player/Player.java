@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.springframework.data.annotation.Transient;
+
 import app.group.Group;
 import network.packets.PlayerPacket;
 
@@ -24,6 +26,7 @@ public class Player implements PlayerInterface {
 	private String username;
 
 	/** The group. */
+	@Transient
 	private Group group;
 
 	/** The health. */
