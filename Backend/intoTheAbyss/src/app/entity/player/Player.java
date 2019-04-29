@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import app.group.Group;
 import network.packets.PlayerPacket;
@@ -26,7 +25,7 @@ public class Player implements PlayerInterface {
 	private String username;
 
 	/** The group. */
-	@ManyToOne
+	// @ManyToOne
 	@JoinColumn(name = "groupID")
 	private Group group;
 
