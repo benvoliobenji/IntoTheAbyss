@@ -3,7 +3,6 @@ package app.entity.player;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 
 import app.group.Group;
 import network.packets.PlayerPacket;
@@ -26,7 +25,7 @@ public class Player implements PlayerInterface {
 
 	/** The group. */
 	// @ManyToOne
-	@JoinColumn(name = "groupID")
+	// @JoinColumn(name = "groupID")
 	private Group group;
 
 	/** The health. */
