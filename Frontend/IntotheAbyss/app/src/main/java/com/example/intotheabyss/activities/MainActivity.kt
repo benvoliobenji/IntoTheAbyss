@@ -1,7 +1,6 @@
 package com.example.intotheabyss.activities
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +8,6 @@ import android.widget.Button
 import android.widget.Switch
 import android.widget.Toast
 import com.example.intotheabyss.R
-import com.example.intotheabyss.networking.NetworkRunnable
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val debugToggle = findViewById<Switch>(R.id.debugToggle)
+        val adminToggle = findViewById<Switch>(R.id.adminToggle)
 
         // Google Sign-In
         var signInButton = findViewById<Button>(R.id.playButton)
@@ -61,20 +59,22 @@ class MainActivity : AppCompatActivity() {
     fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             var account: GoogleSignInAccount? = completedTask.result
-            startActivity(Intent(this, DungeonActivity::class.java))
+            var intent = Intent(this, DungeonActivity::class.java)
+            intent.putExtra("admin", adminToggle.isChecked)
+            startActivity(intent)
         } catch(e: ApiException) {
             Log.w("Google Sign In Error", "signInResult:failed code=" + e.statusCode)
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
         }
     }
 
-    override fun onStart() {
-        var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-        if (account != null) {
-            var intent = Intent(this, DungeonActivity::class.java)
-            intent.putExtra("debug", debugToggle.isChecked)
-            startActivity(intent)
-        }
-        super.onStart()
-    }
+//    override fun onStart() {
+//        var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+//        if (account != null) {
+//            var intent = Intent(this, DungeonActivity::class.java)
+//            intent.putExtra("debug", debugToggle.isChecked)
+//            startActivity(intent)
+//        }
+//        super.onStart()
+//    }
 }

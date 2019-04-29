@@ -8,6 +8,6 @@ import com.example.intotheabyss.networking.Network
  * @author Benjamin Vogel
  */
 interface VolleyNetworkInterface{
-    fun retrievePlayerData(playerID: String, playerName: String)
+    fun retrievePlayerData(playerID: String, isAdmin: Boolean, playerName: String)
     fun retrieveNewDungeonLevel(level: Int, network: Network)
 }

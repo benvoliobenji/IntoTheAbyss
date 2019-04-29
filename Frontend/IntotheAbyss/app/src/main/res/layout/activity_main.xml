@@ -45,11 +45,11 @@
             android:backgroundTint="@android:color/holo_orange_light" android:background="@android:color/darker_gray"
             android:backgroundTintMode="multiply"/>
     <Switch
-            android:text="Debug"
+            android:text="Admin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/debugToggle" app:layout_constraintStart_toEndOf="@+id/background"
+            android:id="@+id/adminToggle" app:layout_constraintStart_toEndOf="@+id/background"
             app:layout_constraintEnd_toStartOf="@+id/background"
             android:layout_marginTop="40dp" app:layout_constraintTop_toBottomOf="@+id/settingsButton"
-            tools:text="Debug" android:textColor="@android:color/white" android:textStyle="bold" tools:checked="true"/>
+            tools:text="Admin" android:textColor="@android:color/white" android:textStyle="bold" tools:checked="true"/>
 </android.support.constraint.ConstraintLayout>

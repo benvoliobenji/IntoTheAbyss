@@ -2,12 +2,7 @@ package app.entity.player;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import app.group.Group;
 import network.packets.PlayerPacket;
@@ -21,20 +16,21 @@ public class Player implements PlayerInterface {
 	/** The id. */
 	@Id
 	@Column(length = 50)
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	// @GeneratedValue(generator = "UUID")
+	// @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String ID;
 
 	/** The username. */
 	private String username;
 
 	/** The group. */
-	@ManyToOne
-	@JoinColumn(name = "groupID")
+	// @ManyToOne
+	// @JoinColumn(name = "groupID")
 	private Group group;
 
 	/** The health. */
 	private Integer posX, posY, floor, health;
+	private boolean isAdmin;
 
 	/**
 	 * Instantiates a new player.
@@ -43,6 +39,7 @@ public class Player implements PlayerInterface {
 		floor = Integer.valueOf(0);
 		username = "";
 		health = Integer.valueOf(10);
+		isAdmin = false;
 	}
 
 	/**
@@ -55,6 +52,7 @@ public class Player implements PlayerInterface {
 		floor = Integer.valueOf(playerPacket.getFloorNumber());
 		posX = Integer.valueOf(playerPacket.getXPos());
 		posY = Integer.valueOf(playerPacket.getYPos());
+		health = Integer.valueOf(10);
 	}
 
 	/*
@@ -194,5 +192,27 @@ public class Player implements PlayerInterface {
 	 */
 	public Group getGroup() {
 		return group;
+	}
+
+	/**
+	 * Sets the player as admin.
+	 *
+	 * @param group the new group
+	 */
+	public void setIsAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	/**
+	 * Gets the isAdmin attribute.
+	 *
+	 * @return the group
+	 */
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void removePlayerFromGroup(String playerID) {
+		group.removePlayer(playerID);
 	}
 }

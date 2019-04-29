@@ -11,6 +11,7 @@ import com.example.intotheabyss.dungeonassets.Stair
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.game.entity.player.Player
+import com.example.intotheabyss.game.entity.player.Role
 import com.example.intotheabyss.utils.gridParse
 import java.io.File
 
@@ -33,7 +34,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
     }
 
     //TODO: CHANGE URL TO MATCH NEW URL FOR ID AND NAME
-    // TODO: CHANGE TESTS TO WORK WITH NEW VOLLEYNETWORK INTERFACE
+    //TODO: ADD ISADMIN FOR URL
     /**
      * Retrieves the User's player data through a JSONObjectRequest.
      *
@@ -42,18 +43,32 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      * @param playerID The ID of the user to retrieve their data from the server.
      * @param playerName The display name of the user who's data should be retrieved from the server.
      */
-    override fun retrievePlayerData(playerID: String, playerName: String) {
+    override fun retrievePlayerData(playerID: String, isAdmin: Boolean, playerName: String) {
         // Add the playerName to the url
+//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
+//                "?playerNamePassed=$playerName?isAdmin=$isAdmin"
+        Log.i("VolleyNetwork", "Sending request")
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
                 "?playerNamePassed=$playerName"
+        Log.i("VolleyNetwork", "Request Sent")
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
-                val networkPlayerID = response.getString("playerID")
+                Log.i("VolleyNetwork", response.toString())
+                val networkPlayerID = response.getString("ID")
                 val networkPlayerName = response.getString("username")
+                val floor = response.getInt("floor")
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
-                val player = Player(networkPlayerName, networkPlayerID, 0, posX, posY)
+                val health = response.getInt("health")
+                val playerAdmin = response.getBoolean("isAdmin")
+                val player = Player(networkPlayerName, networkPlayerID, health, floor, posX, posY)
+
+                if(playerAdmin) {
+                    player.role = Role.ADMIN
+                } else {
+                    player.role = Role.PLAYER
+                }
                 gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
                 Log.i("PlayerRegistrationX", posX.toString())

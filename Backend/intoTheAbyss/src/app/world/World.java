@@ -3,7 +3,7 @@ package app.world;
 import java.util.Hashtable;
 import java.util.Random;
 
-import app.entity.player.PlayerInterface;
+import app.entity.GameEntity;
 import app.level.Level;
 import app.level.LevelInterface;
 import app.room.Room;
@@ -73,9 +73,9 @@ public class World implements WorldInterface {
 	 * @param from   the level the player is moved from
 	 * @param to     the level the player is to be moved to
 	 */
-	public void switchFloors(PlayerInterface player, int from, int to) {
-		levels.get(from).removePlayer(player.getID());
-		levels.get(to).addPlayer(player);
+	public void switchFloors(GameEntity player, int from, int to) {
+		levels.get(from).removeEntity(player.getID());
+		levels.get(to).addEntity(player);
 		player.setFloor(Integer.valueOf(to));
 		player.setPosX(Integer.valueOf(levels.get(to).getSpawn().x));
 		player.setPosY(Integer.valueOf(levels.get(to).getSpawn().y));
