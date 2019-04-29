@@ -47,11 +47,14 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
         // Add the playerName to the url
 //        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
 //                "?playerNamePassed=$playerName?isAdmin=$isAdmin"
+        Log.i("VolleyNetwork", "Sending request")
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
                 "?playerNamePassed=$playerName"
+        Log.i("VolleyNetwork", "Request Sent")
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->
+                Log.i("VolleyNetwork", response.toString())
                 val networkPlayerID = response.getString("ID")
                 val networkPlayerName = response.getString("username")
                 val floor = response.getInt("floor")

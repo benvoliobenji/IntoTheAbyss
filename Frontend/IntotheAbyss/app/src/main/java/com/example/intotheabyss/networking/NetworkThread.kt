@@ -34,7 +34,7 @@ class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boo
 
         // Add/Retrieve data from server
         //TODO: Remove this comment
-        volleyNetworkInterface.retrievePlayerData(personID!!, displayName!!)
+        volleyNetworkInterface.retrievePlayerData(personID!!, isAdmin, displayName!!)
 
         val network = Network(gameState)
         //TODO: Remove this comment
