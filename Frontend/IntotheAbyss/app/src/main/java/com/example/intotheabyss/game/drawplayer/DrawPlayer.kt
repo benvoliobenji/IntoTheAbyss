@@ -40,7 +40,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param gAction The action status of the player we are drawing. 0 if no action, 1 if action
      * @param isPlayer Is this player the owner of the phone? False if not, true if so.
      */
-    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: com.example.intotheabyss.game.entity.Entity, gAction: Int, isPlayer: Boolean)  {
+    override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: Entity, gAction: Int, isPlayer: Boolean)  {
         val x = player.x
         val y = player.y
 
@@ -212,11 +212,28 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      */
     private fun drawUserName(player: Entity, canvas: Canvas) {
         val paint = Paint()
+
+        if(checkInGroup(player)) paint.color = Color.GREEN else paint.color = Color.RED //Set userName color
         paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
 
         canvas.drawText(player.ID, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
+    }
+
+    /**
+     * Method to check if a player is in your group.
+     * @param player The player we are checking
+     * @return True if player is in your group. False if not.
+     */
+    private fun checkInGroup(player: Entity): Boolean   {
+        for (p in gameView!!.player!!.party)  {
+            if (p.ID == player.ID)  {
+                return true
+            }
+        }
+
+        return false
     }
 
     /**

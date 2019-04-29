@@ -167,53 +167,72 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 player!!.health--
             }
 
-            gameControllerInterface.updatePlayerLocation()
-//        gAction = gameControllerInterface!!.getAction(event!!.x, event!!.y, event!!.action)
-            gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
-            checkNewLevel()
-
-            pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
-
-            gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
-
-//        println("Gamestate level = ${gameState!!.myPlayer.floorNumber}")
-            val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
-            minX = p.x
-            minY = p.y
+//            gameControllerInterface.updatePlayerLocation()
+//            gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
+//            checkNewLevel()
+//
+//            pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
+//            gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+//
+//            val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
+//            minX = p.x
+//            minY = p.y
+            updatePlayer()
+            updateEvents()
 
             if (pList) {
                 playerBoard!!.getPlayerBoardAction(gameState!!.entitiesInLevel, event.x, event.y, event)
                 playerBoard!!.getPlayerGroupAction(event.x, event.y)
             }
-
             if (player!!.health < 1) {
                 dead = true
-
-                //TODO: IAFH:LSIHGSLD:GJ Remove
-                deathActivity = true
             }
 
-            /////
 //            //TODO: Remove this code later.
-//            if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
-//                var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-//                val playerList = gameState!!.entitiesInLevel
-//                playerList["pid"] = testPlayer
-//
-//                testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
-//                playerList["MMMMMM"] = testPlayer
-//
-//                testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
-//                playerList["pid3"] = testPlayer
-//
-//                testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
-//                playerList["pid4"] = testPlayer
-//            }
+            if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
+                var testPlayer = Player("test", "pid", 10, 0, 15, 15)
+                val playerList = gameState!!.entitiesInLevel
+                playerList["pid"] = testPlayer
+
+                testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
+                playerList["MMMMMM"] = testPlayer
+
+                testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
+                playerList["pid3"] = testPlayer
+
+                testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
+                playerList["pid4"] = testPlayer
+            }
+
         }   else    {
             if (gameState!!.eventQueue.isEmpty())   {
                 deathActivity = true
             }
         }
+    }
+
+    /**
+     * Method to do some general updates for the Player
+     * Just a bunch of calls that were ugly, so I abstracted to a class
+     */
+    private fun updatePlayer()  {
+        gameControllerInterface.updatePlayerLocation()
+        gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
+        checkNewLevel()
+
+        pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
+        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+
+        val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
+        minX = p.x
+        minY = p.y
+    }
+
+    /**
+     * Method to update the event queue that is retrieved from the server.
+     */
+    private fun updateEvents()  {
+        //TODO: Write this code
     }
 
     /**
@@ -225,7 +244,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             if (lvlArray[player!!.y][player!!.x].type == TileTypes.STAIR) {
                 player!!.floor++
                 gameState!!.loading = true //Indicate that we want a new level
-                println("Attempting to descend level. Currently at ${player!!.floor}")
             }
         }
     }
