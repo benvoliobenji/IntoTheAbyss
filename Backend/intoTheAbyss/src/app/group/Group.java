@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -30,7 +29,7 @@ public class Group {
 	private String leader;
 
 	/** The players. */
-	@OneToMany(mappedBy = "group")
+	// @OneToMany(mappedBy = "group")
 	private List<String> players;
 
 	public Group() {
