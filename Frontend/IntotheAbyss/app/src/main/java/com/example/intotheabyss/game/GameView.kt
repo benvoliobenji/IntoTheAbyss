@@ -167,16 +167,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 player!!.health--
             }
 
-//            gameControllerInterface.updatePlayerLocation()
-//            gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
-//            checkNewLevel()
-//
-//            pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
-//            gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
-//
-//            val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
-//            minX = p.x
-//            minY = p.y
             updatePlayer()
             updateEvents()
 
@@ -232,7 +222,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * Method to update the event queue that is retrieved from the server.
      */
     private fun updateEvents()  {
-        //TODO: Write this code
+        while (!gameState!!.eventQueueDisplay.isEmpty())  {
+            val event = gameState!!.eventQueueDisplay.poll()
+            gameState!!.entitiesInLevel[event.performerID]!!.action = 1
+        }
     }
 
     /**

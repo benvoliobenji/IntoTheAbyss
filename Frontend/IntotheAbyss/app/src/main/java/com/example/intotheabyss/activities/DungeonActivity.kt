@@ -57,18 +57,8 @@ class DungeonActivity : AppCompatActivity() {
 
     }
 
-//    override fun onUserInteraction() {
-//        super.onUserInteraction()
-//        if (gameView!!.dead)    {
-//            val intent = Intent(this, DeathActivity::class.java)
-//            intent.putExtra("level", gameState.level)
-//            startActivity(intent)
-//        }
-//    }
-
     override fun onUserInteraction() {
         super.onUserInteraction()
-
         if (gameView!!.deathActivity) {
             val intent = Intent(this, DeathActivity::class.java)
             intent.putExtra("level", gameState.level)
