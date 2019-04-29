@@ -30,7 +30,7 @@ public class Group {
 	private String leader;
 
 	/** The players. */
-	private List<String> players;
+	private ArrayList<String> players;
 
 	public Group() {
 		players = new ArrayList<String>();
@@ -77,7 +77,7 @@ public class Group {
 	 *
 	 * @param players the new players
 	 */
-	public void setPlayers(List<String> players) {
+	public void setPlayers(ArrayList<String> players) {
 		this.players = players;
 	}
 

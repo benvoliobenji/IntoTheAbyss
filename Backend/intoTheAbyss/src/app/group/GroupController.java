@@ -39,7 +39,7 @@ public class GroupController {
 	 * @param player the player
 	 * @return the group members
 	 */
-	@GetMapping(path = "/all")
+	@GetMapping(path = "/allP")
 	public List<String> getGroupMembers(String ID) {
 		return groupRepository.findById(ID).get().getPlayers();
 
