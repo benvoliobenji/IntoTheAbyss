@@ -29,7 +29,6 @@ public class Group {
 	private String leader;
 
 	/** The players. */
-	// @OneToMany(mappedBy = "group")
 	private List<String> players;
 
 	public Group() {

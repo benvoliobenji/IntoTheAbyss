@@ -24,8 +24,6 @@ public class Player implements PlayerInterface {
 	private String username;
 
 	/** The group. */
-	// @ManyToOne
-	// @JoinColumn(name = "groupID")
 	private Group group;
 
 	/** The health. */
