@@ -20,7 +20,7 @@ class Player: PlayerInterface, Entity {
     var role: Role = Role.PLAYER
     private var image: Bitmap? = null
 
-    constructor(): super("", 1, 1, 0, 10, 0, EntityType.PLAYER) {
+    constructor(): super("", 1, 1, 0, 0, 0, 10, 0, EntityType.PLAYER) {
         playerName = ""
         this.party.clear()
         this.role = Role.PLAYER
@@ -36,7 +36,7 @@ class Player: PlayerInterface, Entity {
      * @param yPos The current y-position the player is at.
      */
     constructor(playerName: String, playerID: String, floorNumber: Int, xPos: Int, yPos: Int):
-            super(playerID, xPos, yPos, floorNumber, 10, 0, EntityType.PLAYER) {
+            super(playerID, xPos, yPos, 0, 0, floorNumber, 10, 0, EntityType.PLAYER) {
         this.playerName = playerName
         this.party.clear()
         this.role = Role.PLAYER
@@ -52,7 +52,7 @@ class Player: PlayerInterface, Entity {
      * @param yPos The current y-position the player is at.
      */
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int, yPos: Int):
-            super(playerID, xPos, yPos, floorNumber, health, 0, EntityType.PLAYER) {
+            super(playerID, xPos, yPos, 0, 0, floorNumber, health, 0, EntityType.PLAYER) {
         this.playerName = playerName
         this.party.clear()
         this.role = Role.PLAYER
@@ -70,8 +70,8 @@ class Player: PlayerInterface, Entity {
      * @param role The role of the Player.
      */
     constructor(playerName: String, playerID: String, health: Int, floorNumber: Int, xPos: Int,
-                yPos: Int, party: MutableList<Player>, role: Role): super(playerID, xPos, yPos, floorNumber,
-                health, 0, EntityType.PLAYER) {
+                yPos: Int, party: MutableList<Player>, role: Role): super(playerID, xPos, yPos, 0, 0,
+                floorNumber, health, 0, EntityType.PLAYER) {
         this.playerName = playerName
         this.party = party
         this.role = role
@@ -81,7 +81,7 @@ class Player: PlayerInterface, Entity {
      * Another constructor that allows for the user to create a Player object from another Player object.
      * @param player Another Player object.
      */
-    constructor(player: Player) : super(player.ID, player.x, player.y, player.floor,
+    constructor(player: Player) : super(player.ID, player.x, player.y, 0, 0, player.floor,
                 player.health, 0, EntityType.PLAYER) {
         this.playerName = player.playerName
         this.party = player.party
