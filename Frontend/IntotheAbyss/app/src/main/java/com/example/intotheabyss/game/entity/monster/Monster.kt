@@ -15,6 +15,6 @@ class Monster : MonsterInterface, Entity {
      * A constructor to create a Monster from an Entity
      * @param e An Entity to cast to Monster.
      */
-    constructor(e: Entity) : super(e.ID, e.x, e.y, e.floor, e.health, 0, EntityType.MONSTER)
+    constructor(e: Entity) : super(e.ID, e.x, e.y, 0, 0, e.floor, e.health, 0, EntityType.MONSTER)
 
 }
