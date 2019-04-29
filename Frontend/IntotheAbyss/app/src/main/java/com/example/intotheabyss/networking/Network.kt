@@ -189,7 +189,7 @@ class Network(private var gameState: GameState): Listener() {
     private fun handleAddAction(action: EntityAction) {
         var json = JSONObject(action.payload)
         if (action.performerID == gameState.myPlayer.ID) {
-            gameState.myPlayer.ID = json.getString("playerID")
+            gameState.myPlayer.ID = json.getString("ID")
             gameState.myPlayer.playerName = json.getString("username")
             gameState.myPlayer.x = json.getInt("posX")
             gameState.myPlayer.y = json.getInt("posY")
@@ -223,7 +223,10 @@ class Network(private var gameState: GameState): Listener() {
 
         // Verify that the entity is still on this floor
         if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
-            entityUnderMovement!!.x = moveAction.location.first
+            entityUnderMovement!!.lastX = entityUnderMovement.x
+            entityUnderMovement.lastY = entityUnderMovement.y
+
+            entityUnderMovement.x = moveAction.location.first
             entityUnderMovement.y = moveAction.location.second
             entityUnderMovement.floor = moveAction.floorMovedTo
 
@@ -249,7 +252,7 @@ class Network(private var gameState: GameState): Listener() {
         gameState.eventQueueDisplay.add(attackEvent)
 
         // Remove the entity from the level if their health is less than 0
-        if(entityAttacked!!.health <= 0) {
+        if(entityAttacked.health <= 0) {
             if (entityAttacked.type == EntityType.PLAYER) {
                 var playerAttacked = entityAttacked as Player
 
@@ -327,9 +330,8 @@ class Network(private var gameState: GameState): Listener() {
         var json = JSONObject(action.payload)
         var gson = Gson()
         var kickAction = gson.fromJson<Kick>(json.toString(), Kick::class.java)
-        var kickingPlayer = Player()
 
-        kickingPlayer = if (action.performerID == gameState.myPlayer.ID) {
+        var kickingPlayer = if (action.performerID == gameState.myPlayer.ID) {
             gameState.myPlayer
         } else {
             gameState.entitiesInLevel[action.performerID] as Player

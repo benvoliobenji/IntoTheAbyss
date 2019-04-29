@@ -1,6 +1,7 @@
 package app.entity.player;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -24,8 +25,7 @@ public class Player implements PlayerInterface {
 	private String username;
 
 	/** The group. */
-	// @ManyToOne
-	// @JoinColumn(name = "groupID")
+	@Embedded
 	private Group group;
 
 	/** The health. */
