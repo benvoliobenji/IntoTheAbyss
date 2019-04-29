@@ -33,7 +33,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
     }
 
     //TODO: CHANGE URL TO MATCH NEW URL FOR ID AND NAME
-    // TODO: CHANGE TESTS TO WORK WITH NEW VOLLEYNETWORK INTERFACE
+    //TODO: ADD ISADMIN FOR URL
     /**
      * Retrieves the User's player data through a JSONObjectRequest.
      *
