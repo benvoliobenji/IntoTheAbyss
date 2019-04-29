@@ -16,13 +16,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class DungeonActivity : AppCompatActivity() {
     private var networkThread = Thread()
     var gameState = GameState()
-    var debug = false
+    var admin = false
     var gameView: GameView? = null
 
 
     @SuppressLint("ClickableViewAccessibility") //This is for blind people accessability- sorry blind people
     override fun onCreate(savedInstanceState: Bundle?) {
-        debug = intent.getBooleanExtra("debug", false)
+        admin = intent.getBooleanExtra("admin", false)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
@@ -30,9 +30,9 @@ class DungeonActivity : AppCompatActivity() {
         this.gameView = gameView
 
         gameView.gameState = gameState
-        gameView.debug = debug
+        gameView.debug = false
 
-        if (debug) {
+        if (false) {
             debugString.setText(R.string.debug_string)
         } else  {
             debugString.setText(R.string.not_debug_string)
@@ -46,7 +46,7 @@ class DungeonActivity : AppCompatActivity() {
 
         if(!networkThread.isAlive) {
             // Add networkThread.IsBackground = true?
-            networkThread = Thread(NetworkRunnable(gameState, this))
+            networkThread = Thread(NetworkRunnable(gameState, admin, this))
             networkThread.start()
         }
 
