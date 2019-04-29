@@ -67,10 +67,6 @@ public class PlayerController {
 			return player;
 		} else
 			return players.get();
-		/*
-		 * Json j = new Json(); String jsonStr =
-		 * j.toJson(playerRepository.getPlayerByID(playerUUIDPassed)); return jsonStr;
-		 */
 	}
 
 	/**

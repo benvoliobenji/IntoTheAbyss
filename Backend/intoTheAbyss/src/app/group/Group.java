@@ -1,5 +1,6 @@
 package app.group;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -31,6 +32,10 @@ public class Group {
 	/** The players. */
 	@OneToMany(mappedBy = "group")
 	private List<String> players;
+
+	public Group() {
+		players = new ArrayList<String>();
+	}
 
 	/**
 	 * Gets the group ID.

@@ -36,9 +36,9 @@ public class LevelController {
 		if (level.isPresent()) {
 			return level.get();
 		} else {
-			Level l = new Level(id, new Room(new Random()));
-			levelRepository.save(l);
-			return l;
+			Level newLevel = new Level(id, new Room(new Random()));
+			levelRepository.save(newLevel);
+			return newLevel;
 		}
 	}
 

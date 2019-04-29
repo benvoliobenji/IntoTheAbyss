@@ -35,6 +35,7 @@ public class Player implements PlayerInterface {
 
 	/** The health. */
 	private Integer posX, posY, floor, health;
+	private boolean isAdmin;
 
 	/**
 	 * Instantiates a new player.
@@ -55,6 +56,7 @@ public class Player implements PlayerInterface {
 		floor = Integer.valueOf(playerPacket.getFloorNumber());
 		posX = Integer.valueOf(playerPacket.getXPos());
 		posY = Integer.valueOf(playerPacket.getYPos());
+		health = Integer.valueOf(10);
 	}
 
 	/*
@@ -194,5 +196,27 @@ public class Player implements PlayerInterface {
 	 */
 	public Group getGroup() {
 		return group;
+	}
+
+	/**
+	 * Sets the player as admin.
+	 *
+	 * @param group the new group
+	 */
+	public void setIsAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	/**
+	 * Gets the isAdmin attribute.
+	 *
+	 * @return the group
+	 */
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void removePlayerFromGroup(String playerID) {
+		group.removePlayer(playerID);
 	}
 }

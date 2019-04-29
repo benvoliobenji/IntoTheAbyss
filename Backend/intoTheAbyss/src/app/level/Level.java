@@ -25,7 +25,6 @@ public class Level implements LevelInterface {
 	@Id
 	private Integer level;
 	private Random rand;
-	// private Hashtable<String, PlayerInterface> players;
 	private Hashtable<String, GameEntity> gameEntities;
 	@Transient
 	private Tile[][] grid;
@@ -39,7 +38,6 @@ public class Level implements LevelInterface {
 	 */
 	public Level() {
 		rand = new Random();
-		// players = new Hashtable<String, PlayerInterface>();
 		gameEntities = new Hashtable<String, GameEntity>();
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		fillGridForDefaultMap();
@@ -52,7 +50,6 @@ public class Level implements LevelInterface {
 	 * @param room  the room
 	 */
 	public Level(Integer level, RoomInterface room) {
-		// players = new Hashtable<String, PlayerInterface>();
 		gameEntities = new Hashtable<String, GameEntity>();
 		this.level = level;
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
@@ -69,7 +66,6 @@ public class Level implements LevelInterface {
 	 * @see app.level.LevelInterface#buildDefaultLevel()
 	 */
 	public void buildDefaultLevel() {
-		// players = new Hashtable<String, PlayerInterface>();
 		gameEntities = new Hashtable<String, GameEntity>();
 		grid = new Tile[MAPHEIGHT][MAPWIDTH];
 		fillGridForDefaultMap();
@@ -110,49 +106,6 @@ public class Level implements LevelInterface {
 	public Integer getLevel() {
 		return level;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see app.level.LevelInterface#getPlayer(java.lang.String)
-	 *
-	 * public PlayerInterface getPlayer(String ID) { return players.get(ID); }
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see app.level.LevelInterface#getPlayers()
-	 *
-	 * public ArrayList<PlayerInterface> getPlayers() { return new
-	 * ArrayList<PlayerInterface>(players.values()); }
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see app.level.LevelInterface#addPlayer(app.entity.player.PlayerInterface)
-	 *
-	 * public void addPlayer(PlayerInterface p) { players.put(p.getID(), p); }
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see app.level.LevelInterface#removePlayer(java.lang.String)
-	 *
-	 * public void removePlayer(String playerID) { players.remove(playerID); }
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see app.level.LevelInterface#replacePlayer(java.lang.String,
-	 * app.entity.player.PlayerInterface)
-	 *
-	 * public void replacePlayer(String playerID, PlayerInterface p) {
-	 * players.replace(playerID, p); }
-	 */
 
 	/*
 	 * (non-Javadoc)
