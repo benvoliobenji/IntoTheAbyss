@@ -20,19 +20,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-////        val ring = MediaPlayer.create(this, R.raw.car_sound)
-//
-//        val play = findViewById<Button>(R.id.playButton)
-//        play.setOnClickListener {
-//            val intent = Intent(this, DungeonActivity::class.java)
-//            intent.putExtra("debug", debugToggle.isChecked)
-//            startActivity(intent)
-////            ring.start()
-//        }
-
     var mGoogleSignInClient: GoogleSignInClient? = null
     var RC_SIGN_IN = 0
 
@@ -81,13 +68,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-        if (account != null) {
-            var intent = Intent(this, DungeonActivity::class.java)
-            intent.putExtra("debug", debugToggle.isChecked)
-            startActivity(intent)
-        }
-        super.onStart()
-    }
+//    override fun onStart() {
+//        var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+//        if (account != null) {
+//            var intent = Intent(this, DungeonActivity::class.java)
+//            intent.putExtra("debug", debugToggle.isChecked)
+//            startActivity(intent)
+//        }
+//        super.onStart()
+//    }
 }

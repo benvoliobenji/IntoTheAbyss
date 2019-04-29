@@ -51,9 +51,10 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
             Response.Listener { response ->
                 val networkPlayerID = response.getString("playerID")
                 val networkPlayerName = response.getString("username")
+                val floor = response.getInt("floor")
                 val posX = response.getInt("posX")
                 val posY = response.getInt("posY")
-                val player = Player(networkPlayerName, networkPlayerID, 0, posX, posY)
+                val player = Player(networkPlayerName, networkPlayerID, floor, posX, posY)
                 gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
                 Log.i("PlayerRegistrationX", posX.toString())
@@ -93,6 +94,9 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 val stairX = stairs.getInt("x")
                 val stairY = stairs.getInt("y")
                 levelGrid[stairY][stairX] = Stair()
+
+                //TODO: DElete
+                println("$stairX,$stairY")
 
                 // Set the new level in gameState
                 gameState.level = levelGrid

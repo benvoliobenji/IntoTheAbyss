@@ -33,13 +33,13 @@ class NetworkRunnable(private val gameState: GameState, private val context: Con
 
         // Add/Retrieve data from server
         //TODO: Remove this comment
-//        volleyNetworkInterface.retrievePlayerData(personID!!, displayName!!)
+        volleyNetworkInterface.retrievePlayerData(personID!!, displayName!!)
 
         val network = Network(gameState)
         //TODO: Remove this comment
-//        network.connect()
+        network.connect()
 
-//        volleyNetwork.retrieveNewDungeonLevel(gameState.myPlayer.floorNumber)
+        volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor, network)
 
         if(!updateThread.isAlive) {
             updateThread = Thread(UpdateRunnable(network, volleyNetworkInterface, gameState))

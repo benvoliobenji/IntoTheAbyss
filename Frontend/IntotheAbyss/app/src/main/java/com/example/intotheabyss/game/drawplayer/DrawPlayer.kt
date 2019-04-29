@@ -49,7 +49,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         paint.style = Paint.Style.FILL
         paint.textSize = 30.toFloat()
 
-        drawAction(gAction)
+        drawAction(gAction, dX, dY)
         val image = setPlayerImage(dX, dY, context, player.action, player)
         setAnimState(image)
 
@@ -181,10 +181,12 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      *
      * @param gAction Whether or not the player performed an action. If gAction > 1, action performed. If less, not.
      */
-    private fun drawAction(gAction: Int) {
+    private fun drawAction(gAction: Int, dX: Int, dY: Int) {
         if (gAction > 0) {
             animCount = 0
+            gameView!!.checkAttack(dX, dY)
         }
+
     }
 
     /**

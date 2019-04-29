@@ -11,8 +11,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import app.entity.player.Player;
-
 /**
  * The group type stores id and list of players.
  */
@@ -32,7 +30,7 @@ public class Group {
 
 	/** The players. */
 	@OneToMany(mappedBy = "group")
-	private List<Player> players;
+	private List<String> players;
 
 	/**
 	 * Gets the group ID.
@@ -41,15 +39,6 @@ public class Group {
 	 */
 	public String getGroupID() {
 		return groupID;
-	}
-
-	/**
-	 * Sets the group ID.
-	 *
-	 * @param groupID the new group ID
-	 */
-	public void setGroupID(String groupID) {
-		this.groupID = groupID;
 	}
 
 	/**
@@ -75,7 +64,7 @@ public class Group {
 	 *
 	 * @return the players
 	 */
-	public List<Player> getPlayers() {
+	public List<String> getPlayers() {
 		return players;
 	}
 
@@ -84,7 +73,15 @@ public class Group {
 	 *
 	 * @param players the new players
 	 */
-	public void setPlayers(List<Player> players) {
+	public void setPlayers(List<String> players) {
 		this.players = players;
+	}
+
+	public void addPlayer(String playerID) {
+		players.add(playerID);
+	}
+
+	public void removePlayer(String playerID) {
+		players.remove(playerID);
 	}
 }
