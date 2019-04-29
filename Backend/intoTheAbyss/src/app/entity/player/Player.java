@@ -2,12 +2,9 @@ package app.entity.player;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import app.group.Group;
 import network.packets.PlayerPacket;
@@ -21,8 +18,8 @@ public class Player implements PlayerInterface {
 	/** The id. */
 	@Id
 	@Column(length = 50)
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	// @GeneratedValue(generator = "UUID")
+	// @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String ID;
 
 	/** The username. */
@@ -44,6 +41,7 @@ public class Player implements PlayerInterface {
 		floor = Integer.valueOf(0);
 		username = "";
 		health = Integer.valueOf(10);
+		isAdmin = false;
 	}
 
 	/**
