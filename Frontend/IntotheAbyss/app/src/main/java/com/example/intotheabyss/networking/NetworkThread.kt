@@ -15,7 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
  * @param context The context the android application is currently running.
  * @author Benjamin Vogel
  */
-class NetworkRunnable(private val gameState: GameState, private val context: Context): Runnable {
+class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boolean,
+                      private val context: Context): Runnable {
     private var updateThread = Thread()
 
     /**
