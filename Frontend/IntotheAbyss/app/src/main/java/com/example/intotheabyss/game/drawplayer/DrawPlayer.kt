@@ -251,7 +251,6 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         if(checkInGroup(player)) paint.color = Color.GREEN else paint.color = Color.RED //Set userName color
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
-        val text = "text"
         println("Player name is: ${p.ID}")
         canvas.drawText(p.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
@@ -262,6 +261,9 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @return True if player is in your group. False if not.
      */
     private fun checkInGroup(player: Entity): Boolean   {
+        if (player.ID == gameView!!.player!!.ID)    {
+            return true
+        }
         for (p in gameView!!.player!!.party)  {
             if (p.ID == player.ID)  {
                 return true
