@@ -385,7 +385,6 @@ class Network(private var gameState: GameState): Listener() {
 
     private fun handleRemoveAction(action: EntityAction) {
         if (gameState.myPlayer.ID == action.performerID) {
-            disconnect()
             gameState.eventQueueDisplay.add(DisconnectEvent())
         } else if (gameState.myPlayer.party.contains(gameState.entitiesInLevel[action.performerID] as Player)) {
             gameState.myPlayer.party.remove(gameState.entitiesInLevel[action.performerID] as Player)
