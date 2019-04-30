@@ -114,6 +114,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
+
+        Thread.sleep(2000)
     }
 
     /**
@@ -382,7 +384,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
             for (key in gameState!!.entitiesInLevel.keys) {
                 val otherEntity = gameState!!.entitiesInLevel[key]
-                println("$key")
                 gameState!!.entitiesInLevel[key]!!.action = 0
 
                 if (otherEntity!!.type == EntityType.PLAYER) {
