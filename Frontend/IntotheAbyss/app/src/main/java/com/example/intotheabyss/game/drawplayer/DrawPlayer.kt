@@ -230,10 +230,21 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param canvas The canvas object to draw to
      */
     private fun drawHealth(player: Entity, canvas: Canvas) {
+        val outline = Rect(gameView!!.sWidth-500, 100, gameView!!.sWidth, 0)
+        val outPaint = Paint()
+        outPaint.color = Color.BLACK
+
+        val inside = Rect(gameView!!.sWidth-500, 100, gameView!!.sWidth - (10 - player.health)*50, 0)
+        val inPaint = Paint()
+        inPaint.color = Color.RED
+
         val paint = Paint()
-        paint.color = Color.RED
+        paint.color = Color.WHITE
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.textSize = 80f
+
+        canvas.drawRect(outline, outPaint)
+        canvas.drawRect(inside, inPaint)
         canvas.drawText("Health: ${player.health}/10", gameView!!.sWidth.toFloat()-500, 100f, paint)
     }
 
