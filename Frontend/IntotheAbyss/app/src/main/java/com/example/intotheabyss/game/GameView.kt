@@ -368,7 +368,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             image = wallImage                                   //Set image to wallImage
                         } else if (lvlArray[j][i].type == TileTypes.STAIR) {
                             image = stairsImage
-                            println("$j,$i")
+//                            println("Stairs at: ($j,$i)")
                         }
                         //Try to print the damn thing
                         canvas.drawBitmap(
@@ -401,6 +401,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
             for (key in gameState!!.entitiesInLevel.keys) {
                 val otherEntity = gameState!!.entitiesInLevel[key]
+                println("$key")
                 gameState!!.entitiesInLevel[key]!!.action = 0
 
                 if (otherEntity!!.type == EntityType.PLAYER) {
