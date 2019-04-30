@@ -199,7 +199,11 @@ class Network(private var gameState: GameState): Listener() {
     fun death(death: DeathEvent) {
         val deathPacket = EntityAction(death.performerID, EntityActionType.DEATH, gameState.myPlayer.floor,
             death.performerID)
+        val disconnectPacket = DisconnectPacket(gameState.myPlayer.ID, gameState.myPlayer.floor)
+        client.sendTCP(disconnectPacket)
         client.sendTCP(deathPacket)
+        client.stop()
+        client.close()
     }
 
     fun disconnect() {
