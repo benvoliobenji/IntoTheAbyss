@@ -143,7 +143,10 @@ class PlayerBoard(private val gameView: GameView,
 //            println("Input moved")
             for (r in rectArray)    {
                 val i = rectArray.indexOf(r)
-                val s = keyArray[i]
+                var s = ""
+                if (keyArray.size > i) {
+                    s = keyArray[i]
+                }   else    break
 
                 if (isInRect(x, y, r)) {
 //                    println("In rect, add player")
