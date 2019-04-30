@@ -431,7 +431,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                                 if (isVisible(
                                         gameState!!.myPlayer,
                                         otherPlayer
-                                    ) and (gameState!!.myPlayer != otherPlayer)
+                                    ) and (this.player!!.ID != otherPlayer.ID)
                                 ) {
                                     drawPlayerInterface.drawPlayer(
                                         0,
