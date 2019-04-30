@@ -57,6 +57,7 @@ class GameController(
         if (thisTimeAction - lastTimeAction > actionTimer) {
             if (gcHelper!!.checkActionRange(x, y, action)) {
                         lastTimeAction = thisTimeAction
+                        println("Got action")
                         return 1
                     }
                 }
@@ -87,6 +88,9 @@ class GameController(
     override fun updatePlayerLocation() {
         var flag = false
         val waitTime: Long = 100
+
+        gameView.player!!.lastX = gameView.player!!.x
+        gameView.player!!.lastY = gameView.player!!.y
 
         if (input != null) {
             for (i in 0 until input!!.pointerCount) {   //Check all inputs

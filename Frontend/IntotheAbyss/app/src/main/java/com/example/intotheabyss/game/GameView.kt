@@ -17,6 +17,8 @@ import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.entity.player.Role
 import com.example.intotheabyss.game.event.AttackEvent
+import com.example.intotheabyss.game.event.DisconnectEvent
+import com.example.intotheabyss.game.event.EventType
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
 import com.example.intotheabyss.game.gamecontroller.PlayerBoard
@@ -165,6 +167,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if (!dead) {
             if (player!!.x == 13)   {
                 player!!.health--
+//                val death =
             }
 
             updatePlayer()
@@ -208,6 +211,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun updatePlayer()  {
         gameControllerInterface.updatePlayerLocation()
         gAction = gameControllerInterface.getAction(event!!.x, event!!.y, event!!.action)
+        if (gAction == 1)   {
+            player!!.action = 1
+        }
         checkNewLevel()
 
         pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
@@ -224,6 +230,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun updateEvents()  {
         while (!gameState!!.eventQueueDisplay.isEmpty())  {
             val event = gameState!!.eventQueueDisplay.poll()
+            if (event.type == EventType.ATTACK)
             gameState!!.entitiesInLevel[event.performerID]!!.action = 1
         }
     }
@@ -273,6 +280,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 drawBG(canvas)
 
                 drawPlayerInterface.drawPlayer(dX, dY, context, canvas, player!!, gAction, true)
+                player!!.action = 0
                 gameControllerInterface.drawController(canvas)
                 drawOtherPlayers(canvas)
             } else {
@@ -335,6 +343,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             validLevel = true
         }
 
+        //TODO: REmove this line
+        setLevel()
+
         //image variable - will maybe be updated to be more efficient later
         var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
 
@@ -383,6 +394,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
             for (key in gameState!!.entitiesInLevel.keys) {
                 val otherEntity = gameState!!.entitiesInLevel[key]
+                gameState!!.entitiesInLevel[key]!!.action = 0
 
                 if (otherEntity!!.type == EntityType.PLAYER) {
                     var otherPlayer = otherEntity as Player

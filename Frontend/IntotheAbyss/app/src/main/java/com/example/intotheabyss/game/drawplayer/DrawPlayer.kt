@@ -78,23 +78,27 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * Function to set the image to be used for the player.
      * Will return the proper Bitmap to represent the player (or monster) object
      *
-     * @param dX The direction player is facing. -1 if left, 0 if neither, 1 if right
-     * @param dY The direction player is facing. -1 if down, 0 if neither, 1 if up
      * @param context The context to allow access to game resources
      * @param gAction Whether or not the player is performing an action
      * @param player The player that will be drawn
      */
     override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Entity): Bitmap {
-        var isMonster = false
-        if ((!player.ID.isBlank()) && (player.ID.length>2)) {
-            if ((player.ID[0] == 'M') && player.ID[1] == 'M') {
-                isMonster = true
-            }
-        }
-
+        val isMonster = false
         var image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
         if (player.action == 1)   {
             animState = 0
+        }
+        val play = player as Player
+        val p = getDirection(play)
+        if ((p.x != 0) and (p.y != 0)) {
+            play.dX = p.x
+            play.dY = p.y
+        }
+//        val dX = play.dX
+//        val dY = play.dY
+
+        if (play.ID != gameView!!.player!!.ID) {
+            gameView!!.gameState!!.entitiesInLevel[play.ID] = play
         }
 
         when(dX) {
@@ -158,6 +162,36 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
             }
         }
         return image
+    }
+
+    /**
+     * Method to determine which way a player is facing
+     *
+     * @param player The player in question
+     * @return A point describing which way the player is facing
+     */
+    private fun getDirection(player: Player): Point    {
+        var p = Point(0,0)
+        if ((player.x != player.lastX) or (player.y != player.lastY)) {
+            var dX = player.x - player.lastX
+            var dY = player.y - player.lastY
+            if (dX < 0) {
+                p.x = -1
+                p.y = 0
+            } else if (dX > 0) {
+                p.x = 1
+                p.y = 0
+            }
+
+            if (dY < 0) {
+                p.x = 0
+                p.y = -1
+            } else if (dY > 0) {
+                p.x = 0
+                p.y = 1
+            }
+        }
+        return p
     }
 
     /**

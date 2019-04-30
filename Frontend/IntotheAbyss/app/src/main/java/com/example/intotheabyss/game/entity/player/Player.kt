@@ -19,6 +19,8 @@ class Player: PlayerInterface, Entity {
     var party: MutableList<Player> = mutableListOf()
     var role: Role = Role.PLAYER
     private var image: Bitmap? = null
+    var dX: Int = 0
+    var dY: Int = 0
 
     constructor(): super("", 1, 1, 0, 0, 0, 10, 0, EntityType.PLAYER) {
         playerName = ""
