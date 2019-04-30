@@ -221,34 +221,37 @@ class Network(private var gameState: GameState): Listener() {
         if(action.performerID == gameState.myPlayer.ID) {
             for(ids in json.keys()) {
                 Log.i("AddAction", ids)
-                var playerjson = json.getJSONObject(ids)
-                var newPlayer = Player()
+                if (ids != gameState.myPlayer.ID) {
+                    var playerjson = json.getJSONObject(ids)
+                    var newPlayer = Player()
 
-                newPlayer.x = playerjson.getInt("posX")
-                newPlayer.y = playerjson.getInt("posY")
-                newPlayer.playerName = playerjson.getString("username")
-                newPlayer.ID = ids
-                gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+                    newPlayer.x = playerjson.getInt("posX")
+                    newPlayer.y = playerjson.getInt("posY")
+                    newPlayer.role = if (playerjson.getBoolean("isAdmin")) Role.ADMIN else Role.PLAYER
+                    newPlayer.playerName = playerjson.getString("username")
+                    newPlayer.ID = ids
+                    gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+                }
             }
-        }
-
-        // If it has a username, then it is a Player, else it is a Monster
-        if (json.optString("username") != "") {
-            var newPlayer = Player()
-            newPlayer.x = json.getInt("posX")
-            newPlayer.y = json.getInt("posY")
-            newPlayer.playerName = json.getString("username")
-            Log.i("ADD", json.getInt("ID").toString())
-            newPlayer.ID = action.performerID
-
-            Log.i("ADD", newPlayer.ID)
-
-            gameState.entitiesInLevel[newPlayer.ID] = newPlayer
-
-            Log.i("ADD", gameState.entitiesInLevel[newPlayer.ID].toString())
         } else {
-            var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
-            gameState.entitiesInLevel[newMonster.ID] = newMonster
+            // If it has a username, then it is a Player, else it is a Monster
+            if (json.optString("username") != "") {
+                var newPlayer = Player()
+                newPlayer.x = json.getInt("posX")
+                newPlayer.y = json.getInt("posY")
+                newPlayer.playerName = json.getString("username")
+                Log.i("ADD", json.getInt("ID").toString())
+                newPlayer.ID = action.performerID
+
+                Log.i("ADD", newPlayer.ID)
+
+                gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+
+                Log.i("ADD", gameState.entitiesInLevel[newPlayer.ID].toString())
+            } else {
+                var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
+                gameState.entitiesInLevel[newMonster.ID] = newMonster
+            }
         }
     }
 
