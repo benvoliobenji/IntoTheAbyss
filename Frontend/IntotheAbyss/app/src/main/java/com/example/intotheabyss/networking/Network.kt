@@ -20,10 +20,7 @@ import com.example.intotheabyss.game.event.*
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import com.google.gson.LongSerializationPolicy
+import com.google.gson.*
 import org.json.JSONObject
 import java.util.*
 
@@ -216,30 +213,11 @@ class Network(private var gameState: GameState): Listener() {
      * @param action The EntityAction packet that was sent over Kryonet.
      */
     private fun handleAddAction(action: EntityAction) {
-        var gsonBuilder = GsonBuilder()
-        gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
-        var gson = gsonBuilder.create()
-        var json = JSONObject(gson.toJson(action.payload).toString())
-        gson.toJson(action.payload)
+        var gson = Gson()
+        var json = JSONObject(action.payload)
         Log.i("AddAction", json.toString())
-        // Regardless if it's in the hash map or not, it will be modified or added the same way
 
-        if(action.performerID == gameState.myPlayer.ID) {
-            for(ids in json.keys()) {
-                Log.i("AddAction", ids)
-                if (ids != gameState.myPlayer.ID) {
-                    var playerjson = json.getJSONObject(ids)
-                    var newPlayer = Player()
-
-                    newPlayer.x = playerjson.getInt("posX")
-                    newPlayer.y = playerjson.getInt("posY")
-                    newPlayer.role = if (playerjson.getBoolean("isAdmin")) Role.ADMIN else Role.PLAYER
-                    newPlayer.playerName = playerjson.getString("username")
-                    newPlayer.ID = ids
-                    gameState.entitiesInLevel[newPlayer.ID] = newPlayer
-                }
-            }
-        } else {
+        if (!gameState.entitiesInLevel.containsKey(action.performerID)) {
             // If it has a username, then it is a Player, else it is a Monster
             if (json.optString("username") != "") {
                 var newPlayer = Player()
