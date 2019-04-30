@@ -272,14 +272,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * @param canvas The Canvas object that we will be drawing to
      */
     override fun draw(canvas: Canvas) {
-        if ((!loaded) or (lvlArray.size < 5))    {
-            canvas.drawColor(Color.CYAN)
-            val p = Paint()
-            p.color = Color.BLACK
-            p.textSize = 60f
-            canvas.drawText("Loading: please wait a few seconds", 25f, 500f, p)
-            canvas.drawText("Hint: Try hitting your opponent while avoiding getting hit.", 25f, 650f, p)
-        } else if (!dead) {
+
+
+        if (!dead) {
             if (!pList) {
                 super.draw(canvas)
                 drawBG(canvas)
@@ -299,6 +294,15 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             deathPaint.color = Color.RED
             deathPaint.textSize = 50f
             canvas.drawText("You died", sHeight.toFloat()/2, sWidth.toFloat()/2, deathPaint)
+        }
+
+        if ((!loaded) or (lvlArray.size < 5))    {
+            canvas.drawColor(Color.CYAN)
+            val p = Paint()
+            p.color = Color.BLACK
+            p.textSize = 60f
+            canvas.drawText("Loading: please wait a few seconds", 25f, 500f, p)
+            canvas.drawText("Hint: Try hitting your opponent while avoiding getting hit.", 25f, 650f, p)
         }
     }
 
