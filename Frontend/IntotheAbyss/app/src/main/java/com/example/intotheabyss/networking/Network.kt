@@ -229,10 +229,7 @@ class Network(private var gameState: GameState): Listener() {
 
         // Verify that the entity is still on this floor
         if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
-            entityUnderMovement!!.lastX = entityUnderMovement.x
-            entityUnderMovement.lastY = entityUnderMovement.y
-
-            entityUnderMovement.x = moveAction.location.first
+            entityUnderMovement!!.x = moveAction.location.first
             entityUnderMovement.y = moveAction.location.second
             entityUnderMovement.floor = moveAction.floorMovedTo
 
