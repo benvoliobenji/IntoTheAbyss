@@ -86,7 +86,6 @@ class GameControllerHelper(g: GameView): GameControllerHelperInterface    {
     override fun checkPlayerListButton(x: Float, y: Float, action: Int, boolean: Boolean): Boolean {
         if (!boolean) {
             if ((playersX.contains(x)) and (playersY.contains(y)) and (action != MotionEvent.ACTION_UP)) {
-                System.out.println("HIEHILSHLIE")
                 return true
             }
         } else {
