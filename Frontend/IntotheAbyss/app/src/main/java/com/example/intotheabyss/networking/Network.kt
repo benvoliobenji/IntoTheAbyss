@@ -323,8 +323,12 @@ class Network(private var gameState: GameState): Listener() {
         // var gson = gsonBuilder.create()
         // var gson = Gson()
         // var joinAction: Join = gson.fromJson<Join>(action.payload, Join::class.java)
-        var joinedPlayer = gameState.entitiesInLevel[action.payload] as Player
-
+        var joinedPlayer: Player = if (gameState.myPlayer.ID == action.payload) {
+            gameState.myPlayer
+        } else {
+            gameState.entitiesInLevel[action.payload] as Player
+        }
+        
         when {
             gameState.myPlayer.ID == action.performerID -> {
                 gameState.myPlayer.role = Role.GROUP_LEADER
