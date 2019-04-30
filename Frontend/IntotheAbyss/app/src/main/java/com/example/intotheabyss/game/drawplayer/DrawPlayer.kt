@@ -273,7 +273,6 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         if(checkInGroup(player)) paint.color = Color.GREEN else paint.color = Color.RED //Set userName color
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
-        println("Player name is: ${p.ID}")
         canvas.drawText(p.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
 
