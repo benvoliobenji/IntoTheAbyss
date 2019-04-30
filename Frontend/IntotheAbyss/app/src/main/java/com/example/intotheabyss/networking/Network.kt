@@ -21,6 +21,7 @@ import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
 import com.google.gson.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 
@@ -213,13 +214,13 @@ class Network(private var gameState: GameState): Listener() {
      * @param action The EntityAction packet that was sent over Kryonet.
      */
     private fun handleAddAction(action: EntityAction) {
-        var gson = Gson()
+        var gsonBuilder = GsonBuilder()
+        gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
+        var gson = gsonBuilder.create()
         var json = JSONObject(action.payload)
         Log.i("AddAction", json.toString())
 
-        if (!gameState.entitiesInLevel.containsKey(action.performerID)) {
-            // If it has a username, then it is a Player, else it is a Monster
-            if (json.optString("username") != "") {
+        if (gameState.myPlayer.ID != action.performerID) {
                 var newPlayer = Player()
                 newPlayer.x = json.getInt("posX")
                 newPlayer.y = json.getInt("posY")
@@ -231,11 +232,9 @@ class Network(private var gameState: GameState): Listener() {
 
                 gameState.entitiesInLevel[newPlayer.ID] = newPlayer
 
+                Log.i("AddAction", gameState.entitiesInLevel.isNotEmpty().toString())
+
                 Log.i("ADD", gameState.entitiesInLevel[newPlayer.ID].toString())
-            } else {
-                var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
-                gameState.entitiesInLevel[newMonster.ID] = newMonster
-            }
         }
     }
 

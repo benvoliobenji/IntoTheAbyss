@@ -9,5 +9,5 @@ import com.example.intotheabyss.networking.Network
  */
 interface VolleyNetworkInterface{
     fun retrievePlayerData(playerID: String, isAdmin: Boolean, playerName: String)
-    fun retrieveNewDungeonLevel(level: Int, network: Network)
+    fun retrieveNewDungeonLevel(level: Int)
 }

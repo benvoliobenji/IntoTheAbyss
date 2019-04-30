@@ -85,9 +85,8 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      * object in GameState at the spawn location of the level.
      *
      * @param level The level number the User will be moving to.
-     * @param network The Kryonet instance to invoke kryonet methods (MoveFloorPacket).
      */
-    override fun retrieveNewDungeonLevel(level: Int, network: Network) {
+    override fun retrieveNewDungeonLevel(level: Int) {
 //        val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
         val url = "http://10.29.178.17:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(
