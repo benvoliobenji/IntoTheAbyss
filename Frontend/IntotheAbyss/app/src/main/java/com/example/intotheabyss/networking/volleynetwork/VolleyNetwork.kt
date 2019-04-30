@@ -43,7 +43,9 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      */
     override fun retrievePlayerData(playerID: String, isAdmin: Boolean, playerName: String) {
         Log.i("VolleyNetwork", "Sending request")
-        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
+//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
+//                "&playerNamePassed=$playerName&isAdmin=$isAdmin"
+        val url = "http://10.29.178.17:8080/players/getPlayer?playerUUIDPassed=$playerID" +
                 "&playerNamePassed=$playerName&isAdmin=$isAdmin"
         Log.i("VolleyNetwork", url)
         Log.i("VolleyNetwork", "Request Sent")
@@ -58,7 +60,8 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 val posY = response.getInt("posY")
                 val health = response.getInt("health")
                 val playerAdmin = response.getBoolean("isAdmin")
-                val player = Player(networkPlayerName, networkPlayerID, health, floor, posX, posY)
+                val player = Player(playerName = networkPlayerName, playerID = networkPlayerID, health = health,
+                    floorNumber = floor, xPos = posX, yPos = posY)
 
                 player.role = if (playerAdmin) Role.ADMIN else Role.PLAYER
 
@@ -66,13 +69,12 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
                 Log.i("PlayerRegistrationX", posX.toString())
                 Log.i("PlayerRegistrationY", posY.toString())
-                Log.i("PlayerRegistrationID", playerID)
+                Log.i("PlayerRegistrationID", player.ID)
             },
             Response.ErrorListener { error ->
                 Log.i("PlayerRegistrationError", "Error: %s".format(error.toString()))
             }
         )
-
         requestQueue?.add(jsonObjectRequest)
     }
 
@@ -86,7 +88,8 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      * @param network The Kryonet instance to invoke kryonet methods (MoveFloorPacket).
      */
     override fun retrieveNewDungeonLevel(level: Int, network: Network) {
-        val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
+//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
+        val url = "http://10.29.178.17:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->

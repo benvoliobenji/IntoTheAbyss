@@ -37,7 +37,8 @@ import org.json.JSONObject
  */
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
-    private val ip: String = "cs309-ad-4.misc.iastate.edu"
+    // private val ip: String = "cs309-ad-4.misc.iastate.edu"
+    private val ip: String = "10.29.178.17"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
@@ -79,8 +80,15 @@ class Network(private var gameState: GameState): Listener() {
         try {
             // Attempt to connect within a 5000 ms window before timing out
             client.connect(5000, ip, tcpPort, udpPort)
-            Log.d("Networking", "Sending Floor Request")
-            client.sendTCP(ConnectionPackage(gameState.myPlayer.ID))
+            Log.d("Networking", "Sending Player ID")
+            Log.i("Networking", gameState.myPlayer.ID)
+            if (gameState.myPlayer.ID == null || gameState.myPlayer.ID == "") {
+                Log.d("Networking", gameState.myPlayer.playerName)
+                Log.d("Networking", "Player ID is null or empty")
+            }
+            var connection = ConnectionPackage(gameState.myPlayer.ID)
+            Log.d("Networking", connection.userID)
+            client.sendTCP(connection)
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -143,9 +151,16 @@ class Network(private var gameState: GameState): Listener() {
      */
     fun updatePosition(playerID: String, oldFloor: Int, floor: Int, posX: Int, posY: Int) {
         val gson = Gson()
-        val movement = Move(Pair(posX, posY), floor)
+
+        // Edge case for floor 0
+        val prevFloor = if (oldFloor < 0) 0 else oldFloor
+
+        val movement = Move(posX, posY, floor)
         val jsonPacket = gson.toJson(movement)
-        val positionPacket = EntityAction(playerID, EntityActionType.MOVE, oldFloor, jsonPacket)
+        val positionPacket = EntityAction(playerID, EntityActionType.MOVE, prevFloor, jsonPacket)
+        Log.i("Movement", positionPacket.floor.toString())
+        Log.i("Movement", jsonPacket.toString())
+
         client.sendTCP(positionPacket)
     }
 
@@ -226,8 +241,8 @@ class Network(private var gameState: GameState): Listener() {
 
         // Verify that the entity is still on this floor
         if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
-            entityUnderMovement!!.x = moveAction.location.first
-            entityUnderMovement.y = moveAction.location.second
+            entityUnderMovement!!.x = moveAction.posX
+            entityUnderMovement.y = moveAction.posY
             entityUnderMovement.floor = moveAction.floorMovedTo
 
             gameState.entitiesInLevel[action.performerID] = entityUnderMovement

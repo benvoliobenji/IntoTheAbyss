@@ -1,4 +1,4 @@
 package com.example.intotheabyss.game.entity.entityaction
 
 
-class Move(var location: Pair<Int, Int>, var floorMovedTo: Int)
+class Move(var posX: Int, var posY: Int, var floorMovedTo: Int)

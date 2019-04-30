@@ -5,6 +5,7 @@ import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import java.lang.Thread.sleep
 
 /**
  * A Network Thread that instantiates the Network and VolleyNetwork classes and creates/runs the UpdateThread.
@@ -36,6 +37,7 @@ class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boo
             // Add/Retrieve data from server
             volleyNetworkInterface.retrievePlayerData(personID!!, isAdmin, displayName!!)
 
+            sleep(10000)
             val network = Network(gameState)
             network.connect()
 

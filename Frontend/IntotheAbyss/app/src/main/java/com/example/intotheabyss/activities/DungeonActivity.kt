@@ -62,7 +62,7 @@ class DungeonActivity : AppCompatActivity() {
         super.onUserInteraction()
         if (gameView!!.deathActivity) {
             val intent = Intent(this, DeathActivity::class.java)
-            intent.putExtra("level", gameState.level)
+            // intent.putExtra("level", gameState.level)
             startActivity(intent)
         }
         if (gameView!!.kicked)  {

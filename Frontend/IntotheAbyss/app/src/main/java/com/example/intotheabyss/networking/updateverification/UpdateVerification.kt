@@ -5,6 +5,7 @@ import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.game.event.*
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
+import java.lang.Thread.sleep
 
 /**
  * UpdateVerification is a class that checks for differences between its values (x, y, floor) and those stored in
@@ -31,20 +32,22 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
     override fun verifyGameState(gameState: GameState, network: Network,
                                  volleyNetworkInterface: VolleyNetworkInterface): UpdateVerificationType {
 
-        // Handle if the player has moved
-        if ((posX != gameState.myPlayer.x) or (posY != gameState.myPlayer.y)) {
-            posX = gameState.myPlayer.x
-            posY = gameState.myPlayer.y
-            network.updatePosition(gameState.myPlayer.ID, floorNum - 1, floorNum, posX, posY)
-
-            return UpdateVerificationType.POSITION
-        }
-
         // Handle if the player has moved floors
         if (floorNum != gameState.myPlayer.floor) {
             floorNum = gameState.myPlayer.floor
             volleyNetworkInterface.retrieveNewDungeonLevel(floorNum, network)
+            sleep(2000)
+            network.updatePosition(gameState.myPlayer.ID, floorNum - 1, floorNum, posX, posY)
             return UpdateVerificationType.LEVEL
+        }
+
+        // Handle if the player has moved
+        if ((posX != gameState.myPlayer.x) or (posY != gameState.myPlayer.y)) {
+            posX = gameState.myPlayer.x
+            posY = gameState.myPlayer.y
+            network.updatePosition(gameState.myPlayer.ID, floorNum, floorNum, posX, posY)
+
+            return UpdateVerificationType.POSITION
         }
 
         // Handle if there is something in the eventQueue
