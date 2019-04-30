@@ -252,16 +252,16 @@ class Network(private var gameState: GameState): Listener() {
         var moveAction = gson.fromJson<Move>(json.toString(), Move::class.java)
 
         // Verify that the entity is still on this floor
-        if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
+//        if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
             Log.i("MOVE", entityUnderMovement.toString())
             entityUnderMovement!!.x = moveAction.posX
             entityUnderMovement.y = moveAction.posY
             entityUnderMovement.floor = moveAction.floorMovedTo
 
             gameState.entitiesInLevel[action.performerID] = entityUnderMovement
-        } else {
-            gameState.entitiesInLevel.remove(action.performerID)
-        }
+//        } else {
+//            gameState.entitiesInLevel.remove(action.performerID)
+//        }
     }
 
     /**
