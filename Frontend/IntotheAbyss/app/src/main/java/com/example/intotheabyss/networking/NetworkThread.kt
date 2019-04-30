@@ -26,23 +26,28 @@ class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boo
      * from the server, and then create and run the Update Thread.
      */
     override fun run() {
-        val volleyNetworkInterface: VolleyNetworkInterface = VolleyNetwork(context, gameState)
+        try {
+            val volleyNetworkInterface: VolleyNetworkInterface = VolleyNetwork(context, gameState)
 
-        val account = GoogleSignIn.getLastSignedInAccount(context)
-        val displayName = account?.displayName
-        val personID = account?.id
+            val account = GoogleSignIn.getLastSignedInAccount(context)
+            val displayName = account?.displayName
+            val personID = account?.id
 
-        // Add/Retrieve data from server
-        volleyNetworkInterface.retrievePlayerData(personID!!, isAdmin, displayName!!)
+            // Add/Retrieve data from server
+            volleyNetworkInterface.retrievePlayerData(personID!!, isAdmin, displayName!!)
 
-        val network = Network(gameState)
-        network.connect()
+            val network = Network(gameState)
+            network.connect()
 
-        volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor, network)
+            volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor, network)
 
-        if(!updateThread.isAlive) {
-            updateThread = Thread(UpdateRunnable(network, volleyNetworkInterface, gameState))
-            updateThread.start()
+            if (!updateThread.isAlive) {
+                updateThread = Thread(UpdateRunnable(network, volleyNetworkInterface, gameState))
+                updateThread.start()
+            }
+        } catch (e: InterruptedException) {
+            updateThread.interrupt()
+            return
         }
     }
 }

@@ -17,6 +17,7 @@ import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.entity.player.Role
 import com.example.intotheabyss.game.event.AttackEvent
+import com.example.intotheabyss.game.event.DeathEvent
 import com.example.intotheabyss.game.event.DisconnectEvent
 import com.example.intotheabyss.game.event.EventType
 import com.example.intotheabyss.game.gamecontroller.GameController
@@ -33,6 +34,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var debug = true //set to true to get a generic level, false to get a level from DB
     private var dead = false
     var deathActivity = false
+    var kicked = false
 
     private val thread: GameThread
     var gameState: GameState? = null
@@ -167,7 +169,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if (!dead) {
             if (player!!.x == 13)   {
                 player!!.health--
-//                val death =
             }
 
             updatePlayer()
@@ -179,6 +180,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
             if (player!!.health < 1) {
                 dead = true
+                val death = DeathEvent(player!!.ID)
+                gameState!!.eventQueue.add(death)
             }
 
 //            //TODO: Remove this code later.
@@ -199,6 +202,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         }   else    {
             if (gameState!!.eventQueue.isEmpty())   {
+
                 deathActivity = true
             }
         }
@@ -230,8 +234,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private fun updateEvents()  {
         while (!gameState!!.eventQueueDisplay.isEmpty())  {
             val event = gameState!!.eventQueueDisplay.poll()
-            if (event.type == EventType.ATTACK)
-            gameState!!.entitiesInLevel[event.performerID]!!.action = 1
+            if (event.type == EventType.ATTACK) {
+                gameState!!.entitiesInLevel[event.performerID]!!.action = 1
+            } else if (event.type == EventType.DISCONNECT)  {
+                kicked = true
+            }
         }
     }
 

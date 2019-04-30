@@ -40,6 +40,7 @@ class UpdateRunnable(private val network: Network, private val volleyNetworkInte
             }
         } catch (e: InterruptedException) {
             e.printStackTrace()
+            return
         }
     }
 }

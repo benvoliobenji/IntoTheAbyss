@@ -8,6 +8,7 @@ import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.R
 
 import com.example.intotheabyss.game.GameView
+import com.example.intotheabyss.game.event.DisconnectEvent
 
 import com.example.intotheabyss.networking.NetworkRunnable
 import kotlinx.android.synthetic.main.activity_dungeon.*
@@ -64,6 +65,20 @@ class DungeonActivity : AppCompatActivity() {
             intent.putExtra("level", gameState.level)
             startActivity(intent)
         }
+        if (gameView!!.kicked)  {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
+    override fun onStop()   {
+        val disc = DisconnectEvent()
+        gameState.eventQueue.add(disc)
+
+        while (!gameState.eventQueue.isEmpty()) {
+            Thread.sleep(5)
+        }
+        networkThread.interrupt()
+        super.onStop()
+    }
 }

@@ -184,6 +184,7 @@ class Network(private var gameState: GameState): Listener() {
     fun disconnect() {
         val disconnectPacket = DisconnectPacket(gameState.myPlayer.ID)
         client.sendTCP(disconnectPacket)
+        client.stop()
         client.close()
     }
 
