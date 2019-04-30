@@ -225,7 +225,10 @@ class Network(private var gameState: GameState): Listener() {
             newPlayer.x = json.getInt("posX")
             newPlayer.y = json.getInt("posY")
             newPlayer.playerName = json.getString("username")
-            newPlayer.ID = json.getString("ID")
+            newPlayer.ID = json.getInt("ID").toString()
+
+            Log.i("ADD", newPlayer.ID)
+
             gameState.entitiesInLevel[newPlayer.ID] = newPlayer
 
             Log.i("ADD", gameState.entitiesInLevel[newPlayer.ID].toString())
