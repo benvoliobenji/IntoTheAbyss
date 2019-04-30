@@ -183,23 +183,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 val death = DeathEvent(player!!.ID)
                 gameState!!.eventQueue.add(death)
             }
-
-//            //TODO: Remove this code later.
-//            if ((gameState != null) and (gameState!!.entitiesInLevel.size < 1)) {
-//                var testPlayer = Player("test", "pid", 10, 0, 15, 15)
-//                val playerList = gameState!!.entitiesInLevel
-//                playerList["pid"] = testPlayer
-//
-//                testPlayer = Player("MMMMMM", "MMMMMM", 10, 0, 14, 20)
-//                playerList["MMMMMM"] = testPlayer
-//
-//                testPlayer = Player("test3", "pid3", 10, 0, 15, 20)
-//                playerList["pid3"] = testPlayer
-//
-//                testPlayer = Player("test4", "pid4", 10, 0, 16, 20)
-//                playerList["pid4"] = testPlayer
-//            }
-
         }   else    {
             if (gameState!!.eventQueue.isEmpty())   {
 
@@ -349,9 +332,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
             validLevel = true
         }
-
-        //TODO: REmove this line
-//        setLevel()
 
         //image variable - will maybe be updated to be more efficient later
         var image: Bitmap = BitmapFactory.decodeResource(resources, com.example.intotheabyss.R.drawable.panda)
