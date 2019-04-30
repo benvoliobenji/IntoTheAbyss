@@ -268,10 +268,13 @@ class Network(private var gameState: GameState): Listener() {
      * @param action The EntityActionPacket received from Kryonet
      */
     private fun handleAttackAction(action: EntityAction) {
-        var json = JSONObject(action.payload)
-        var gson = Gson()
-        var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
-        var entityAttacked = gameState.entitiesInLevel[attackAction.attackID]
+        // var json = JSONObject(action.payload)
+        var gsonBuilder = GsonBuilder()
+        gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
+        var gson = gsonBuilder.create()
+        var attackAction = gson.fromJson<Attack>(action.payload, Attack::class.java)
+        // var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
+        var entityAttacked = gameState.entitiesInLevel[attackAction.attackedID]
         entityAttacked!!.health -= attackAction.dmg
 
         var attackEvent = AttackEvent(entityAttacked!!.ID, action.performerID, attackAction.dmg)
@@ -296,7 +299,7 @@ class Network(private var gameState: GameState): Listener() {
             }
             gameState.entitiesInLevel.remove(entityAttacked.ID)
         } else {
-            gameState.entitiesInLevel[attackAction.attackID] = entityAttacked
+            gameState.entitiesInLevel[attackAction.attackedID] = entityAttacked
         }
     }
 
