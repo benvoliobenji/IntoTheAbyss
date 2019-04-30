@@ -227,6 +227,8 @@ class Network(private var gameState: GameState): Listener() {
             newPlayer.playerName = json.getString("username")
             newPlayer.ID = json.getString("ID")
             gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+
+            Log.i("ADD", gameState.entitiesInLevel[newPlayer.ID].toString())
         } else {
             var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
             gameState.entitiesInLevel[newMonster.ID] = newMonster
@@ -246,6 +248,7 @@ class Network(private var gameState: GameState): Listener() {
 
         // Verify that the entity is still on this floor
         if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
+            Log.i("MOVE", entityUnderMovement.toString())
             entityUnderMovement!!.x = moveAction.posX
             entityUnderMovement.y = moveAction.posY
             entityUnderMovement.floor = moveAction.floorMovedTo
