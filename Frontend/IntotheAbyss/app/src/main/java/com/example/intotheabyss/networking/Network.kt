@@ -328,7 +328,7 @@ class Network(private var gameState: GameState): Listener() {
         } else {
             gameState.entitiesInLevel[action.payload] as Player
         }
-        
+
         when {
             gameState.myPlayer.ID == action.performerID -> {
                 gameState.myPlayer.role = Role.GROUP_LEADER
@@ -377,8 +377,8 @@ class Network(private var gameState: GameState): Listener() {
 
     private fun handleKickAction(action: EntityAction) {
         //var json = JSONObject(action.payload)
-        var gson = Gson()
-        var kickAction = gson.fromJson<Kick>(action.payload, Kick::class.java)
+        // var gson = Gson()
+        // var kickAction = gson.fromJson<Kick>(action.payload, Kick::class.java)
 
         var kickingPlayer = if (action.performerID == gameState.myPlayer.ID) {
             gameState.myPlayer
@@ -386,7 +386,7 @@ class Network(private var gameState: GameState): Listener() {
             gameState.entitiesInLevel[action.performerID] as Player
         }
 
-        if (kickingPlayer.role == Role.GROUP_LEADER && gameState.myPlayer.ID == kickAction.kickedID) {
+        if (kickingPlayer.role == Role.GROUP_LEADER && gameState.myPlayer.ID == action.payload) {
             gameState.myPlayer.role = Role.PLAYER
             kickingPlayer.party.remove(gameState.myPlayer)
 
@@ -396,7 +396,7 @@ class Network(private var gameState: GameState): Listener() {
 
             gameState.myPlayer.party.removeAll(gameState.myPlayer.party)
         } else if (kickingPlayer.role == Role.GROUP_LEADER && gameState.myPlayer.ID == kickingPlayer.ID) {
-            val kickedPlayer = gameState.entitiesInLevel[kickAction.kickedID] as Player
+            val kickedPlayer = gameState.entitiesInLevel[action.payload] as Player
 
             gameState.myPlayer.party.remove(kickedPlayer)
 
@@ -406,7 +406,7 @@ class Network(private var gameState: GameState): Listener() {
 
             kickedPlayer.party.removeAll(kickedPlayer.party)
         } else if (kickingPlayer.role == Role.GROUP_LEADER) {
-            val kickedPlayer = gameState.entitiesInLevel[kickAction.kickedID] as Player
+            val kickedPlayer = gameState.entitiesInLevel[action.payload] as Player
 
             kickingPlayer.party.remove(kickedPlayer)
 
@@ -416,13 +416,13 @@ class Network(private var gameState: GameState): Listener() {
 
             kickedPlayer.party.removeAll(kickingPlayer.party)
         } else {
-            val kickedPlayer = gameState.entitiesInLevel[kickAction.kickedID] as Player
+            val kickedPlayer = gameState.entitiesInLevel[action.payload] as Player
 
             for (player in kickedPlayer.party) {
                 player.party.remove(kickedPlayer)
             }
 
-            gameState.entitiesInLevel.remove(kickAction.kickedID)
+            gameState.entitiesInLevel.remove(action.payload)
         }
     }
 
