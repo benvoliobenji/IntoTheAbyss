@@ -171,10 +171,10 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @return A point describing which way the player is facing
      */
     private fun getDirection(player: Player): Point    {
-        var p = Point(0,0)
+        val p = Point(0,0)
         if ((player.x != player.lastX) or (player.y != player.lastY)) {
-            var dX = player.x - player.lastX
-            var dY = player.y - player.lastY
+            val dX = player.x - player.lastX
+            val dY = player.y - player.lastY
             if (dX < 0) {
                 p.x = -1
                 p.y = 0
