@@ -72,6 +72,11 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
                     network.disconnect()
                     gameState.eventQueue.remove()
                 }
+                EventType.DEATH -> {
+                    val deathEvent = gameState.eventQueue.peek() as DeathEvent
+                    network.death(deathEvent)
+                    gameState.eventQueue.remove()
+                }
                 else -> Log.i("EventType", "Unknown EventType" + event.type)
             }
             return UpdateVerificationType.EVENT

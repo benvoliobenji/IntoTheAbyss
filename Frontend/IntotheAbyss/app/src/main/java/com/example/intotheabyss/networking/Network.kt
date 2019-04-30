@@ -16,9 +16,7 @@ import com.example.intotheabyss.game.entity.monster.Monster
 import com.example.intotheabyss.networking.packets.*
 import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.game.entity.player.Role
-import com.example.intotheabyss.game.event.AttackEvent
-import com.example.intotheabyss.game.event.KickEvent
-import com.example.intotheabyss.game.event.RequestEvent
+import com.example.intotheabyss.game.event.*
 import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
@@ -125,6 +123,8 @@ class Network(private var gameState: GameState): Listener() {
 
                     EntityActionType.KICK -> handleKickAction(action)
 
+                    EntityActionType.REMOVE -> handleRemoveAction(action)
+
                     else -> Log.i("EntityAction", "Unknown EntityActionType" + o.actionType)
                 }
             }
@@ -173,6 +173,12 @@ class Network(private var gameState: GameState): Listener() {
         val kickPacket = EntityAction(kick.performerID, EntityActionType.KICK, gameState.myPlayer.floor,
             kick.performedID)
         client.sendTCP(kickPacket)
+    }
+
+    fun death(death: DeathEvent) {
+        val deathPacket = EntityAction(death.performerID, EntityActionType.DEATH, gameState.myPlayer.floor,
+            death.performerID)
+        client.sendTCP(deathPacket)
     }
 
     fun disconnect() {
@@ -375,6 +381,16 @@ class Network(private var gameState: GameState): Listener() {
 
             gameState.entitiesInLevel.remove(kickAction.kickedID)
         }
+    }
 
+    private fun handleRemoveAction(action: EntityAction) {
+        if (gameState.myPlayer.ID == action.performerID) {
+            disconnect()
+            gameState.eventQueueDisplay.add(DisconnectEvent())
+        } else if (gameState.myPlayer.party.contains(gameState.entitiesInLevel[action.performerID] as Player)) {
+            gameState.myPlayer.party.remove(gameState.entitiesInLevel[action.performerID] as Player)
+        }
+
+        gameState.entitiesInLevel.remove(action.performerID)
     }
 }

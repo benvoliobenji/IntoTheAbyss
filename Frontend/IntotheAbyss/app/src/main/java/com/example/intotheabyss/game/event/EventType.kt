@@ -10,5 +10,6 @@ enum class EventType {
     REQUEST,
     KICK,
     REMOVE,
-    DISCONNECT
+    DISCONNECT,
+    DEATH
 }
