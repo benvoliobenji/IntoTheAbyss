@@ -144,9 +144,7 @@ class PlayerBoard(private val gameView: GameView,
             for (r in rectArray)    {
                 val i = rectArray.indexOf(r)
                 var s = ""
-                if (keyArray.size > i) {
-                    s = keyArray[i]
-                }   else    break
+                s = keyArray[i]
 
                 if (isInRect(x, y, r)) {
 //                    println("In rect, add player")
@@ -215,16 +213,15 @@ class PlayerBoard(private val gameView: GameView,
         if (myPlayer.role == Role.GROUP_LEADER || myPlayer.role == Role.ADMIN) {
             for (p in myPlayer.party)  {
                 if (key.equals(p.ID))   {
-
                     gameView.player!!.party.remove(p)
-                    val kickEvent = KickEvent(myPlayer.ID, key)
-                    gameView.gameState!!.eventQueue.add(kickEvent)
 
                     val k = keyArray.indexOf(key)
                     groupRectArray.remove(groupRectArray[k])
                     keyArray.remove(key)
                 }
             }
+            val kickEvent = KickEvent(myPlayer.ID, key)
+            gameView.gameState!!.eventQueue.add(kickEvent)
         }
         if ((gameView.player!!.party.isEmpty()) and (gameView.player!!.role != Role.ADMIN))   {
             gameView.player!!.role = Role.PLAYER
