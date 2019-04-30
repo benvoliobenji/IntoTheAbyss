@@ -1,6 +1,7 @@
 package network.server;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import app.db.LevelRepository;
 import app.db.PlayerRepository;
+import app.entity.GameEntity;
 import app.entity.player.Player;
 import app.group.Group;
 import app.level.Level;
@@ -27,14 +29,6 @@ import network.packets.PlayerPacket;
 /**
  * The Class RequestHandler handles all request types. As of now the supported
  * request types are ConnectionPacket, and ActionPacket.
- */
-
-/*
- * TODO Document this with good comments explaining the processing. TODO Fix the
- * to all method calls such that they don't send to the sender TODO Fix storage
- * of connections such that we are able to keep them by floor this may be part
- * of a larger fix. TODO Check for consistent data across DB, server, and
- * client.
  */
 public class RequestHandler {
 
@@ -72,8 +66,9 @@ public class RequestHandler {
 	 * @param object     the object
 	 */
 	public void handleRequests(Connection connection, Object object) {
+		Json json = new Json();
 		if (object instanceof ConnectionPacket) {
-			handleConnectionRequest(connection, object);
+			handleConnectionRequest(connection, object, json);
 		} else if (object instanceof DisconnectPacket) {
 			handleDisconnectRequest(connection, object);
 		} else if (object instanceof MapRequestPacket) {
@@ -97,10 +92,11 @@ public class RequestHandler {
 		Json json = new Json();
 		switch (action.getActionType()) {
 		case MOVE:
-			handleMoveAction(action, json);
+			handleMoveAction(action, json, connection);
 			server.sendToAllExceptTCP(connection.getID(), action);
 			break;
 		case ATTACK:
+			System.out.println(action.getPayload());
 			handleAttackAction(action, json);
 			server.sendToAllExceptTCP(connection.getID(), action);
 			break;
@@ -127,9 +123,8 @@ public class RequestHandler {
 	 * @param connection the connection from Kryonet
 	 * @param object     the object that is a instance of ConnectionRequest
 	 */
-	public void handleConnectionRequest(Connection connection, Object object) {
-		ConnectionPacket request = (ConnectionPacket) object;
-		System.out.print(request.getID());
+	public void handleConnectionRequest(Connection connection, Object object, Json json) {
+		ConnectionPacket request = ((ConnectionPacket) object);
 		Player p = playerRepository.findById(request.getID()).get();
 		if (p != null) {
 			world.getLevel(p.getFloor()).addEntity(p);
@@ -138,11 +133,20 @@ public class RequestHandler {
 			action.setFloor(p.getFloor());
 			action.setPerformerID(p.getID());
 			action.setPayload(new Json().toJson(p, Player.class));
-			// server.sendToAllExceptTCP(connection.getID(), action);
-			// server.sendToTCP(connection.getID(), (((Level)
-			// world.getLevel(p.getFloor())).getAllEntities()));
+			server.sendToAllExceptTCP(connection.getID(), action);
+
+			Collection<GameEntity> entity = ((Level) world.getLevel(p.getFloor())).getAllEntities().values();
+			for (GameEntity e : entity) {
+				Action action1 = new Action();
+				action1.setActionType(ActionTypes.ADD);
+				action1.setFloor(p.getFloor());
+				action1.setPerformerID(e.getID());
+				action1.setPayload(new Json().toJson((Player) e, Player.class));
+				server.sendToTCP(connection.getID(), action1);
+			}
 			System.out.println("User added to world :" + p.toString());
 		}
+		world.getLevel(p.getFloor()).addEntity(p);
 	}
 
 	/**
@@ -155,16 +159,17 @@ public class RequestHandler {
 	public void handleDisconnectRequest(Connection connection, Object object) {
 		DisconnectPacket request = (DisconnectPacket) object;
 		Player p = (Player) world.getLevel(request.getFloor()).getEntity(request.getID());
-
-		if (p.getGroup().getLeader() == p.getID()) {
-			ArrayList<String> members = (ArrayList<String>) p.getGroup().getPlayers();
-			for (int i = 0; i < members.size(); i++) {
-				Action action = new Action();
-				action.setActionType(ActionTypes.KICK);
-				action.setFloor(request.getFloor());
-				action.setPerformerID(request.getID());
-				action.setPayload(members.get(i));
-				server.sendToAllExceptTCP(connection.getID(), action);
+		if (p.getGroup() != null) {
+			if (p.getGroup().getLeader() == p.getID()) {
+				ArrayList<String> members = (ArrayList<String>) p.getGroup().getPlayers();
+				for (int i = 0; i < members.size(); i++) {
+					Action action = new Action();
+					action.setActionType(ActionTypes.KICK);
+					action.setFloor(request.getFloor());
+					action.setPerformerID(request.getID());
+					action.setPayload(members.get(i));
+					server.sendToAllExceptTCP(connection.getID(), action);
+				}
 			}
 		}
 
@@ -172,6 +177,7 @@ public class RequestHandler {
 		action.setActionType(ActionTypes.REMOVE);
 		action.setFloor(request.getFloor());
 		action.setPerformerID(request.getID());
+		action.setPayload(request.getID());
 		server.sendToAllExceptTCP(connection.getID(), action);
 		world.getLevel(request.getFloor()).removeEntity(p.getID());
 		playerRepository.save(p);
@@ -185,7 +191,7 @@ public class RequestHandler {
 	 * @param action the action
 	 * @param json   the json
 	 */
-	public void handleMoveAction(Action action, Json json) {
+	public void handleMoveAction(Action action, Json json, Connection connection) {
 		Move move = json.fromJson(Move.class, action.getPayload());
 		Player moved = (Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID());
 		if (moved != null) {
@@ -198,18 +204,37 @@ public class RequestHandler {
 			} else {
 				// Get floor from DB, this should be there as clients request prior to sending
 				// the move action
+				System.out.print(action.getPayload());
 				if (world.getLevel(move.getFloorMovedTo()) == null) {
 					Optional<Level> newLevel = levelRepository.findById(Integer.valueOf(move.getFloorMovedTo()));
 					world.addLevel(newLevel.get());
 				}
 
-				Player p = playerRepository.getPlayerByID(action.getPerformerID());
+				Action action1 = new Action();
+				action1.setActionType(ActionTypes.ADD);
+				action1.setFloor(move.getFloorMovedTo());
+				action1.setPerformerID(moved.getID());
+				action1.setPayload(new Json().toJson(moved, Player.class));
+				server.sendToAllExceptTCP(connection.getID(), action);
+
+				Collection<GameEntity> entity = ((Level) world.getLevel(move.getFloorMovedTo())).getAllEntities()
+						.values();
+				for (GameEntity e : entity) {
+					Action action2 = new Action();
+					action2.setActionType(ActionTypes.ADD);
+					action2.setFloor(move.getFloorMovedTo());
+					action2.setPerformerID(e.getID());
+					action2.setPayload(new Json().toJson((Player) e, Player.class));
+					server.sendToTCP(connection.getID(), action2);
+				}
+
+				Player p = playerRepository.findById(action.getPerformerID()).get();
 				world.switchFloors(p, action.getFloor(), move.getFloorMovedTo());
 				p = (Player) world.getLevel(move.getFloorMovedTo()).getEntity(action.getPerformerID());
 				playerRepository.save(p);
-				System.out.println(p.toString());
 			}
 		}
+
 	}
 
 	/**
@@ -224,6 +249,7 @@ public class RequestHandler {
 		Player attacked = (Player) world.getLevel(action.getFloor()).getEntity(action.getPerformerID());
 		attacked.setHealth(attacked.getHealth() - atk.getDmg());
 		attacked = playerRepository.save(attacked);
+		System.out.println("Look at that swing.");
 	}
 
 	/*
@@ -239,9 +265,10 @@ public class RequestHandler {
 			ArrayList<String> members = (ArrayList<String>) leader.getGroup().getPlayers();
 			for (int i = 0; i < members.size(); i++) {
 				Player member = (Player) world.getLevel(action.getFloor()).getEntity(members.get(i));
-				member.getGroup().addPlayer(action.getPayload());
-				world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
-				// playerRepository.save(member);
+				if (member.getID() != action.getPayload()) {
+					member.getGroup().addPlayer(action.getPayload());
+					world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
+				}
 			}
 
 		}
@@ -249,14 +276,13 @@ public class RequestHandler {
 		Player joinee = (Player) world.getLevel(action.getFloor()).getEntity(action.getPayload());
 		joinee.setGroup(leader.getGroup());
 		world.getLevel(action.getFloor()).replaceEntity(joinee.getID(), joinee);
-		// playerRepository.save(joinee);
 
 		Action joinAction = new Action();
-		action.setActionType(ActionTypes.JOIN);
-		action.setFloor(joinee.getFloor());
-		action.setPerformerID(joinee.getID());
-		action.setPayload(leader.getID());
-		server.sendToAllExceptTCP(connection.getID(), joinAction);
+		joinAction.setActionType(ActionTypes.JOIN);
+		joinAction.setFloor(joinee.getFloor());
+		joinAction.setPerformerID(leader.getID());
+		joinAction.setPayload(joinee.getID());
+		server.sendToAllTCP(joinAction);
 	}
 
 	// Kick action is just the ID of the person to be kicked if it's from a admin.
@@ -275,7 +301,6 @@ public class RequestHandler {
 				Player member = (Player) world.getLevel(action.getFloor()).getEntity(members.get(i));
 				member.removePlayerFromGroup(action.getPayload());
 				world.getLevel(action.getFloor()).replaceEntity(member.getID(), member);
-				// playerRepository.save(member);
 			}
 			server.sendToAllExceptUDP(connection.getID(), action);
 		}

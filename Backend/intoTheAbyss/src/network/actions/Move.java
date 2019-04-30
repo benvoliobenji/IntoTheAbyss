@@ -7,11 +7,8 @@ import java.awt.Point;
  */
 public class Move {
 
-	/** The location. */
-	private Point location;
-
 	/** The floor moved to. */
-	private int floorMovedTo;
+	private int posX, posY, floorMovedTo;
 
 	/**
 	 * Gets the location.
@@ -19,7 +16,7 @@ public class Move {
 	 * @return the location
 	 */
 	public Point getLocation() {
-		return location;
+		return new Point(posX, posY);
 	}
 
 	/**
@@ -28,7 +25,8 @@ public class Move {
 	 * @param p the location to move actor of the Action
 	 */
 	public void setLocation(Point p) {
-		location = p;
+		posX = p.x;
+		posY = p.y;
 	}
 
 	/**
