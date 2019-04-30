@@ -317,12 +317,12 @@ class Network(private var gameState: GameState): Listener() {
     }
 
     private fun handleJoinAction(action: EntityAction) {
-        var json =JSONObject(action.payload)
+        //var json =JSONObject(action.payload)
         // var gsonBuilder = GsonBuilder()
         // gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
         // var gson = gsonBuilder.create()
         var gson = Gson()
-        var joinAction: Join = gson.fromJson<Join>(json.toString(), Join::class.java)
+        var joinAction: Join = gson.fromJson<Join>(action.payload, Join::class.java)
         var joinedPlayer = gameState.entitiesInLevel[joinAction.joinedPlayerID] as Player
 
         when {
@@ -372,9 +372,9 @@ class Network(private var gameState: GameState): Listener() {
     }
 
     private fun handleKickAction(action: EntityAction) {
-        var json = JSONObject(action.payload)
+        //var json = JSONObject(action.payload)
         var gson = Gson()
-        var kickAction = gson.fromJson<Kick>(json.toString(), Kick::class.java)
+        var kickAction = gson.fromJson<Kick>(action.payload, Kick::class.java)
 
         var kickingPlayer = if (action.performerID == gameState.myPlayer.ID) {
             gameState.myPlayer
