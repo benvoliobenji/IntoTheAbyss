@@ -428,11 +428,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             i = 0
                             for (player in gameState!!.entitiesInLevel) {
                                 otherPlayer = player.value as Player
-                                if (isVisible(
-                                        gameState!!.myPlayer,
-                                        otherPlayer
-                                    ) and (this.player!!.ID != otherPlayer.ID)
-                                ) {
+//                                if (isVisible(
+//                                        gameState!!.myPlayer,
+//                                        otherPlayer
+//                                    ) and (this.player!!.ID != otherPlayer.ID)
+//                                ) {
                                     drawPlayerInterface.drawPlayer(
                                         0,
                                         0,
@@ -442,7 +442,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                                         otherPlayer.action,
                                         false
                                     )
-                                }
+//                                }
                                 i++
                             }
                         }
