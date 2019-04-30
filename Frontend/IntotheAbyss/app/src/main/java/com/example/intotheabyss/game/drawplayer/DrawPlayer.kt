@@ -83,25 +83,32 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      * @param player The player that will be drawn
      */
     override fun setPlayerImage(dX: Int, dY: Int, context: Context, gAction: Int, player: Entity): Bitmap {
+        var ddX = dX
+        var ddY = dY
         val isMonster = false
         var image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
         if (player.action == 1)   {
             animState = 0
         }
         val play = player as Player
-        val p = getDirection(play)
-        if ((p.x != 0) and (p.y != 0)) {
-            play.dX = p.x
-            play.dY = p.y
+        if (play.ID != gameView!!.player!!.ID) {
+            val p = getDirection(play)
+            if ((p.x != 0) and (p.y != 0)) {
+                play.dX = p.x
+                play.dY = p.y
+            }
+            ddX = play.dX
+            ddY = play.dY
         }
+
 //        val dX = play.dX
 //        val dY = play.dY
 
-        if (play.ID != gameView!!.player!!.ID) {
-            gameView!!.gameState!!.entitiesInLevel[play.ID] = play
-        }
+//        if (play.ID != gameView!!.player!!.ID) {
+//            gameView!!.gameState!!.entitiesInLevel[play.ID] = play
+//        }
 
-        when(dX) {
+        when(ddX) {
             -1 -> {
                 if (playerIdle) {
                     image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_left)
@@ -131,7 +138,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
                 }
             }
         }
-        when(dY) {
+        when(ddY) {
             -1 -> {
                 if (playerIdle) {
                     image = BitmapFactory.decodeResource(context.resources, com.example.intotheabyss.R.drawable.char_idle_down)
@@ -173,6 +180,9 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
     private fun getDirection(player: Player): Point    {
         val p = Point(0,0)
         if ((player.x != player.lastX) or (player.y != player.lastY)) {
+            gameView!!.gameState!!.entitiesInLevel[player.ID]!!.lastX = player.x
+            gameView!!.gameState!!.entitiesInLevel[player.ID]!!.lastY = player.y
+
             val dX = player.x - player.lastX
             val dY = player.y - player.lastY
             if (dX < 0) {

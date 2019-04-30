@@ -115,7 +115,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             e.printStackTrace()
         }
 
-        Thread.sleep(2000)
+        Thread.sleep(5000)
     }
 
     /**
