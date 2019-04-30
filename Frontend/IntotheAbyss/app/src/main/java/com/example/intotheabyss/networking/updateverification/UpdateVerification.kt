@@ -35,7 +35,7 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
         // Handle if the player has moved floors
         if (floorNum != gameState.myPlayer.floor) {
             floorNum = gameState.myPlayer.floor
-            volleyNetworkInterface.retrieveNewDungeonLevel(floorNum, network)
+            volleyNetworkInterface.retrieveNewDungeonLevel(floorNum)
             sleep(2000)
             network.updatePosition(gameState.myPlayer.ID, floorNum - 1, floorNum, posX, posY)
             return UpdateVerificationType.LEVEL

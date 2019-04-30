@@ -73,8 +73,7 @@ class UpdateHandlerTests {
         gameState.myPlayer.floor = 1
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
 
-        verify(mockVolleyNetwork, times(1)).retrieveNewDungeonLevel(gameState.myPlayer.floor,
-            mockKryoNetwork)
+        verify(mockVolleyNetwork, times(1)).retrieveNewDungeonLevel(gameState.myPlayer.floor)
 
     }
 
