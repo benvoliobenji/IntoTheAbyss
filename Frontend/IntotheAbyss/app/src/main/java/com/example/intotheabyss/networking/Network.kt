@@ -356,12 +356,16 @@ class Network(private var gameState: GameState): Listener() {
                 var leaderPlayer = gameState.entitiesInLevel[action.performerID] as Player
 
                 for (player in leaderPlayer.party) {
-                    player.party.add(gameState.myPlayer)
+                    if (player.ID != gameState.myPlayer.ID) {
+                        player.party.add(gameState.myPlayer)
+                    }
                 }
 
                 leaderPlayer.role = Role.GROUP_LEADER
                 gameState.myPlayer.party = leaderPlayer.party
-                leaderPlayer.party.add(gameState.myPlayer)
+                if (!leaderPlayer.party.contains(gameState.myPlayer)) {
+                    leaderPlayer.party.add(gameState.myPlayer)
+                }
             }
 
             else -> {
