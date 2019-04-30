@@ -211,13 +211,20 @@ class Network(private var gameState: GameState): Listener() {
      */
     private fun handleAddAction(action: EntityAction) {
         var json = JSONObject(action.payload)
+        var gson = Gson()
         Log.i("AddAction", json.toString())
         // Regardless if it's in the hash map or not, it will be modified or added the same way
-        var gson = Gson()
 
-//        if(action.performerID == gameState.myPlayer.ID) {
-//
-//        }
+        if(action.performerID == gameState.myPlayer.ID) {
+            for(ids in json.keys()) {
+                var newPlayer = Player()
+                newPlayer.x = json.getInt("posX")
+                newPlayer.y = json.getInt("posY")
+                newPlayer.playerName = json.getString("username")
+                newPlayer.ID = ids
+                gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+            }
+        }
 
         // If it has a username, then it is a Player, else it is a Monster
         if (json.optString("username") != "") {
@@ -225,6 +232,7 @@ class Network(private var gameState: GameState): Listener() {
             newPlayer.x = json.getInt("posX")
             newPlayer.y = json.getInt("posY")
             newPlayer.playerName = json.getString("username")
+            Log.i("ADD", json.getInt("ID").toString())
             newPlayer.ID = action.performerID
 
             Log.i("ADD", newPlayer.ID)
