@@ -59,6 +59,7 @@ class UpdateVerification(var posX: Int, var posY: Int, var floorNum: Int): Updat
                     network.attackPlayer(attack.performerID, attack.performedID, attack.damage)
                 }
                 EventType.KICK -> {
+                    Log.i("UpdateVerification", "KickEvent")
                     val kick: KickEvent = gameState.eventQueue.remove() as KickEvent
                     network.kickPlayer(kick)
                 }

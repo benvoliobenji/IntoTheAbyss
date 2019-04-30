@@ -226,6 +226,7 @@ class Network(private var gameState: GameState): Listener() {
                 newPlayer.x = json.getInt("posX")
                 newPlayer.y = json.getInt("posY")
                 newPlayer.playerName = json.getString("username")
+                newPlayer.floor = gameState.myPlayer.floor
                 Log.i("ADD", json.getInt("ID").toString())
                 newPlayer.ID = action.performerID
 
