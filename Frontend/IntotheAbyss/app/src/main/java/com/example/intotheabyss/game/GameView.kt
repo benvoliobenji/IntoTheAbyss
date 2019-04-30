@@ -37,6 +37,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var deathActivity = false
     var kicked = false
     var loaded = false
+    private var lvlNum = 0
 
     private val thread: GameThread
     var gameState: GameState? = null
@@ -62,8 +63,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     //Variables for displaying player
     var player: Player? = null
     var dX: Int = 0 //If player facing left, dX=-1; if facing right, dX=1; If neither, dX=0 (not currently supported)
-    var dY: Int =
-        0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
+    var dY: Int = 0 //If player facing up, dY=1; if facing down, dY=-1; If neither, dY=0 (this is now the only supported mode)
     var playerIdle = true   //True if player not moving, false if player is moving
 
     //Vars for creating default levels
@@ -90,6 +90,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var playerTextPaint = Paint()
     private var bSize = sHeight.toFloat() * 10 / 64
     private var playerBoardPaint = Paint()
+    private val infoPaint = Paint()
 
     /**
      * This is kinda like a constructor. Just code that needs to be ran on startup. A lot of initialization of stuff, etc
@@ -108,7 +109,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         playerTextPaint.textSize = 70f
 
         playerBoardPaint.color = Color.WHITE
-        playerBoardPaint.alpha = 90
+        playerBoardPaint.alpha = 100
+        playerBoardPaint.textSize = 20f
+
+        infoPaint.color = Color.WHITE
+        infoPaint.textSize = 30f
 
         playerBoard = PlayerBoard(this, bSize)
         try {
@@ -260,7 +265,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if (gameState!!.entitiesInLevel.isNotEmpty()) {
             for (p in gameState!!.entitiesInLevel) {
                 if ((p.value.x == atkX) and (p.value.y == atkY)) {
-                    val dmg = Random.nextInt(1, 3)
+                    val i = Random.nextInt(0, 1000)
+                    var dmg = Random.nextInt(1, 3)
+                    if (i == 5) {
+                        dmg = 7
+                    }
                     val atk = AttackEvent(player!!.ID, p.key, dmg)
                     gameState!!.eventQueue.add(atk)
                 }
@@ -284,6 +293,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 player!!.action = 0
                 gameControllerInterface.drawController(canvas)
                 drawOtherPlayers(canvas)
+
+                canvas.drawText("Level: ${player!!.floor}", 40f, 100f, infoPaint)
             } else {
                 canvas.drawColor(Color.BLACK)
                 playerBoard!!.drawPlayerBoard(canvas, gameState!!.entitiesInLevel)
@@ -380,14 +391,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     }
                 }
         }
-
-//        for (i in 0..99)    {
-//            for (j in 0..24)    {
-//                if (lvlArray[j][i].type == TileTypes.STAIR) {
-//                    println("Found at $j,$i")
-//                }
-//            }
-//        }
     }
 
     /**
@@ -421,28 +424,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     canvas.drawRect(rect, playerBoardPaint)
                     canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
                         rect.exactCenterY(), playerTextPaint)
-//                    if (gameState!!.entitiesInLevel.isNotEmpty()) {
-//                        i = 0
-//                        for (player in gameState!!.entitiesInLevel) {
-//                            otherPlayer = player.value as Player
-////                                if (isVisible(
-////                                        gameState!!.myPlayer,
-////                                        otherPlayer
-////                                    ) and (this.player!!.ID != otherPlayer.ID)
-////                                ) {
-//                                drawPlayerInterface.drawPlayer(
-//                                    0,
-//                                    0,
-//                                    context,
-//                                    canvas,
-//                                    otherPlayer,
-//                                    otherPlayer.action,
-//                                    false
-//                                )
-////                                }
-//                            i++
-//                        }
-//                    }
                 }
             }
         }
