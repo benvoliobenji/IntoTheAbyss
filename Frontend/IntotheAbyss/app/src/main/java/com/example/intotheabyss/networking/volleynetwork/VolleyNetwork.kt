@@ -43,9 +43,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      */
     override fun retrievePlayerData(playerID: String, isAdmin: Boolean, playerName: String) {
         Log.i("VolleyNetwork", "Sending request")
-//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
-//                "&playerNamePassed=$playerName&isAdmin=$isAdmin"
-        val url = "http://10.29.178.17:8080/players/getPlayer?playerUUIDPassed=$playerID" +
+        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
                 "&playerNamePassed=$playerName&isAdmin=$isAdmin"
         Log.i("VolleyNetwork", url)
         Log.i("VolleyNetwork", "Request Sent")
@@ -87,8 +85,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      * @param level The level number the User will be moving to.
      */
     override fun retrieveNewDungeonLevel(level: Int) {
-//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
-        val url = "http://10.29.178.17:8080/levels/get?id=$level"
+        val url = "http://cs309-ad-4.misc.iastate.edu:8080/levels/get?id=$level"
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             Response.Listener { response ->

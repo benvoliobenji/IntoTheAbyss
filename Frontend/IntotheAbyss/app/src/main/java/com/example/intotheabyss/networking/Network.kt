@@ -40,8 +40,7 @@ import java.util.*
  */
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
-    // private val ip: String = "cs309-ad-4.misc.iastate.edu"
-    private val ip: String = "10.29.178.17"
+    private val ip: String = "cs309-ad-4.misc.iastate.edu"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
