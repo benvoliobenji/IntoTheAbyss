@@ -22,6 +22,7 @@ import java.io.IOException
 import com.example.intotheabyss.utils.TileTypes
 import com.google.gson.Gson
 import org.json.JSONObject
+import java.util.*
 
 /**
  * This class is the implementation of the Kryonet library, which is our websocket implementation.
@@ -71,6 +72,8 @@ class Network(private var gameState: GameState): Listener() {
             register(EntityActionType::class.java)
 
             register(DisconnectPacket::class.java)
+            register(Player::class.java)
+            register(Hashtable::class.java)
         }
 
 
@@ -217,10 +220,13 @@ class Network(private var gameState: GameState): Listener() {
 
         if(action.performerID == gameState.myPlayer.ID) {
             for(ids in json.keys()) {
+                Log.i("AddAction", ids)
+                var playerjson = json.getJSONObject(ids)
                 var newPlayer = Player()
-                newPlayer.x = json.getInt("posX")
-                newPlayer.y = json.getInt("posY")
-                newPlayer.playerName = json.getString("username")
+                
+                newPlayer.x = playerjson.getInt("posX")
+                newPlayer.y = playerjson.getInt("posY")
+                newPlayer.playerName = playerjson.getString("username")
                 newPlayer.ID = ids
                 gameState.entitiesInLevel[newPlayer.ID] = newPlayer
             }
