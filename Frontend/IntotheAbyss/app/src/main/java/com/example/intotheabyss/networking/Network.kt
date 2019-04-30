@@ -230,10 +230,7 @@ class Network(private var gameState: GameState): Listener() {
 
         // Verify that the entity is still on this floor
         if (moveAction.floorMovedTo == gameState.myPlayer.floor) {
-            entityUnderMovement!!.lastX = entityUnderMovement.x
-            entityUnderMovement.lastY = entityUnderMovement.y
-
-            entityUnderMovement.x = moveAction.location.first
+            entityUnderMovement!!.x = moveAction.location.first
             entityUnderMovement.y = moveAction.location.second
             entityUnderMovement.floor = moveAction.floorMovedTo
 
@@ -386,7 +383,6 @@ class Network(private var gameState: GameState): Listener() {
 
     private fun handleRemoveAction(action: EntityAction) {
         if (gameState.myPlayer.ID == action.performerID) {
-            disconnect()
             gameState.eventQueueDisplay.add(DisconnectEvent())
         } else if (gameState.myPlayer.party.contains(gameState.entitiesInLevel[action.performerID] as Player)) {
             gameState.myPlayer.party.remove(gameState.entitiesInLevel[action.performerID] as Player)
