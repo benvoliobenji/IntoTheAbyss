@@ -10,6 +10,7 @@ import com.esotericsoftware.minlog.Log as kryolog
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.dungeonassets.Tile
 import com.example.intotheabyss.dungeonassets.Wall
+import com.example.intotheabyss.game.entity.Entity
 import com.example.intotheabyss.game.entity.EntityType
 import com.example.intotheabyss.game.entity.entityaction.*
 import com.example.intotheabyss.game.entity.monster.Monster
@@ -268,16 +269,22 @@ class Network(private var gameState: GameState): Listener() {
      * @param action The EntityActionPacket received from Kryonet
      */
     private fun handleAttackAction(action: EntityAction) {
-        // var json = JSONObject(action.payload)
         var gsonBuilder = GsonBuilder()
         gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
         var gson = gsonBuilder.create()
         var attackAction = gson.fromJson<Attack>(action.payload, Attack::class.java)
         // var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
-        var entityAttacked = gameState.entitiesInLevel[attackAction.attackedID]
-        entityAttacked!!.health -= attackAction.dmg
 
-        var attackEvent = AttackEvent(entityAttacked!!.ID, action.performerID, attackAction.dmg)
+        var entityAttacked: Entity
+        if (gameState.myPlayer.ID == attackAction.attackedID) {
+            entityAttacked = gameState.myPlayer
+        } else {
+            entityAttacked = gameState.entitiesInLevel[attackAction.attackedID]!!
+        }
+
+        entityAttacked.health -= attackAction.dmg
+
+        var attackEvent = AttackEvent(entityAttacked.ID, action.performerID, attackAction.dmg)
         gameState.eventQueueDisplay.add(attackEvent)
 
         // Remove the entity from the level if their health is less than 0
@@ -305,6 +312,9 @@ class Network(private var gameState: GameState): Listener() {
 
     private fun handleJoinAction(action: EntityAction) {
         var json =JSONObject(action.payload)
+        // var gsonBuilder = GsonBuilder()
+        // gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
+        // var gson = gsonBuilder.create()
         var gson = Gson()
         var joinAction: Join = gson.fromJson<Join>(json.toString(), Join::class.java)
         var joinedPlayer = gameState.entitiesInLevel[joinAction.joinedPlayerID] as Player
