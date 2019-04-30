@@ -114,7 +114,7 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 gameState.myPlayer.y = startY
 
                 // Empty entities in the level to make sure that nothing gets carried over
-                gameState.entitiesInLevel.clear()
+                // gameState.entitiesInLevel.clear()
 
                 // Add party members if player is in party
                 if(gameState.myPlayer.party.isNotEmpty()) {
