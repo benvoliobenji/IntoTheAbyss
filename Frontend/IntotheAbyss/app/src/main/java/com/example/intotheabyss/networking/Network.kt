@@ -321,9 +321,9 @@ class Network(private var gameState: GameState): Listener() {
         // var gsonBuilder = GsonBuilder()
         // gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
         // var gson = gsonBuilder.create()
-        var gson = Gson()
-        var joinAction: Join = gson.fromJson<Join>(action.payload, Join::class.java)
-        var joinedPlayer = gameState.entitiesInLevel[joinAction.joinedPlayerID] as Player
+        // var gson = Gson()
+        // var joinAction: Join = gson.fromJson<Join>(action.payload, Join::class.java)
+        var joinedPlayer = gameState.entitiesInLevel[action.payload] as Player
 
         when {
             gameState.myPlayer.ID == action.performerID -> {
@@ -348,7 +348,7 @@ class Network(private var gameState: GameState): Listener() {
                 gameState.myPlayer.party.add(joinedPlayer)
             }
 
-            gameState.myPlayer.ID == joinAction.joinedPlayerID -> {
+            gameState.myPlayer.ID == action.payload -> {
                 var leaderPlayer = gameState.entitiesInLevel[action.performerID] as Player
 
                 for (player in leaderPlayer.party) {
