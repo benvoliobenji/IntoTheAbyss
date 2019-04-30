@@ -472,10 +472,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         var change = 0
 
-        while ((change < distAway) and (y < lvlArray.size) and (x < lvlArray[0].size)) {
+        while (change < distAway) {
             x += xDif   //Add unit vector components
             y += yDif   //Add unit vector components
             change++    //Increase distance traveled by 1 unit
+
+            if ((x < 0) or (x > lvlArray[0].size) or (y < 0) or (y > lvlArray.size)) return true
 
             //Check if collision with wall
             if (lvlArray[x.roundToInt()][y.roundToInt()].type == TileTypes.WALL) {
