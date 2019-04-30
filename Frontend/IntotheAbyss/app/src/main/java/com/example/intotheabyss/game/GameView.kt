@@ -257,7 +257,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         if (gameState!!.entitiesInLevel.isNotEmpty()) {
             for (p in gameState!!.entitiesInLevel) {
-                if ((p.value.x == atkX) and (p.value.y == atkY)) {
+                if ((p.value.x == atkX) and (p.value.y == atkY) and !checkInGroup(p.key)) {
                     val i = Random.nextInt(0, 1000)
                     var dmg = Random.nextInt(1, 3)
                     if (i == 5) {
@@ -268,6 +268,21 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 }
             }
         }
+    }
+
+    /**
+     * Check if a player is in my group.
+     *
+     * @param s The ID of the player that we're checking
+     */
+    private fun checkInGroup(s: String): Boolean {
+        for (p in player!!.party)   {
+            if (p.ID == s)  {
+                return true
+            }
+        }
+
+        return false
     }
 
     /**
@@ -374,7 +389,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             image = stairsImage
 //                            println("Stairs at: ($j,$i)")
                         }
-                        //Try to print the damn thing
+
                         canvas.drawBitmap(
                             image,
                             (((i - minX) * tileSize)).toFloat(),
