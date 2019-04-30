@@ -5,5 +5,5 @@ package com.example.intotheabyss.networking.packets
  * @constructor Provided a string, set that string as the payload.
  * @author Benjamin Vogel
  */
-class ConnectionPackage(var playerID: String) {
+class ConnectionPackage(var userID: String) {
 }

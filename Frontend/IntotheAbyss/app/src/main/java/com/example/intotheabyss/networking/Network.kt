@@ -98,8 +98,8 @@ class Network(private var gameState: GameState): Listener() {
      */
     override fun received(c: Connection, o: Any) {
         if (o is ConnectionPackage) {
-            Log.i("Networking", o.playerID)
-            val connectionResponse = ConnectionPackage("Client says hello!")
+            Log.i("Networking", o.userID)
+            val connectionResponse = ConnectionPackage(gameState.myPlayer.ID)
             client.sendTCP(connectionResponse)
         }
         if (o is PlayerPacket) {
@@ -200,7 +200,7 @@ class Network(private var gameState: GameState): Listener() {
         var gson = Gson()
 
 //        if(action.performerID == gameState.myPlayer.ID) {
-//            
+//
 //        }
 
         // If it has a username, then it is a Player, else it is a Monster
