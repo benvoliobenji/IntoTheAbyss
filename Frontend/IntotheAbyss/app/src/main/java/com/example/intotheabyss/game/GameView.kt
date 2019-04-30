@@ -27,6 +27,7 @@ import com.example.intotheabyss.game.gamecontroller.PlayerBoardInterface
 import com.example.intotheabyss.game.levelhandler.LevelHandler
 import com.example.intotheabyss.game.levelhandler.LevelHandlerInterface
 import com.example.intotheabyss.utils.TileTypes
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
@@ -471,15 +472,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         var change = 0
 
-        while (change < distAway) {
+        while ((change < distAway) and (y < lvlArray.size) and (x < lvlArray[0].size)) {
             x += xDif   //Add unit vector components
             y += yDif   //Add unit vector components
             change++    //Increase distance traveled by 1 unit
 
             //Check if collision with wall
-            if ((lvlArray[x.toInt()][y.toInt()].type == TileTypes.WALL) || (lvlArray[x.toInt() + 1][y.toInt()].type == TileTypes.WALL) ||
-                (lvlArray[x.toInt()][y.toInt() + 1].type == TileTypes.WALL) || (lvlArray[x.toInt() + 1][y.toInt()].type == TileTypes.WALL)
-            ) {
+            if (lvlArray[x.roundToInt()][y.roundToInt()].type == TileTypes.WALL) {
                 return false
             }
         }
