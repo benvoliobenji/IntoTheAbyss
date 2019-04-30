@@ -275,11 +275,11 @@ class Network(private var gameState: GameState): Listener() {
         var attackAction = gson.fromJson<Attack>(action.payload, Attack::class.java)
         // var attackAction = gson.fromJson<Attack>(json.toString(), Attack::class.java)
 
-        var entityAttacked: Entity
+        var entityAttacked: Player
         if (gameState.myPlayer.ID == attackAction.attackedID) {
             entityAttacked = gameState.myPlayer
         } else {
-            entityAttacked = gameState.entitiesInLevel[attackAction.attackedID]!!
+            entityAttacked = gameState.entitiesInLevel[attackAction.attackedID]!! as Player
         }
 
         entityAttacked.health -= attackAction.dmg
@@ -289,7 +289,9 @@ class Network(private var gameState: GameState): Listener() {
 
         // Remove the entity from the level if their health is less than 0
         if(entityAttacked.health <= 0) {
-            if (entityAttacked.type == EntityType.PLAYER) {
+            if (entityAttacked.ID == gameState.myPlayer.ID) {
+                death(DeathEvent(gameState.myPlayer.ID))
+            }else if (entityAttacked.type == EntityType.PLAYER) {
                 var playerAttacked = entityAttacked as Player
 
                 if (playerAttacked.role == Role.GROUP_LEADER) {
@@ -306,7 +308,11 @@ class Network(private var gameState: GameState): Listener() {
             }
             gameState.entitiesInLevel.remove(entityAttacked.ID)
         } else {
-            gameState.entitiesInLevel[attackAction.attackedID] = entityAttacked
+            if (entityAttacked.ID == gameState.myPlayer.ID) {
+                gameState.myPlayer = entityAttacked
+            } else {
+                gameState.entitiesInLevel[attackAction.attackedID] = entityAttacked
+            }
         }
     }
 
