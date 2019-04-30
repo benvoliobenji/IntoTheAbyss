@@ -204,7 +204,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         checkNewLevel()
 
         pList = gameControllerInterface.getPList(event!!.x, event!!.y, event!!.action, pList)
-        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+//        gameState!!.myPlayer = player!!   //Not sure if this is necessary - but it couldn't hurt
+        player = gameState!!.myPlayer
 
         val p = drawPlayerInterface.updateBoundaries(player!!)      //Make sure screen follows player around
         minX = p.x

@@ -246,13 +246,14 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
      */
     private fun drawUserName(player: Entity, canvas: Canvas) {
         val paint = Paint()
+        val p = player as Player
 
         if(checkInGroup(player)) paint.color = Color.GREEN else paint.color = Color.RED //Set userName color
-        paint.color = Color.WHITE
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
-
-        canvas.drawText(player.ID, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
+        val text = "text"
+        println("Player name is: ${p.ID}")
+        canvas.drawText(p.playerName, (player.x- gameView!!.minX)* tileSize.toFloat(), (player.y- gameView!!.minY)* tileSize.toFloat()-5f, paint)
     }
 
     /**
