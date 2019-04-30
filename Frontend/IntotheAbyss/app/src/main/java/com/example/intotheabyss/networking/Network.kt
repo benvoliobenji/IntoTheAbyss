@@ -361,6 +361,7 @@ class Network(private var gameState: GameState): Listener() {
 
                 leaderPlayer.role = Role.GROUP_LEADER
                 gameState.myPlayer.party = leaderPlayer.party
+                gameState.myPlayer.party.add(leaderPlayer)
                 if (!leaderPlayer.party.contains(gameState.myPlayer)) {
                     leaderPlayer.party.add(gameState.myPlayer)
                 }
