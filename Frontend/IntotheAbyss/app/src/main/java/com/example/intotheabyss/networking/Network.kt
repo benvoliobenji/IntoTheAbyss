@@ -223,7 +223,7 @@ class Network(private var gameState: GameState): Listener() {
                 Log.i("AddAction", ids)
                 var playerjson = json.getJSONObject(ids)
                 var newPlayer = Player()
-                
+
                 newPlayer.x = playerjson.getInt("posX")
                 newPlayer.y = playerjson.getInt("posY")
                 newPlayer.playerName = playerjson.getString("username")
