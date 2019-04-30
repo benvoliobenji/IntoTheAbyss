@@ -234,7 +234,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
         paint.color = Color.RED
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.textSize = 80f
-        canvas.drawText("Health: ${player.health}/10", 1500f, 100f, paint)
+        canvas.drawText("Health: ${player.health}/10", gameView!!.sWidth.toFloat()-500, 100f, paint)
     }
 
     /**
