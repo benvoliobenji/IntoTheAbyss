@@ -122,7 +122,7 @@ public class Level implements LevelInterface {
 	 * 
 	 * @see app.level.LevelInterface#addEntity(app.entity.Entity)
 	 */
-	public void addEntity(app.entity.GameEntity e) {
+	public void addEntity(GameEntity e) {
 		gameEntities.put(e.getID(), e);
 	}
 

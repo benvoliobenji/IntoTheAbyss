@@ -1,6 +1,5 @@
 package app.entity.player;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -16,7 +15,7 @@ public class Player implements PlayerInterface {
 
 	/** The id. */
 	@Id
-	@Column(length = 50)
+	// @Column(length = 50)
 	// @GeneratedValue(generator = "UUID")
 	// @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	public String ID;
