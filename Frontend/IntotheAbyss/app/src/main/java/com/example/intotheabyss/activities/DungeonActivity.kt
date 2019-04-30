@@ -47,8 +47,8 @@ class DungeonActivity : AppCompatActivity() {
 
         if(!networkThread.isAlive) {
             // Add networkThread.IsBackground = true?
-//            networkThread = Thread(NetworkRunnable(gameState, admin, this))
-//            networkThread.start()
+            networkThread = Thread(NetworkRunnable(gameState, admin, this))
+            networkThread.start()
         }
 
         if (gameView!!.deathActivity)   {
