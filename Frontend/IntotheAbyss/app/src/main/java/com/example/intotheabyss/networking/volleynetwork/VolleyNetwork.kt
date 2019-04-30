@@ -33,8 +33,6 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
         this.requestQueue = Volley.newRequestQueue(context)
     }
 
-    //TODO: CHANGE URL TO MATCH NEW URL FOR ID AND NAME
-    //TODO: ADD ISADMIN FOR URL
     /**
      * Retrieves the User's player data through a JSONObjectRequest.
      *
@@ -44,12 +42,15 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
      * @param playerName The display name of the user who's data should be retrieved from the server.
      */
     override fun retrievePlayerData(playerID: String, isAdmin: Boolean, playerName: String) {
-        // Add the playerName to the url
-//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
-//                "?playerNamePassed=$playerName?isAdmin=$isAdmin"
         Log.i("VolleyNetwork", "Sending request")
+//        val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
+//                "&playerNamePassed=$playerName&isAdmin=$isAdmin"
+//        if (playerName.contains(" ")) {
+//            var spaceInt = playerName
+//        }
         val url = "http://cs309-ad-4.misc.iastate.edu:8080/players/getPlayer?playerUUIDPassed=$playerID" +
-                "?playerNamePassed=$playerName"
+                "&playerNamePassed=$playerName"
+        Log.i("VolleyNetwork", url)
         Log.i("VolleyNetwork", "Request Sent")
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -64,11 +65,8 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 val playerAdmin = response.getBoolean("isAdmin")
                 val player = Player(networkPlayerName, networkPlayerID, health, floor, posX, posY)
 
-                if(playerAdmin) {
-                    player.role = Role.ADMIN
-                } else {
-                    player.role = Role.PLAYER
-                }
+                player.role = if (playerAdmin) Role.ADMIN else Role.PLAYER
+
                 gameState.myPlayer = player
                 Log.i("PlayerRegistration", "Response: %s".format(player.toString()))
                 Log.i("PlayerRegistrationX", posX.toString())
@@ -108,9 +106,6 @@ class VolleyNetwork(private var context: Context, private var gameState: GameSta
                 val stairX = stairs.getInt("x")
                 val stairY = stairs.getInt("y")
                 levelGrid[stairY][stairX] = Stair()
-
-                //TODO: DElete
-                println("$stairX,$stairY")
 
                 // Set the new level in gameState
                 gameState.level = levelGrid

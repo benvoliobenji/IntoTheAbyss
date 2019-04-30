@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
  * The group type stores id and list of players.
  */
 @Entity
-@Embeddable
+//@Embeddable
 @Table(name = "\"Table\"")
 public class Group {
 
@@ -31,7 +30,7 @@ public class Group {
 	private String leader;
 
 	/** The players. */
-	private List<String> players;
+	private ArrayList<String> players;
 
 	public Group() {
 		players = new ArrayList<String>();
@@ -78,7 +77,7 @@ public class Group {
 	 *
 	 * @param players the new players
 	 */
-	public void setPlayers(List<String> players) {
+	public void setPlayers(ArrayList<String> players) {
 		this.players = players;
 	}
 

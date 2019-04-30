@@ -1,6 +1,7 @@
 package com.example.intotheabyss
 
 import com.example.intotheabyss.game.GameState
+import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.networking.Network
 import com.example.intotheabyss.networking.updateverification.UpdateVerification
 import com.example.intotheabyss.networking.updateverification.UpdateVerificationType
@@ -32,8 +33,8 @@ class UpdateHandlerTests {
     @Test
     fun updateVerificationReceivesCorrectInfoOnNewPlayer() {
         var fakeVolleyNetwork = FakeVolleyNetwork(gameState)
-        whenever(mockVolleyNetwork.retrievePlayerData("1", "player")).then {
-            fakeVolleyNetwork.retrievePlayerData("1", "player")
+        whenever(mockVolleyNetwork.retrievePlayerData("1", true,"player")).then {
+            fakeVolleyNetwork.retrievePlayerData("1", true,"player")
         }
 
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
@@ -46,8 +47,8 @@ class UpdateHandlerTests {
     @Test
     fun updateVerificationReceivesCorrectInfoOnPlayerInDatabase() {
         var fakeVolleyNetwork = FakeVolleyNetwork(gameState)
-        whenever(mockVolleyNetwork.retrievePlayerData("2", "oldPlayer")).then {
-            fakeVolleyNetwork.retrievePlayerData("2", "oldPlayer")
+        whenever(mockVolleyNetwork.retrievePlayerData("2", false,"oldPlayer")).then {
+            fakeVolleyNetwork.retrievePlayerData("2", false, "oldPlayer")
         }
 
         updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
@@ -81,5 +82,23 @@ class UpdateHandlerTests {
     fun updateVerificationShouldDoNothingWhenNothingHappens() {
         val verification = updateVerification.verifyGameState(gameState, mockKryoNetwork, mockVolleyNetwork)
         Assert.assertEquals(verification, UpdateVerificationType.NONE)
+    }
+
+    @Test
+    fun updateVerificationShouldNotRemoveAliveEnemies() {
+        gameState.entitiesInLevel["player2"] = Player()
+        gameState.entitiesInLevel["player2"]!!.health = 10
+        updateVerification.cleanUpEntities(gameState)
+
+        Assert.assertEquals(1, gameState.entitiesInLevel.size)
+    }
+
+    @Test
+    fun updateVerificationSuccessfullyCleansUpDeadEnemies() {
+        gameState.entitiesInLevel["player2"] = Player()
+        gameState.entitiesInLevel["player2"]!!.health = -1
+        updateVerification.cleanUpEntities(gameState)
+
+        Assert.assertEquals(true, gameState.entitiesInLevel.isEmpty())
     }
 }

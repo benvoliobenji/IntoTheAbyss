@@ -6,5 +6,7 @@ enum class EntityActionType {
     ATTACK,
     JOIN,
     REQUEST,
-    KICK
+    KICK,
+    REMOVE,
+    DEATH
 }

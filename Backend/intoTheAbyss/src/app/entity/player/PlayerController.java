@@ -53,7 +53,8 @@ public class PlayerController {
 	 */
 	@GetMapping(path = "/getPlayer")
 	public @ResponseBody Player getPlayer(@RequestParam String playerUUIDPassed,
-			@RequestParam String playerNamePassed) {
+										  @RequestParam String playerNamePassed,
+										  @RequestParam Boolean isAdmin) {
 		Optional<Player> players = playerRepository.findById(playerUUIDPassed);
 		if (!players.isPresent()) {
 			Player player = new Player();
@@ -63,11 +64,13 @@ public class PlayerController {
 			player.setHealth(10);
 			player.setPosX(1);
 			player.setPosY(1);
+			player.setIsAdmin(isAdmin);
 			playerRepository.save(player);
 			return player;
 		} else
 			return players.get();
 	}
+
 
 	/**
 	 * Gets the all players.

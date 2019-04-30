@@ -33,11 +33,9 @@ class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boo
         val personID = account?.id
 
         // Add/Retrieve data from server
-        //TODO: Remove this comment
         volleyNetworkInterface.retrievePlayerData(personID!!, isAdmin, displayName!!)
 
         val network = Network(gameState)
-        //TODO: Remove this comment
         network.connect()
 
         volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor, network)
