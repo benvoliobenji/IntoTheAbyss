@@ -174,6 +174,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             if (player!!.x == 13)   {
                 player!!.health--
             }
+            if ((player!!.x == 15) and (player!!.y == 33))  {
+                player!!.health = 10
+            }
 
             updatePlayer()
             updateEvents()
