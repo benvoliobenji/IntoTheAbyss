@@ -98,11 +98,11 @@ public class RequestHandler {
 		switch (action.getActionType()) {
 		case MOVE:
 			handleMoveAction(action, json);
-			server.sendToAllExceptUDP(connection.getID(), action);
+			server.sendToAllExceptTCP(connection.getID(), action);
 			break;
 		case ATTACK:
 			handleAttackAction(action, json);
-			server.sendToAllExceptUDP(connection.getID(), action);
+			server.sendToAllExceptTCP(connection.getID(), action);
 			break;
 		case REQUEST:
 			handleRequestAction(action, json, connection);
@@ -129,7 +129,7 @@ public class RequestHandler {
 	 */
 	public void handleConnectionRequest(Connection connection, Object object) {
 		ConnectionPacket request = (ConnectionPacket) object;
-		Player p = playerRepository.getPlayerByID(request.getID());
+		Player p = playerRepository.findById(request.getID()).get();
 		if (p != null) {
 			world.getLevel(p.getFloor()).addEntity(p);
 			Action action = new Action();
@@ -137,7 +137,9 @@ public class RequestHandler {
 			action.setFloor(p.getFloor());
 			action.setPerformerID(p.getID());
 			action.setPayload(new Json().toJson(p, Player.class));
-			server.sendToAllExceptTCP(connection.getID(), action);
+			// server.sendToAllExceptTCP(connection.getID(), action);
+			// server.sendToTCP(connection.getID(), (((Level)
+			// world.getLevel(p.getFloor())).getAllEntities()));
 			System.out.println("User added to world :" + p.toString());
 		}
 	}
@@ -171,6 +173,7 @@ public class RequestHandler {
 		action.setPerformerID(request.getID());
 		server.sendToAllExceptTCP(connection.getID(), action);
 		world.getLevel(request.getFloor()).removeEntity(p.getID());
+		playerRepository.save(p);
 		System.out.println("User removed from world: " + p.toString());
 
 	}
