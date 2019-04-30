@@ -37,7 +37,7 @@ import org.json.JSONObject
  */
 class Network(private var gameState: GameState): Listener() {
     private var client: Client = Client()
-    private val ip: String = "http://cs309-ad-4.misc.iastate.edu:8080"
+    private val ip: String = "cs309-ad-4.misc.iastate.edu"
     private val tcpPort: Int = 44444
     private val udpPort: Int = 44445
 
@@ -195,25 +195,21 @@ class Network(private var gameState: GameState): Listener() {
      */
     private fun handleAddAction(action: EntityAction) {
         var json = JSONObject(action.payload)
-        if (action.performerID == gameState.myPlayer.ID) {
-            gameState.myPlayer.ID = json.getString("ID")
-            gameState.myPlayer.playerName = json.getString("username")
-            gameState.myPlayer.x = json.getInt("posX")
-            gameState.myPlayer.y = json.getInt("posY")
-            gameState.myPlayer.floor = json.getInt("floor")
-            gameState.myPlayer.health = json.getInt("health")
-        } else {
-            // Regardless if it's in the hash map or not, it will be modified or added the same way
-            var gson = Gson()
+        Log.i("AddAction", json.toString())
+        // Regardless if it's in the hash map or not, it will be modified or added the same way
+        var gson = Gson()
 
-            // If it has a username, then it is a Player, else it is a Monster
-            if (json.optString("username") != "") {
-                var newPlayer = gson.fromJson<Player>(json.toString(), Player::class.java)
-                gameState.entitiesInLevel[newPlayer.ID] = newPlayer
-            } else {
-                var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
-                gameState.entitiesInLevel[newMonster.ID] = newMonster
-            }
+//        if(action.performerID == gameState.myPlayer.ID) {
+//            
+//        }
+
+        // If it has a username, then it is a Player, else it is a Monster
+        if (json.optString("username") != "") {
+            var newPlayer = gson.fromJson<Player>(json.toString(), Player::class.java)
+            gameState.entitiesInLevel[newPlayer.ID] = newPlayer
+        } else {
+            var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)
+            gameState.entitiesInLevel[newMonster.ID] = newMonster
         }
     }
 
