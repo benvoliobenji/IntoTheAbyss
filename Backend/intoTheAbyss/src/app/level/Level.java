@@ -139,6 +139,10 @@ public class Level implements LevelInterface {
 		gameEntities.replace(ID, e);
 	}
 
+	public Hashtable<String, GameEntity> getAllEntities() {
+		return gameEntities;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
