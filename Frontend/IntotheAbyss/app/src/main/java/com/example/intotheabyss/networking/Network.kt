@@ -116,6 +116,7 @@ class Network(private var gameState: GameState): Listener() {
         }
         if (o is EntityAction) {
             var action = EntityAction(o.performerID, o.actionType, o.floor, o.payload)
+            Log.i("EntityAction", o.actionType.toString())
 
             // Make sure we only process events based on our floor
             if (action.floor == gameState.myPlayer.floor) {
