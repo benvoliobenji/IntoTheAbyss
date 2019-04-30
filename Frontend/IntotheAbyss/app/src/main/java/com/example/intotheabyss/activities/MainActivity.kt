@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {
         val adminToggle = findViewById<Switch>(R.id.adminToggle)
 
         // Google Sign-In
-        var signInButton = findViewById<Button>(R.id.playButton)
-        var gso: GoogleSignInOptions = GoogleSignInOptions.Builder(
+        val signInButton = findViewById<Button>(R.id.playButton)
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun signIn() {
-        var signInIntent = mGoogleSignInClient?.signInIntent
+        val signInIntent = mGoogleSignInClient?.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             var account: GoogleSignInAccount? = completedTask.result
-            var intent = Intent(this, DungeonActivity::class.java)
+            val intent = Intent(this, DungeonActivity::class.java)
             intent.putExtra("admin", adminToggle.isChecked)
             startActivity(intent)
         } catch(e: ApiException) {

@@ -145,12 +145,11 @@ class PlayerBoard(private val gameView: GameView,
 //            println("Input moved")
             for (r in rectArray)    {
                 val i = rectArray.indexOf(r)
-                var s = ""
-                s = keyArray[i]
+                val s = keyArray[i]
 
                 if (isInRect(x, y, r)) {
 //                    println("In rect, add player")
-                    var newMember = playerList[s]!!
+                    val newMember = playerList[s]!!
                     addToGroup(newMember)
                     lastX = x
                     lastY =y
@@ -318,7 +317,7 @@ class PlayerBoard(private val gameView: GameView,
      * Function to check if playerID is in the playerList given
      *
      * @param s ID of the player we are checking for
-     * @param playerList PlayerList that we are checking inside of
+     * @param pList PlayerList that we are checking inside of
      */
     private fun checkForID(s: String, pList: MutableList<Player>): Boolean  {
         if (pList.isNotEmpty()) {
