@@ -37,12 +37,11 @@ class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boo
 
             // Add/Retrieve data from server
             volleyNetworkInterface.retrievePlayerData(personID!!, isAdmin, displayName!!)
+            volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor)
 
             sleep(10000)
             val network = Network(gameState)
             network.connect()
-
-            volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor, network)
 
             if (!updateThread.isAlive) {
                 updateThread = Thread(UpdateRunnable(network, volleyNetworkInterface, gameState))
