@@ -21,6 +21,9 @@ import java.io.IOException
 
 import com.example.intotheabyss.utils.TileTypes
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
+import com.google.gson.LongSerializationPolicy
 import org.json.JSONObject
 import java.util.*
 
@@ -213,8 +216,11 @@ class Network(private var gameState: GameState): Listener() {
      * @param action The EntityAction packet that was sent over Kryonet.
      */
     private fun handleAddAction(action: EntityAction) {
-        var json = JSONObject(action.payload)
-        var gson = Gson()
+        var gsonBuilder = GsonBuilder()
+        gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
+        var gson = gsonBuilder.create()
+        var json = JSONObject(gson.toJson(action.payload))
+        gson.toJson(action.payload)
         Log.i("AddAction", json.toString())
         // Regardless if it's in the hash map or not, it will be modified or added the same way
 
