@@ -126,7 +126,7 @@ class PlayerBoard(private val gameView: GameView,
 
     override fun getPlayerBoardAction(entityList: HashMap<String, Entity>, x: Float, y: Float, action: MotionEvent) {
         checkScrollButtons(x, y)
-        println("Scroll offset: $scrollOffset")
+//        println("Scroll offset: $scrollOffset")
         val playerList: HashMap<String, Player> = hashMapOf()
 
         for (entities in entityList.values) {
@@ -136,13 +136,13 @@ class PlayerBoard(private val gameView: GameView,
         }
 
         if (checkIfInputMoved(x, y)) {
-            println("Input moved")
+//            println("Input moved")
             for (r in rectArray)    {
                 val i = rectArray.indexOf(r)
                 val s = keyArray[i]
 
                 if (isInRect(x, y, r)) {
-                    println("In rect, add player")
+//                    println("In rect, add player")
                     var newMember = playerList[s]!!
                     addToGroup(newMember)
                     lastX = x
@@ -225,7 +225,6 @@ class PlayerBoard(private val gameView: GameView,
         gameView.gameState!!.eventQueue.add(kickEvent)
 
         for (p in gameView.gameState!!.entitiesInLevel) {
-            println("Checking $key, ${p.key}")
             if (p.key == key)   {
                 println("Removing")
                 gameView.gameState!!.entitiesInLevel.remove(p.key)

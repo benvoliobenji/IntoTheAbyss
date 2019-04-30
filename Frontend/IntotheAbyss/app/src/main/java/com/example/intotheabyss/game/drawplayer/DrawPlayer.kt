@@ -43,6 +43,7 @@ class DrawPlayer(gView: GameView, pImage: Bitmap): DrawPlayerInterface {
     override fun drawPlayer(dX: Int, dY: Int, context: Context, canvas: Canvas, player: Entity, gAction: Int, isPlayer: Boolean)  {
         val x = player.x
         val y = player.y
+        println("${player.ID} is at ${player.x},${player.y}")
 
         val paint = Paint()
         paint.color = Color.WHITE
