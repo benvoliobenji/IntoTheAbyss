@@ -129,6 +129,7 @@ public class RequestHandler {
 	 */
 	public void handleConnectionRequest(Connection connection, Object object) {
 		ConnectionPacket request = (ConnectionPacket) object;
+		System.out.print(request.getID());
 		Player p = playerRepository.findById(request.getID()).get();
 		if (p != null) {
 			world.getLevel(p.getFloor()).addEntity(p);
