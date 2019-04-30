@@ -403,50 +403,46 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 val otherEntity = gameState!!.entitiesInLevel[key]
                 gameState!!.entitiesInLevel[key]!!.action = 0
 
-                if (otherEntity!!.type == EntityType.PLAYER) {
-                    var otherPlayer = otherEntity as Player
+                var otherPlayer = otherEntity as Player
 
-                    if (!pList) {
-                        if (isVisible(gameState!!.myPlayer, otherPlayer) and (gameState!!.myPlayer != otherPlayer)) {
-                            drawPlayerInterface.drawPlayer(
-                                0,
-                                0,
-                                context,
-                                canvas,
-                                otherPlayer,
-                                otherPlayer.action,
-                                false
-                            )
-                        }
-                    } else {
-                        val rect = Rect(25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(),
-                            (3 + i) * bSize.toInt())
-                        canvas.drawRect(rect, playerBoardPaint)
-                        canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
-                            rect.exactCenterY(), playerTextPaint)
-                        if (gameState!!.entitiesInLevel.isNotEmpty()) {
-                            i = 0
-                            for (player in gameState!!.entitiesInLevel) {
-                                otherPlayer = player.value as Player
-//                                if (isVisible(
-//                                        gameState!!.myPlayer,
-//                                        otherPlayer
-//                                    ) and (this.player!!.ID != otherPlayer.ID)
-//                                ) {
-                                    drawPlayerInterface.drawPlayer(
-                                        0,
-                                        0,
-                                        context,
-                                        canvas,
-                                        otherPlayer,
-                                        otherPlayer.action,
-                                        false
-                                    )
-//                                }
-                                i++
-                            }
-                        }
-                    }
+                if (!pList) {
+                    drawPlayerInterface.drawPlayer(
+                        0,
+                        0,
+                        context,
+                        canvas,
+                        otherPlayer,
+                        otherPlayer.action,
+                        false
+                    )
+                } else {
+                    val rect = Rect(25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(),
+                        (3 + i) * bSize.toInt())
+                    canvas.drawRect(rect, playerBoardPaint)
+                    canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
+                        rect.exactCenterY(), playerTextPaint)
+//                    if (gameState!!.entitiesInLevel.isNotEmpty()) {
+//                        i = 0
+//                        for (player in gameState!!.entitiesInLevel) {
+//                            otherPlayer = player.value as Player
+////                                if (isVisible(
+////                                        gameState!!.myPlayer,
+////                                        otherPlayer
+////                                    ) and (this.player!!.ID != otherPlayer.ID)
+////                                ) {
+//                                drawPlayerInterface.drawPlayer(
+//                                    0,
+//                                    0,
+//                                    context,
+//                                    canvas,
+//                                    otherPlayer,
+//                                    otherPlayer.action,
+//                                    false
+//                                )
+////                                }
+//                            i++
+//                        }
+//                    }
                 }
             }
         }
