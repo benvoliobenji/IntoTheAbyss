@@ -24,10 +24,10 @@ class GameController(
     private var thisTimeAction: Long = 1000
     private var actionTimer: Long = 500
 
-    var gcHelper: GameControllerHelperInterface? = null
+    private var gcHelper: GameControllerHelperInterface? = null
 
     init {
-        gcHelper = GameControllerHelper(gameView)
+        this.gcHelper = GameControllerHelper(gameView)
     }
 
     /**

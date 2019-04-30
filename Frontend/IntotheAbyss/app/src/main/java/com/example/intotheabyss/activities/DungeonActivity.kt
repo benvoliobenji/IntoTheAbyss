@@ -12,7 +12,6 @@ import com.example.intotheabyss.game.event.DisconnectEvent
 
 import com.example.intotheabyss.networking.NetworkRunnable
 import kotlinx.android.synthetic.main.activity_dungeon.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 class DungeonActivity : AppCompatActivity() {
     private var networkThread = Thread()
@@ -27,17 +26,13 @@ class DungeonActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dungeon)
-        var gameView = findViewById<GameView>(R.id.gView)
+        val gameView = findViewById<GameView>(R.id.gView)
         this.gameView = gameView
 
         gameView.gameState = gameState
         gameView.debug = false
 
-        if (false) {
-            debugString.setText(R.string.debug_string)
-        } else  {
-            debugString.setText(R.string.not_debug_string)
-        }
+        debugString.setText(R.string.not_debug_string)
 
         gameView.setOnTouchListener { _, event ->
             gameView.dispatchTouchEvent(event)
