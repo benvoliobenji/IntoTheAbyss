@@ -14,11 +14,8 @@ import com.example.intotheabyss.game.entity.player.Player
 import com.example.intotheabyss.game.drawplayer.DrawPlayer
 import com.example.intotheabyss.game.drawplayer.DrawPlayerInterface
 import com.example.intotheabyss.game.entity.Entity
-import com.example.intotheabyss.game.entity.EntityType
-import com.example.intotheabyss.game.entity.player.Role
 import com.example.intotheabyss.game.event.AttackEvent
 import com.example.intotheabyss.game.event.DeathEvent
-import com.example.intotheabyss.game.event.DisconnectEvent
 import com.example.intotheabyss.game.event.EventType
 import com.example.intotheabyss.game.gamecontroller.GameController
 import com.example.intotheabyss.game.gamecontroller.GameControllerInterface
@@ -37,7 +34,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     var deathActivity = false
     var kicked = false
     var loaded = false
-    private var lvlNum = 0
 
     private val thread: GameThread
     var gameState: GameState? = null
@@ -96,11 +92,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * This is kinda like a constructor. Just code that needs to be ran on startup. A lot of initialization of stuff, etc
      */
     init {
-
-        // Don't really know what this does
         holder.addCallback(this)
 
-        // This instantiates the game thread when we start the game
         thread = GameThread(holder, this)
         gameControllerInterface = GameController(this)
         drawPlayerInterface = DrawPlayer(this, playerImage)
@@ -406,7 +399,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 val otherEntity = gameState!!.entitiesInLevel[key]
                 gameState!!.entitiesInLevel[key]!!.action = 0
 
-                var otherPlayer = otherEntity as Player
+                val otherPlayer = otherEntity as Player
 
                 if (!pList) {
                     drawPlayerInterface.drawPlayer(
@@ -431,6 +424,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     /**
     Function to determine if one player is visible from the other.
+     Apparently this code doesn't work, so its not being used.
+     No time to fix :/
+
      *@Param p1 - the originating player to start from
      *@Param p2 - Next player. Checking to see if in LOS of p1
      *@Return true if a straight line can be drawn from p1 -> p2 without intersecting a wall.
