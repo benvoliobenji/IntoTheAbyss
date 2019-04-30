@@ -79,9 +79,11 @@ class PlayerBoard(private val gameView: GameView,
 
         var i = 0 - scrollOffset
         for (p in playerList.keys) {
-            if (i >= 0) {
+            if ((i >= 0)) {
                 val player = playerList[p]
-                playerList(player!!, canvas, i)
+                if (player!!.floor == gameView.player!!.floor) {
+                    playerList(player, canvas, i)
+                }
 
                 keyArray.add(p)
             }

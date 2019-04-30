@@ -416,22 +416,28 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
                 val otherPlayer = otherEntity as Player
 
-                if (!pList) {
-                    drawPlayerInterface.drawPlayer(
-                        0,
-                        0,
-                        context,
-                        canvas,
-                        otherPlayer,
-                        otherPlayer.action,
-                        false
-                    )
-                } else {
-                    val rect = Rect(25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(),
-                        (3 + i) * bSize.toInt())
-                    canvas.drawRect(rect, playerBoardPaint)
-                    canvas.drawText(gameState!!.entitiesInLevel[key]!!.ID, 25f,
-                        rect.exactCenterY(), playerTextPaint)
+                if (otherPlayer.floor == player!!.floor) {
+                    if (!pList) {
+                        drawPlayerInterface.drawPlayer(
+                            0,
+                            0,
+                            context,
+                            canvas,
+                            otherPlayer,
+                            otherPlayer.action,
+                            false
+                        )
+                    } else {
+                        val rect = Rect(
+                            25, ((2 + i) * bSize).toInt(), 25 + 3 * bSize.toInt(),
+                            (3 + i) * bSize.toInt()
+                        )
+                        canvas.drawRect(rect, playerBoardPaint)
+                        canvas.drawText(
+                            gameState!!.entitiesInLevel[key]!!.ID, 25f,
+                            rect.exactCenterY(), playerTextPaint
+                        )
+                    }
                 }
             }
         }
