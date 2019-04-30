@@ -34,6 +34,10 @@ private var scrollOffset = 0
 private var scrollUpRect = Rect(0,0,0,0)
 private var scrollDownRect = Rect(0,0,0,0)
 
+private var kickDelay: Long = 50
+private var lastKick: Long = 0
+private var thisKick: Long = 100
+
 class PlayerBoard(private val gameView: GameView,
                   private val bSize: Float) : PlayerBoardInterface    {
 
@@ -64,7 +68,7 @@ class PlayerBoard(private val gameView: GameView,
         keyArray.clear()
         groupKeyArray.clear()
 
-        var playerList: HashMap<String, Player> = hashMapOf()
+        val playerList: HashMap<String, Player> = hashMapOf()
 
         drawScroll(canvas)
         for (entity in entityList.values) {
@@ -94,7 +98,7 @@ class PlayerBoard(private val gameView: GameView,
 
         if (gameView.player!!.party.size > 0)   {
             canvas.drawRect(leaveGroupRect, angryPaint)
-            canvas.drawText("Leave Group", leaveGroupRect!!.left.toFloat(), leaveGroupRect!!.centerY().toFloat(), playerBoardPaint)
+            canvas.drawText("Leave Group", leaveGroupRect.left.toFloat(), leaveGroupRect.centerY().toFloat(), playerBoardPaint)
         }
     }
 
@@ -165,9 +169,13 @@ class PlayerBoard(private val gameView: GameView,
         for (r in groupRectArray)   {
             if (checkIfInputMoved(x, y))  {
                 if (isInRect(x, y, r)) {
-                    removeFromGroup(groupKeyArray[groupRectArray.indexOf(r)])
-                    lastY = y
-                    lastX = x
+                    if (thisKick - lastKick > kickDelay) {
+                        lastKick = thisKick
+                        thisKick = System.currentTimeMillis()
+                        removeFromGroup(groupKeyArray[groupRectArray.indexOf(r)])
+                        lastY = y
+                        lastX = x
+                    }
                 }
             }
         }
