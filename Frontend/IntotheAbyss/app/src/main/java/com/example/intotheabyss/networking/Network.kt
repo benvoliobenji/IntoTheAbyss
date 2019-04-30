@@ -124,7 +124,7 @@ class Network(private var gameState: GameState): Listener() {
             Log.i("EntityAction", o.actionType.toString())
 
             // Make sure we only process events based on our floor
-            if (action.floor == gameState.myPlayer.floor) {
+//            if (action.floor == gameState.myPlayer.floor) {
 
                 when(action.actionType){
                     EntityActionType.ADD -> handleAddAction(action)
@@ -141,7 +141,7 @@ class Network(private var gameState: GameState): Listener() {
 
                     else -> Log.i("EntityAction", "Unknown EntityActionType" + o.actionType)
                 }
-            }
+//            }
         }
         // This will be where we verify the objects that have been sent over the connection
         // Will verify the instance of each object and then call functions based on the object type
@@ -203,7 +203,7 @@ class Network(private var gameState: GameState): Listener() {
     }
 
     fun disconnect() {
-        val disconnectPacket = DisconnectPacket(gameState.myPlayer.ID)
+        val disconnectPacket = DisconnectPacket(gameState.myPlayer.ID, gameState.myPlayer.floor)
         client.sendTCP(disconnectPacket)
         client.stop()
         client.close()
@@ -226,7 +226,7 @@ class Network(private var gameState: GameState): Listener() {
                 newPlayer.x = json.getInt("posX")
                 newPlayer.y = json.getInt("posY")
                 newPlayer.playerName = json.getString("username")
-                newPlayer.floor = gameState.myPlayer.floor
+                newPlayer.floor = action.floor
                 Log.i("ADD", json.getInt("ID").toString())
                 newPlayer.ID = action.performerID
 
