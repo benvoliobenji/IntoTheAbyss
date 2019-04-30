@@ -221,7 +221,11 @@ class Network(private var gameState: GameState): Listener() {
 
         // If it has a username, then it is a Player, else it is a Monster
         if (json.optString("username") != "") {
-            var newPlayer = gson.fromJson<Player>(json.toString(), Player::class.java)
+            var newPlayer = Player()
+            newPlayer.x = json.getInt("posX")
+            newPlayer.y = json.getInt("posY")
+            newPlayer.playerName = json.getString("username")
+            newPlayer.ID = json.getString("ID")
             gameState.entitiesInLevel[newPlayer.ID] = newPlayer
         } else {
             var newMonster = gson.fromJson<Monster>(json.toString(), Monster::class.java)

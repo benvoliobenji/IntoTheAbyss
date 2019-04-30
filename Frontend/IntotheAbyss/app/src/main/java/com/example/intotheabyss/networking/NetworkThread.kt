@@ -1,6 +1,7 @@
 package com.example.intotheabyss.networking
 
 import android.content.Context
+import android.util.Log
 import com.example.intotheabyss.game.GameState
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetwork
 import com.example.intotheabyss.networking.volleynetwork.VolleyNetworkInterface
@@ -42,7 +43,7 @@ class NetworkRunnable(private val gameState: GameState, private val isAdmin: Boo
             network.connect()
 
             volleyNetworkInterface.retrieveNewDungeonLevel(gameState.myPlayer.floor, network)
-            sleep(5000)
+            sleep(10000)
 
             if (!updateThread.isAlive) {
                 updateThread = Thread(UpdateRunnable(network, volleyNetworkInterface, gameState))
