@@ -35,6 +35,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var dead = false
     var deathActivity = false
     var kicked = false
+    var loaded = false
 
     private val thread: GameThread
     var gameState: GameState? = null
@@ -116,6 +117,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
 
         Thread.sleep(5000)
+        loaded = true
     }
 
     /**
@@ -267,6 +269,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * @param canvas The Canvas object that we will be drawing to
      */
     override fun draw(canvas: Canvas) {
+        if (!loaded)    {
+            canvas.drawColor(Color.CYAN)
+            val p = Paint()
+            p.color = Color.BLACK
+            p.textSize = 80f
+            canvas.drawText("Loading", 100f, 500f, p)
+        }
+
         if (!dead) {
             if (!pList) {
                 super.draw(canvas)
