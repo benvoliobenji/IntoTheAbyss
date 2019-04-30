@@ -219,7 +219,7 @@ class Network(private var gameState: GameState): Listener() {
         var gsonBuilder = GsonBuilder()
         gsonBuilder.setLongSerializationPolicy(LongSerializationPolicy.STRING)
         var gson = gsonBuilder.create()
-        var json = JSONObject(gson.toJson(action.payload))
+        var json = JSONObject(gson.toJson(action.payload).toString())
         gson.toJson(action.payload)
         Log.i("AddAction", json.toString())
         // Regardless if it's in the hash map or not, it will be modified or added the same way
