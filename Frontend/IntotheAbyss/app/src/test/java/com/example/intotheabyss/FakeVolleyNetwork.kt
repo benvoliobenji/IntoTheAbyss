@@ -16,7 +16,7 @@ class FakeVolleyNetwork(var gameState: GameState): VolleyNetworkInterface {
         gameState.myPlayer.role = if (isAdmin) Role.ADMIN else Role.PLAYER
     }
 
-    override fun retrieveNewDungeonLevel(level: Int, network: Network) {
+    override fun retrieveNewDungeonLevel(level: Int) {
         gameState.level = arrayOf(arrayOf(Wall(), Wall(), Wall(), Floor()),
             arrayOf(Wall(), Wall(), Wall(), Floor()))
     }
